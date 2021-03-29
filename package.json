@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "sprint1 in Software Project Management Course",
   "main": "index.js",
+  "engines":{ "node": "12.11.1"},
+    
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node index.js",
