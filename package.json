@@ -1,0 +1,33 @@
+{
+  "name": "sprint1",
+  "version": "1.0.0",
+  "description": "sprint1 in Software Project Management Course",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "test": "mocha Tests/*.spec.js --color",
+    "lint": "eslint Src/*.js --color"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patrick14796/Sprint1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patrick14796/Sprint1/issues"
+  },
+  "homepage": "https://github.com/patrick14796/Sprint1#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.15",
+    "@types/mocha": "^8.2.1",
+    "chai": "^4.3.3",
+    "eslint": "^7.21.0",
+    "mocha": "^8.3.1",
+    "nodemon": "^2.0.7",
+    "ejs": "^3.1.6"
+  }
+}
