@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "sprint1 in Software Project Management Course",
   "main": "index.js",
-  "engines":{ "node": "12.11.1"},
-    
+  "engines": {
+    "node": "12.11.1"
+  },
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node index.js",
@@ -22,8 +23,9 @@
   },
   "homepage": "https://github.com/patrick14796/Sprint1#readme",
   "dependencies": {
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "ejs": "^3.1.6"
+    "mongo": "^0.1.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.15",
