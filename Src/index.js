@@ -13,21 +13,21 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.use(bodyParser.urlencoded({ extended: true }))
 	app.post("/auth", (req, res) => {
 
-		var user_name = req.body.user_name;
-		var password = req.body.password;
+		var user_name = req.body.user_name
+		var password = req.body.password
 
 		var data = {
 			"user": user_name,
 			"password": password
 		}
-		db.collection("loginData").insertOne(data, function (err, collection) {
+		loginData.insertOne(data, function (err, collection) {
 			if (err) {
 				throw err
-			};
-			console.log("Record inserted Successfully");
-		});
+			}
+			console.log("Record inserted Successfully")
+		})
 
-		return res.sendFile(__dirname + "/loggedIn.html");
+		return res.sendFile(__dirname + "/loggedIn.html")
 	})
 
 	app.get("/", (req, res) => {
