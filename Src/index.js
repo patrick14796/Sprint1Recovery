@@ -24,7 +24,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			if (err) {
 				throw err
 			}
-			console.log("Record inserted Successfully")
+			console.log("Record inserted Successfully" + collection.insertedCount)
 		})
 
 		return res.sendFile(__dirname + "/loggedIn.html")
