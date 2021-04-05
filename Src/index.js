@@ -31,7 +31,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.get("/", (req, res) => {
-		res.render("CompanyWorkerHomepage")
+		res.render("Homepage")
 		res.status(200)
 	})
 
