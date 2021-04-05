@@ -24,12 +24,12 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			"password": passwordd
 		}
 
-		//console.log(data)
+		console.log(data)
 		//loginData.insertOne(data, function (err, collection) {
 		//	if (err) {
 		//		throw err
 		//	}
-			console.log("Record inserted Successfully" + collection.insertedCount)
+		console.log("Record inserted Successfully" + collection.insertedCount)
 		var dbo = client.db("login-auth")
 		dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
 			console.log("Number of items:",numItems) // Use this to debug
