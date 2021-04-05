@@ -40,15 +40,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 			else
 			{
-			console.log("User Not Exist! \n")
-			res.render("Login")
+				console.log("User Not Exist! \n")
+				res.render("Login")
 			}
-			})
-
 		})
 
-		//return res.sendFile(__dirname + "/loggedIn.html")
-	//})
+	})
+
 
 	app.get("/", (req, res) => {
 		res.render("Homepage")
