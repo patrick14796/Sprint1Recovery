@@ -12,6 +12,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	console.log("Connected to Database")
 	const db = client.db("login-auth")
 	const loginData = db.collection("loginData")
+	console.log(loginData)
 	app.use(bodyParser.urlencoded({ extended: true }))
 	app.post("/auth", (req, res) => {
 	
@@ -23,21 +24,25 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			"password": passwordd
 		}
 
+		console.log(data)
 		//loginData.insertOne(data, function (err, collection) {
 		//	if (err) {
 		//		throw err
 		//	}
 		//	console.log("Record inserted Successfully" + collection.insertedCount)
 		var dbo = client.db("login-auth")
-		var count
 		dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
-			console.log("Number of items:",numItems); // Use this to debug
+			console.log("Number of items:",numItems) // Use this to debug
 			if (numItems  == 1)
-			{res.sendFile(__dirname + "/loggedIn.html")}
+			{
+				res.sendFile(__dirname + "/loggedIn.html")
+			}
 
 			else
-			{console.log("User Not Exist! \n")
-			res.render("Login")}
+			{
+			console.log("User Not Exist! \n")
+			res.render("Login")
+			}
 			})
 
 		})
@@ -52,26 +57,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 
 	app.get("/Login", (req, res) => {
-		//var dbo = client.db("login-auth")
-		//var q = {password:"123"}
-		//var userDb = {user: String(user_name)}
-		//var pasDb = {password:String(passwordd)}
-		//if (dbo.collection.count({ "user":user_name , "password":passwordd}, limit = 1) != 0)
-		//{
-		//	res.sendFile(__dirname + "/loggedIn.html")
-		//}
-  		//dbo.collection("loginData").find(userDb) == dbo.collection("loginData").find()
-		//dbo.collection("loginData").find(q).toArray(function(err, result) {
-    		//if (err) throw err
-    		//console.log(result)
-    		//client.close()
-  		//})
-		//else
-		//{
-		//	console.log("User Not Exist! \n")
-		//	res.render("Login")
-		//}
-		//res.sendFile(__dirname + "/loggedIn.html")
 		res.render("Login")
 	})
 
