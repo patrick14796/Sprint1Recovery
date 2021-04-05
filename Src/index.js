@@ -64,6 +64,26 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("Register")
 	})
 
+	app.get("/add_new_contractor_worker", (req, res) => {
+		res.render("add_new_contractor_worker")
+	})
+
+	app.get("/monitor_of_all_hires", (req, res) => {
+		res.render("monitor_of_all_hires")
+	})
+
+	app.get("/search_for_a_contractor_worker", (req, res) => {
+		res.render("search_for_a_contractor_worker")
+	})
+
+	app.get("/statistics", (req, res) => {
+		res.render("statistics")
+	})
+
+	app.get("/shifts_monitor", (req, res) => {
+		res.render("shifts_monitor")
+	})
+
 	app.listen(port, () => {
 		console.log("Listening to port 3000!!!")
 	})
