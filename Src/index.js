@@ -2,7 +2,7 @@ const express = require("express")
 const port = process.env.PORT || 3000
 const app = express()
 
-app.use(express.static('/videos'));
+app.use(express.static("/videos"))
 app.set("view engine", "ejs")
 app.use(express.static("public"))
 const bodyParser = require("body-parser")
