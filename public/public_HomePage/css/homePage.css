@@ -1,64 +1,31 @@
+* {
+	box-sizing: border-box;
+  }
+  
+
 body,html{
 	height: 100%;
-    background-image: url("../Images/black3.jpg");
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
 	margin: 0;
+	margin: 0;
+	font-family: Arial;
+	font-size: 17px;
 }
-
+#myVideo {
+	right: 0;
+	bottom: 0;
+	width: 100%; 
+	height: 90%;
+  }
 
 footer{
 	list-style-type: none;
-	position:absolute;
+	position:fixed;
+	color: black;
 	bottom:0;
 	width:100%;
 	height:60px;   /* Height of the footer */
 	font-size: 1.5em;
 }
-
-#section1{
-	padding: 15%;
-	display:table;
-	position: relative;
-}
-.section1{
-	background-image: url("../Images/image4.jpg");
-	border-style: inset;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	width:50%;
-	height: 100%;
-	margin:0.5em;
-}
-#titleSection1{
-	font-size: 3em;
-
-    vertical-align:middle ;
-	border: 0;
-	color: black;
-}
-
-#section2{
-	padding: 15%;
-	display:table;
-	position: relative;
-}
-.section2{
-	background-image: url("../Images/image4.jpg");
-	border-style: inset;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	width:50%;
-	height: 100%;
-	margin:0.5em;
-}
-#titleSection2{
-	font-size: 3em;
-
-    vertical-align:middle ;
-	border: 0;
+#foot{
 	color: black;
 }
