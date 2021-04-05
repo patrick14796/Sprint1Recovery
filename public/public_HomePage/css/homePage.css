@@ -29,3 +29,30 @@ footer{
 #foot{
 	color: black;
 }
+
+#section1{
+	position: fixed;
+	width: 100%;
+	padding:12em;
+}
+#section1Left{
+float: left;
+padding-right: 90px;
+max-width: 40%;
+
+}
+
+#section1Right{
+overflow: hidden;
+padding-top:5em;
+padding-left: 30em;
+}
+
+#sceCText{
+	font-size: 4.5rem;
+}
+
+#stPargraph{
+font-size: 1.8rem;
+line-height:3rem ;
+}
