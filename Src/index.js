@@ -12,7 +12,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	console.log("Connected to Database")
 	const db = client.db("login-auth")
 	const loginData = db.collection("loginData")
-	console.log(loginData)
+	//console.log(loginData)
 	app.use(bodyParser.urlencoded({ extended: true }))
 	app.post("/auth", (req, res) => {
 	
@@ -24,7 +24,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			"password": passwordd
 		}
 
-		console.log(data)
+		//console.log(data)
 		//loginData.insertOne(data, function (err, collection) {
 		//	if (err) {
 		//		throw err
