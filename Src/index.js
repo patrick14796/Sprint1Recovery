@@ -89,7 +89,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		console.log("Listening to port 3000!!!")
 	})
 
-
+	app.get("/why_us_page", (req, res) => {
+		res.render("why_us_page")
+	})
 }).catch(console.error)
 
 
