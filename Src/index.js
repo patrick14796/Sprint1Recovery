@@ -59,6 +59,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("Login")
 	})
 
+	app.get("/contributers", (req, res) => {
+		res.render("contributers_page")
+	})
 
 
 	app.get("/Register", (req, res) => {
