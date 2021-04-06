@@ -33,26 +33,26 @@ footer{
 #section1{
 	position: fixed;
 	width: 100%;
-	padding:12em;
+	padding:9em;
 }
 #section1Left{
 float: left;
 padding-right: 90px;
 max-width: 40%;
-
+padding-top:3rem;
 }
 
 #section1Right{
 overflow: hidden;
-padding-top:5em;
-padding-left: 30em;
+
+padding-left: 20em;
 }
 
 #sceCText{
-	font-size: 4.5rem;
+	font-size: 3rem;
 }
 
 #stPargraph{
-font-size: 1.8rem;
-line-height:3rem ;
+font-size: 1.5rem;
+line-height:2rem ;
 }
