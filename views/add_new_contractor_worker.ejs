@@ -8,7 +8,7 @@
     <meta name="description" content="Colorlib Templates">
     <meta name="author" content="Colorlib">
     <meta name="keywords" content="Colorlib Templates">
-
+    <script src="/public/public_add_new_contractor_worker/js/global.js"></script>
     <!-- Title Page-->
     <title>Add a new contractor worker</title>
 
@@ -31,14 +31,14 @@
                         <div class="form-row">
                             <div class="name">Full name</div>
                             <div class="value">
-                                <input class="input--style-6" type="text" name="full_name">
+                                <input class="input--style-6" type="text" name="full_name" required required pattern="[a-z]{5}"  >
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="name">Email address</div>
                             <div class="value">
                                 <div class="input-group">
-                                    <input class="input--style-6" type="email" name="email" placeholder="example@email.com">
+                                    <input class="input--style-6" type="email" name="email" placeholder="example@email.com" >
                                 </div>
                             </div>
                         </div>
