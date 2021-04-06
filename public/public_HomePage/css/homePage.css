@@ -1,7 +1,13 @@
 * {
 	box-sizing: border-box;
   }
-  
+ 
+  #myVideo {
+	right: 0;
+	bottom: 0;
+	width: 100%; 
+	height: 90%;
+  }
 
 body,html{
 	height: 100%;
@@ -10,49 +16,255 @@ body,html{
 	font-family: Arial;
 	font-size: 17px;
 }
-#myVideo {
-	right: 0;
-	bottom: 0;
-	width: 100%; 
-	height: 90%;
-  }
 
-footer{
-	list-style-type: none;
-	position:fixed;
-	color: black;
-	bottom:0;
-	width:100%;
-	height:60px;   /* Height of the footer */
-	font-size: 1.5em;
-}
-#foot{
-	color: black;
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+	footer{
+		list-style-type: none;
+		position:fixed;
+		color: black;
+		bottom:0;
+		width:100%;
+		height:60px;   /* Height of the footer */
+		font-size: 0.7em;
+	}
+	#foot{
+		color: black;
+	}
+	
+	#section1{
+		position: fixed;
+		width: 130%;
+		padding:8em;
+		padding-left:2em;
+	}
+	#section1Left{
+	float: left;
+	padding-right: 90px;
+	max-width: 60%;
+	padding-top:6rem;
+	}
+	
+	#section1Right{
+	overflow: hidden;
+	padding-top:9.5em;
+	}
+	
+	#sceCText{
+		font-size: 1.8rem;
+	}
+	
+	#stPargraph{
+	font-size: 0.5rem;
+	line-height:1rem ;
+	}
+#imgWorker{
+height: 10em;
 }
 
-#section1{
-	position: fixed;
-	width: 100%;
-	padding:12em;
-}
-#section1Left{
-float: left;
-padding-right: 90px;
-max-width: 40%;
+
+
 
 }
 
-#section1Right{
-overflow: hidden;
-padding-top:5em;
-padding-left: 30em;
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+		
+	footer{
+		list-style-type: none;
+		position:fixed;
+		color: black;
+		bottom:0;
+		width:100%;
+		height:60px;   /* Height of the footer */
+		font-size: 0.9em;
+	}
+	#foot{
+		color: black;
+	}
+	
+	#section1{
+		position: fixed;
+		width: 110%;
+		padding:8em;
+	}
+	#section1Left{
+	float: left;
+	padding-right: 90px;
+	max-width: 65%;
+	padding-top:3rem;
+	}
+	
+	#section1Right{
+	overflow: hidden;
+	padding-top:7.8em;
+	}
+	
+	#sceCText{
+		font-size: 2rem;
+	}
+	
+	#stPargraph{
+	font-size: 0.8rem;
+	line-height:1.2rem ;
+	}
+#imgWorker{
+height: 13em;
 }
 
-#sceCText{
-	font-size: 4.5rem;
+
+
 }
 
-#stPargraph{
-font-size: 1.8rem;
-line-height:3rem ;
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+	
+	footer{
+		list-style-type: none;
+		position:fixed;
+		color: black;
+		bottom:0;
+		width:100%;
+		height:60px;   /* Height of the footer */
+		font-size: 1.2em;
+	}
+	#foot{
+		color: black;
+	}
+	
+	#section1{
+		position: fixed;
+		width: 110%;
+		padding:8em;
+	}
+	#section1Left{
+	float: left;
+	padding-right: 90px;
+	max-width: 40%;
+	padding-top:3rem;
+	}
+	
+	#section1Right{
+	overflow: hidden;
+	padding-left: 10em;
+	padding-top:5em;
+	}
+	
+	#sceCText{
+		font-size: 2.4rem;
+	}
+	
+	#stPargraph{
+	font-size: 1rem;
+	line-height:1.5rem ;
+	}
+#imgWorker{
+height: 16em;
+}
+
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+	footer{
+		list-style-type: none;
+		position:fixed;
+		color: black;
+		bottom:0;
+		width:100%;
+		height:60px;   /* Height of the footer */
+		font-size: 1.3em;
+	}
+	#foot{
+		color: black;
+	}
+	
+	#section1{
+		position: fixed;
+		width: 105%;
+		padding:9em;
+	}
+	#section1Left{
+	float: left;
+	padding-right: 90px;
+	max-width: 40%;
+	padding-top:3rem;
+	}
+	
+	#section1Right{
+	overflow: hidden;
+	padding-left: 14em;
+	}
+	
+	#sceCText{
+		font-size: 2.7rem;
+	}
+	
+	#stPargraph{
+	font-size: 1.3rem;
+	line-height:2rem ;
+	}
+#imgWorker{
+height: 20em;
+}
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+	footer{
+		list-style-type: none;
+		position:fixed;
+		color: black;
+		bottom:0;
+		width:100%;
+		height:60px;   /* Height of the footer */
+		font-size: 1.5em;
+	}
+	#foot{
+		color: black;
+	}
+	
+	#section1{
+		position: fixed;
+		width: 100%;
+		padding:9em;
+	}
+	#section1Left{
+	float: left;
+	padding-right: 90px;
+	max-width: 40%;
+	padding-top:3rem;
+	}
+	
+	#section1Right{
+	overflow: hidden;
+	padding-top: 1em;
+	padding-left: 20em;
+	}
+	
+	#sceCText{
+		font-size: 3rem;
+	}
+	
+	#stPargraph{
+	font-size: 1.5rem;
+	line-height:2rem ;
+	}
+	#section2{
+		width: 100%;
+	}
+	.content{
+		position: fixed;
+		display: flex;
+		bottom:0;
+		min-height: 10vh;
+		width: 100%;
+	}
 }
