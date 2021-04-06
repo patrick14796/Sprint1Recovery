@@ -1,10 +1,107 @@
+
+
+  /* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background-color: black;
+		font-size:70%
+	  }
+	  
+	  li {
+		float: left;
+	  }
+	  
+	  li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 10px 11px;
+		text-decoration: none;
+	  }
+	  
+	  li a:hover {
+		background-color: white;
+		color: black;
+	  }
+	
+	
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background-color: black;
+		font-size:100%
+	  }
+	  
+	  li {
+		float: left;
+	  }
+	  
+	  li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 11px 13px;
+		text-decoration: none;
+	  }
+	  
+	  li a:hover {
+		background-color: white;
+		color: black;
+	  }
+	
+	
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background-color: black;
+		font-size:120%
+	  }
+	  
+	  li {
+		float: left;
+	  }
+	  
+	  li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 12px 14px;
+		text-decoration: none;
+	  }
+	  
+	  li a:hover {
+		background-color: white;
+		color: black;
+	  }
+	
+	
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
 ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 	background-color: black;
-	font-size:150%
+	font-size:130%
   }
   
   li {
@@ -15,7 +112,7 @@ ul {
 	display: block;
 	color: white;
 	text-align: center;
-	padding: 14px 16px;
+	padding: 13px 15px;
 	text-decoration: none;
   }
   
@@ -25,3 +122,34 @@ ul {
   }
 
 
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background-color: black;
+		font-size:150%
+	  }
+	  
+	  li {
+		float: left;
+	  }
+	  
+	  li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+	  }
+	  
+	  li a:hover {
+		background-color: white;
+		color: black;
+	  }
+}
