@@ -12,7 +12,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	console.log("Connected to Database")
 	const db = client.db("login-auth")
 	const loginData = db.collection("loginData")
-	//console.log(loginData)
+	console.log(loginData)
 	app.use(bodyParser.urlencoded({ extended: true }))
 	
 	app.post("/auth", (req, res) => {
@@ -37,21 +37,21 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var db_collection = null
 		switch(userType)
 		{
-			case "Company Worker":
-				var db = client.db("company-workers-login")
-				db_collection = db.collection("companyWorkers")
-				homepage_name = "CompanyWorkerHomepage"
-				break
-			case "Contractor Worker":
-				var db =client.db("login-auth")
-				db_collection = db.collection("companyWorkers")
-				homepage_name = "CompanyWorkerHomepage"
-				break
-			case "Employee":
-				var db = client.db("login-auth")
-				db_collection = db.collection("companyWorkers")
-				homepage_name = "CompanyWorkerHomepage"
-				break
+		case "Company Worker":
+			var db = client.db("company-workers-login")
+			db_collection = db.collection("companyWorkers")
+			homepage_name = "CompanyWorkerHomepage"
+			break
+		case "Contractor Worker":
+			var db =client.db("login-auth")
+			db_collection = db.collection("companyWorkers")
+			homepage_name = "CompanyWorkerHomepage"
+			break
+		case "Employee":
+			var db = client.db("login-auth")
+			db_collection = db.collection("companyWorkers")
+			homepage_name = "CompanyWorkerHomepage"
+			break
 		}
 
 		if(db_collection){
@@ -68,7 +68,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		else
 		{
 			console.log("User Not Exist! \n")
-				res.render("Login")
+			res.render("Login")
 		}
 
 
