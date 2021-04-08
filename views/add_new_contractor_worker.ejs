@@ -18,7 +18,9 @@
     <!-- Main CSS-->
     <link href="public_add_new_contractor_worker/css/add_new_contractor.css" rel="stylesheet" media="all">
 </head>
-
+<header>
+	<%- include('../partials/header_company_worker'); %>
+</header>
 <body>
     <div class="page-wrapper bg-dark p-t-100 p-b-50">
         <div class="wrapper wrapper--w900">
@@ -43,26 +45,21 @@
 						<div class="form-row">
                             <div class="name">Hourly Pay</div>
                             <div class="value">
-                                <input class="input--style-6" type="text" name="hourly_pay" required required pattern="[0-9]+[.]*[0-9]+">
+                                <input class="input--style-6" type="text" name="hourly_pay" required required pattern="[0-9]+|[0-9]+[.][0-9]+">
                             </div>
                         </div>
 						<div class="form-row">
-                            <div class="name">Skills</div>
-                            <div class="value">
-                                <input class="input--style-6" type="text" name="skills" required>
-                            </div>
-                        </div>
-						<div class="form-row">
-							<label>Address</label>
 							<div class="name">City</div>
                             <div class="value">
                                 <input class="input--style-6" type="text" name="city" required>
                             </div>
-                            <div class="name">Home</div>
+                        </div>
+						<div class="form-row">
+							<div class="name">Home</div>
                             <div class="value">
                                 <input class="input--style-6" type="text" name="home" required>
-                            </div>
-                        </div>
+                        	</div>
+						</div>
 						<div class="form-row">
                             <div class="name">Phone Number</div>
                             <div class="value">
@@ -73,15 +70,24 @@
                             <div class="name">Email address</div>
                             <div class="value">
                                 <div class="input-group">
-                                    <input class="input--style-6" type="email" name="email" required required pattern=/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/>
+                                    <input class="input--style-6" type="email" name="email" required required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-row">
+                            <div class="name">Gender</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="radio" name="radio" checked>Male
+									<input class="input--style-6" type="radio" name="radio">Female
                                 </div>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="name">Message</div>
+                            <div class="name">Skills</div>
                             <div class="value">
                                 <div class="input-group">
-                                    <textarea class="textarea--style-6" name="message" placeholder="Message sent to the employer"></textarea>
+                                    <textarea class="textarea--style-6" name="skills" required></textarea>
                                 </div>
                             </div>
                         </div>
