@@ -61,7 +61,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				{
 					res.render(homepage_name + ".ejs")
 				}
-
+				else if(numItems == 0){
+					res.render("Login")
+				}
 			})
 		}
 
