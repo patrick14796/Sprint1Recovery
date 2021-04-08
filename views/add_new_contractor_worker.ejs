@@ -29,7 +29,7 @@
                     <h2 class="title">Add a new contractor</h2>
                 </div>
                 <div class="card-body">
-                    <form id="add_form" method="POST">
+                    <form id="add_form" action="/add_contractor" method="POST">
                         <div class="form-row">
                             <div class="name">First name</div>
                             <div class="value">
@@ -78,8 +78,8 @@
                             <div class="name">Gender</div>
                             <div class="value">
                                 <div class="input-group">
-                                    <input class="input--style-6" type="radio" name="radio" checked>Male
-									<input class="input--style-6" type="radio" name="radio">Female
+                                    <input class="input--style-6" type="radio" name="radio" value="Male" checked>Male
+									<input class="input--style-6" type="radio" name="radio" value="Female">Female
                                 </div>
                             </div>
                         </div>
@@ -91,10 +91,10 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn--radius-2 btn--blue-2" type="submit">Add</button>
+						<div class="card-footer">
+							<button class="btn btn--radius-2 btn--blue-2" type="submit">Add</button>
+						</div>
+					</form>
                 </div>
             </div>
         </div>

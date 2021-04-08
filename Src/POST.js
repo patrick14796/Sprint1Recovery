@@ -3,9 +3,6 @@ module.exports = function(app) {  //receiving "app" instance
 	const bodyParser = require("body-parser")
 	MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useUnifiedTopology: true }).then(client => {
 		console.log("Connected to Database")
-		const db = client.db("login-auth")
-		const loginData = db.collection("loginData")
-		console.log(loginData)
 		app.use(bodyParser.urlencoded({ extended: true }))
 
 		app.post("/auth", (req, res) => {
@@ -80,6 +77,53 @@ module.exports = function(app) {  //receiving "app" instance
 			//	}
 			//})
 
+		})
+
+		app.post("/add_contractor", (req, res) => {
+			var db = client.db("contractor-workers-login")
+			var db_collection = db.collection("contractorWorkers")
+			
+			var first_name = req.body.first_name
+			var last_name = req.body.last_name
+			var hourly_pay = req.body.hourly_pay
+			var city = req.body.city
+			var home = req.body.home
+			var phone_number = req.body.phone_number
+			var email = req.body.email
+			var gender = req.body.radio
+			var skills = req.body.skills
+			var username = first_name + "_" + last_name + "@contractor.sce"
+			var password = "123456789"
+			var data = null
+			// Check if the user name is already taken
+			if(db_collection){
+				db_collection.find({"first_name": first_name, "last_name": last_name}).count().then(function(numItems) {
+					console.log(numItems)
+					if(numItems){
+						username = first_name + "_" + last_name + numItems + "@contractor.sce"
+					}
+					data ={
+						"first_name": first_name,
+						"last_name": last_name,
+						"hourly_pay": hourly_pay,
+						"city": city,
+						"home": home,
+						"phone_number": phone_number,
+						"email": email,
+						"gender": gender,
+						"skills": skills,
+						"username": username,
+						"password": password
+					}
+					db_collection.insertOne(data, function (err, collection) {
+						if (err) {
+							throw err
+						}
+						console.log("Record inserted Successfully" + collection.insertedCount)
+					})
+					res.render("CompanyWorkerHomepage")
+				})
+			}
 		})
 
 	}).catch(console.error)
