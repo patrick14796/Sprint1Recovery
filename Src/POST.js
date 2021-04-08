@@ -30,21 +30,21 @@ module.exports = function(app) {  //receiving "app" instance
 			var db_collection = null
 			switch(userType)
 			{
-				case "Company Worker":
-					var db = client.db("company-workers-login")
-					db_collection = db.collection("companyWorkers")
-					homepage_name = "CompanyWorkerHomepage"
-					break
-				case "Contractor Worker":
-					db =client.db("login-auth")
-					db_collection = db.collection("loginData")
-					homepage_name = "CompanyWorkerHomepage"
-					break
-				case "Employee":
-					db = client.db("login-auth")
-					db_collection = db.collection("companyWorkers")
-					homepage_name = "CompanyWorkerHomepage"
-					break
+			case "Company Worker":
+				var db = client.db("company-workers-login")
+				db_collection = db.collection("companyWorkers")
+				homepage_name = "CompanyWorkerHomepage"
+				break
+			case "Contractor Worker":
+				db =client.db("login-auth")
+				db_collection = db.collection("loginData")
+				homepage_name = "CompanyWorkerHomepage"
+				break
+			case "Employee":
+				db = client.db("login-auth")
+				db_collection = db.collection("companyWorkers")
+				homepage_name = "CompanyWorkerHomepage"
+				break
 			}
 
 			if(db_collection){
