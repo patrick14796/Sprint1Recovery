@@ -109,6 +109,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("Register")
 	})
 
+	app.get("/CompanyWorkerHomepage", (req, res) => {
+		res.render("CompanyWorkerHomepage")
+	})
+
 	app.get("/add_new_contractor_worker", (req, res) => {
 		res.render("add_new_contractor_worker")
 	})
