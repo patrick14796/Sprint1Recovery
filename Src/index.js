@@ -43,11 +43,31 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("Register")
 	})
 
+	app.get("/contractor_worker_home_page", (req, res) => {
+		res.render("contractor_worker_home_page")
+	})
+
+	app.get("/contractor_worker_my_profile", (req, res) => {
+		res.render("contractor_worker_my_profile")
+	})
+
+	app.get("/contractor_worker_work_information", (req, res) => {
+		res.render("contractor_worker_work_information")
+	})
+
+	app.get("/contractor_worker_work_history", (req, res) => {
+		res.render("contractor_worker_work_history")
+	})
+
+	app.get("/contractor_worker_pay_rates", (req, res) => {
+		res.render("contractor_worker_pay_rates")
+	})
+
 	app.listen(port, () => {
 		console.log("Listening to port 3000!!!")
 	})
 
 
-}).catch(console.error)
+	}).catch(console.error)
 
 
