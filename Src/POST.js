@@ -81,7 +81,7 @@ module.exports = function(app) {  //receiving "app" instance
 
 		app.post("/add_contractor", (req, res) => {
 			var db = client.db("contractor-workers-login")
-			db_collection = db.collection("contractorWorkers")
+			var db_collection = db.collection("contractorWorkers")
 			
 			var first_name = req.body.first_name
 			var last_name = req.body.last_name
@@ -92,15 +92,15 @@ module.exports = function(app) {  //receiving "app" instance
 			var email = req.body.email
 			var gender = req.body.radio
 			var skills = req.body.skills
-			var username = first_name + '_' + last_name + '@contractor.sce'
+			var username = first_name + "_" + last_name + "@contractor.sce"
 			var password = "123456789"
 			var data = null
 			// Check if the user name is already taken
 			if(db_collection){
-				var num_users = db_collection.find({"first_name": first_name, "last_name": last_name}).count().then(function(numItems) {
+				db_collection.find({"first_name": first_name, "last_name": last_name}).count().then(function(numItems) {
 					console.log(numItems)
 					if(numItems){
-						username = first_name + '_' + last_name + numItems + '@contractor.sce'
+						username = first_name + "_" + last_name + numItems + "@contractor.sce"
 					}
 					data ={
 						"first_name": first_name,
