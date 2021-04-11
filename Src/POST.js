@@ -11,18 +11,6 @@ module.exports = function(app) {  //receiving "app" instance
 			var passwordd = req.body.pass
 			var userType = req.body.user_type
 
-			//var data = {
-			//	"user": user_name,
-			//	"password": passwordd
-			//}
-
-			//console.log(data)
-			//loginData.insertOne(data, function (err, collection) {
-			//	if (err) {
-			//		throw err
-			//	}
-			//	console.log("Record inserted Successfully" + collection.insertedCount)
-			//})
 			var homepage_name=null
 			var db_collection = null
 			switch(userType)
@@ -33,8 +21,8 @@ module.exports = function(app) {  //receiving "app" instance
 				homepage_name = "CompanyWorkerHomepage"
 				break
 			case "Contractor Worker":
-				db =client.db("login-auth")
-				db_collection = db.collection("loginData")
+				db =client.db("contractor-workers")
+				db_collection = db.collection("contractorWorkersLogin")
 				homepage_name = "CompanyWorkerHomepage"
 				break
 			case "Employee":
@@ -80,7 +68,7 @@ module.exports = function(app) {  //receiving "app" instance
 		})
 
 		app.post("/add_contractor", (req, res) => {
-			var db = client.db("contractor-workers-login")
+			var db = client.db("contractor-workers")
 			var db_collection = db.collection("contractorWorkers")
 			
 			var first_name = req.body.first_name
@@ -115,13 +103,28 @@ module.exports = function(app) {  //receiving "app" instance
 						"username": username,
 						"password": password
 					}
+					// Insert the contractor worker information to a collection of contractorWorkers
 					db_collection.insertOne(data, function (err, collection) {
 						if (err) {
 							throw err
 						}
 						console.log("Record inserted Successfully" + collection.insertedCount)
 					})
-					res.render("CompanyWorkerHomepage")
+
+					data ={
+						"username": username,
+						"password": password
+					}
+					// Insert the contractor worker username and password to a collection of contractorWorkersLogin
+					db_collection = db.collection("contractorWorkersLogin")
+					db_collection.insertOne(data, function (err, collection) {
+						if (err) {
+							throw err
+						}
+						console.log("Record inserted Successfully" + collection.insertedCount)
+					})
+					
+					res.render("added_contractor_successfully")
 				})
 			}
 		})
