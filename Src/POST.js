@@ -51,15 +51,16 @@ module.exports = function(app) {  //receiving "app" instance
 					{
 						res.render(homepage_name + ".ejs")
 					}
+					else
+					{
+						console.log("User Not Exist! \n")
+						res.render("Login")
+					}
 
 				})
 			}
 
-			else
-			{
-				console.log("User Not Exist! \n")
-				res.render("Login")
-			}
+			
 
 
 			//var dbo = client.db("login-auth")
