@@ -100,7 +100,7 @@ module.exports = function(app) {  //receiving "app" instance
 						"email": email,
 						"gender": gender,
 						"skills": skills,
-						"username": username,
+						"user": username,
 						"password": password
 					}
 					// Insert the contractor worker information to a collection of contractorWorkers
@@ -112,7 +112,7 @@ module.exports = function(app) {  //receiving "app" instance
 					})
 
 					data ={
-						"username": username,
+						"user": username,
 						"password": password
 					}
 					// Insert the contractor worker username and password to a collection of contractorWorkersLogin
