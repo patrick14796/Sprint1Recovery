@@ -46,5 +46,13 @@ module.exports = function(app) {  //receiving "app" instance
 		res.render("why_us_page")
 	})
 
+	app.get("/contractor_worker_home_page", (req, res) => {
+		res.render("contractor_worker_home_page")
+	})
+
+	app.get("/contractor_worker_my_profile", (req, res) => {
+		res.render("contractor_worker_my_profile")
+	})
+
 }
 
