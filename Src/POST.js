@@ -23,7 +23,9 @@ module.exports = function(app) {  //receiving "app" instance
 			case "Contractor Worker":
 				db =client.db("contractor-workers")
 				db_collection = db.collection("contractorWorkersLogin")
-				homepage_name = "CompanyWorkerHomepage"
+
+				homepage_name = "contractor_worker_home_page"
+          
 				break
 			case "Employee":
 				db = client.db("login-auth")
