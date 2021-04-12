@@ -21,6 +21,13 @@ module.exports = function(app) {  //receiving "app" instance
 	app.get("/Register", (req, res) => {
 		res.render("Register")
 	})
+	app.get("/careers", (req, res) => {
+		res.render("careers_page")
+	})
+	app.get("/contact_us", (req, res) => {
+		res.render("contact_us_page")
+	})
+
 	
 	app.get("/add_new_contractor_worker", (req, res) => {
 		res.render("add_new_contractor_worker")
