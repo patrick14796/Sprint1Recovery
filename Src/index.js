@@ -65,6 +65,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contact_us", (req, res) => {
 		res.render("contact_us_page")
 	})
+	app.get("/why_us_page", (req, res) => {
+		res.render("why_us_page")
+	})
 
 	app.get("/Register", (req, res) => {
 		res.render("Register")
