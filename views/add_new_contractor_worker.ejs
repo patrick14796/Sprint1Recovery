@@ -1,66 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <link rel="stylesheet" href="../public/public_company_worker_add_new_contractor/css/add_new_contractor.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+    <script src="/public/public_add_new_contractor_worker/js/global.js"></script>
+    <!-- Title Page-->
+    <title>Add a new contractor worker</title>
+
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+
+    <!-- Main CSS-->
+    <link href="public_add_new_contractor_worker/css/add_new_contractor.css" rel="stylesheet" media="all">
 </head>
 <header>
-    <%- include('../partials/header_company_worker'); %>
+	<%- include('../partials/header_company_worker'); %>
 </header>
 <body>
-
-<form action="/action_page.php">
-  <div class="container">
-    <h1>Add a new Contractor worker</h1>
-    <p>Please fill in this form to create an account for a new Contractor worker.</p>
-    <hr>
-    
-    <div class="first_name_form_group">
-        <label for="First Name"><b>First Name</b></label>
-        <input type="text" class="form-control" placeholder="First Name" value="" />
-    </div>
-    <div class="last_name_form_group">
-        <label for="Last Name"><b>Last Name</b></label>
-        <input type="text" class="form-control" placeholder="Last Name" value="" />
-    </div>
-    <div class="skills_form_group">
-        <label for=""><b>Skills</b></label>
-        <textarea>Skills</textarea>
-    </div>
-    <div class="gender_form_group">
-        <label class="label"><b>Gender</b></label>
-        <div>
-            <label class="radio-container m-r-45">Male
-                <input type="radio" checked="checked" name="gender">
-                <span class="checkmark"></span>
-            </label>
-            <label class="radio-container">Female
-                <input type="radio" name="gender">
-                <span class="checkmark"></span>
-            </label>
+    <div class="page-wrapper bg-dark p-t-100 p-b-50">
+        <div class="wrapper wrapper--w900">
+            <div class="card card-6">
+                <div class="card-heading">
+                    <h2 class="title">Add a new contractor</h2>
+                </div>
+                <div class="card-body">
+                    <form id="add_form" action="/add_contractor" method="POST">
+                        <div class="form-row">
+                            <div class="name">First name</div>
+                            <div class="value">
+                                <input class="input--style-6" type="text" name="first_name" required required pattern="[a-zA-Z]+">
+                            </div>
+                        </div>
+						<div class="form-row">
+                            <div class="name">Last name</div>
+                            <div class="value">
+                                <input class="input--style-6" type="text" name="last_name" required required pattern="[a-zA-Z]+">
+                            </div>
+                        </div>
+						<div class="form-row">
+                            <div class="name">Hourly Pay</div>
+                            <div class="value">
+                                <input class="input--style-6" type="text" name="hourly_pay" required required pattern="[0-9]+|[0-9]+[.][0-9]+">
+                            </div>
+                        </div>
+						<div class="form-row">
+							<div class="name">City</div>
+                            <div class="value">
+                                <input class="input--style-6" type="text" name="city" required>
+                            </div>
+                        </div>
+						<div class="form-row">
+							<div class="name">Home</div>
+                            <div class="value">
+                                <input class="input--style-6" type="text" name="home" required>
+                        	</div>
+						</div>
+						<div class="form-row">
+                            <div class="name">Phone Number</div>
+                            <div class="value">
+                                <input class="input--style-6" type="text" name="phone_number" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Email address</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="email" name="email" required required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-row">
+                            <div class="name">Gender</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="radio" name="radio" value="Male" checked>Male
+									<input class="input--style-6" type="radio" name="radio" value="Female">Female
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Skills</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <textarea class="textarea--style-6" name="skills" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+						<div class="card-footer">
+							<button class="btn btn--radius-2 btn--blue-2" type="submit">Add</button>
+						</div>
+					</form>
+                </div>
             </div>
-    </div>
-    <div class="input-group">
-        <label class="label"><b>Email</b></label>
-        <input class="input--style-4" type="email" name="email">
-    </div>
-    <div class="input-group">
-        <label class="label"><b>Phone Number</b></label>
-        <input class="input--style-4" type="text" name="phone">
-    </div>
-    <div class="birthday_form_group">
-    <label class="label"><b>Birthday</b></label>
-        <div class="input-group-icon">
-            <input class="input--style-4 js-datepicker" type="text" name="birthday">
-            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
         </div>
     </div>
-    <p></p>
+    <!-- Jquery JS-->
+    <script src="public_add_new_contractor_worker/vendor/jquery/jquery.min.js"></script>
 
-    <button type="submit" class="add">Add</button>
-  </div>
-</form>
+	
+    <!-- Main JS-->
+    <script src="public_add_new_contractor_worker/js/global.js"></script>
 
-</body>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
 </html>
-
+<!-- end document-->
