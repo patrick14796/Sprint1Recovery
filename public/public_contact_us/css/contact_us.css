@@ -487,6 +487,14 @@
 		box-sizing: border-box;
 	  }
 	 
+	body,html{
+		height: 100%;
+		margin: 0;
+		margin: 0;
+		font-family: Arial;
+		font-size: 15px;
+	}
+	 
 	#contact {
 	font-family: Open Sans ,sans-serif;
 	width: 25%;
@@ -723,6 +731,14 @@
 	* {
 		box-sizing: border-box;
 	  }
+	 
+	body,html{
+		height: 100%;
+		margin: 0;
+		margin: 0;
+		font-family: Arial;
+		font-size: 17px;
+	}
 	 
 	#contact {
 	font-family: Open Sans ,sans-serif;
