@@ -100,7 +100,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			homepage_name = "contractor_worker_home_page"
 			break
 		case "Employee":
-			var db = client.db("employers-workers")
+			db = client.db("employers-workers")
 			db_collection = db.collection("employersWorkersLogin")
 			homepage_name = "CompanyWorkerHomepage"
 			break
