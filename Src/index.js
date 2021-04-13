@@ -85,21 +85,22 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var userType = req.body.user_type
 		var homepage_name=null
 		var db_collection = null
+		var db = null
 		
 		switch(userType)
 		{
 		case "Company Worker":
-			var db = client.db("human-resources-workers")
+			db = client.db("human-resources-workers")
 			db_collection = db.collection("humanResourcsesWorkersLogin")
 			homepage_name = "CompanyWorkerHomepage"
 			break
 		case "Contractor Worker":
-			var db =client.db("contractor-workers")
+			db =client.db("contractor-workers")
 			db_collection = db.collection("contractorWorkersLogin")
 			homepage_name = "contractor_worker_home_page"
 			break
 		case "Employee":
-			var db = client.db("employers-workers")
+		    db = client.db("employers-workers")
 			db_collection = db.collection("employersWorkersLogin")
 			homepage_name = "CompanyWorkerHomepage"
 			break
