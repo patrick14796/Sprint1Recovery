@@ -12,7 +12,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	// GET functions
 	app.get("/", (req, res) => {
-		console.log("insdie")
 		res.render("Homepage")
 		res.status(200)
 	})
@@ -84,29 +83,19 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var user_name = req.body.Email_Address
 		var passwordd = req.body.pass
 		var userType = req.body.user_type
-		//var data = {
-		//	"user": user_name,
-		//	"password": passwordd
-		//}
-		//console.log(data)
-		//loginData.insertOne(data, function (err, collection) {
-		//	if (err) {
-		//		throw err
-		//	}
-		//	console.log("Record inserted Successfully" + collection.insertedCount)
-		//})
 		var homepage_name=null
 		var db_collection = null
-		
+		var db = null
+
 		switch(userType)
 		{
 		case "Company Worker":
-			var db = client.db("human-resources-workers")
+			db = client.db("human-resources-workers")
 			db_collection = db.collection("humanResourcsesWorkersLogin")
 			homepage_name = "CompanyWorkerHomepage"
 			break
 		case "Contractor Worker":
-			var db = client.db("contractor-workers")
+			db =client.db("contractor-workers")
 			db_collection = db.collection("contractorWorkersLogin")
 			homepage_name = "contractor_worker_home_page"
 			break
@@ -116,6 +105,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			homepage_name = "CompanyWorkerHomepage"
 			break
 		}
+
 		if(db_collection){
 			db_collection.find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
 				console.log("Number of items:",numItems) // Use this to debug
@@ -123,6 +113,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				{
 					res.render(homepage_name + ".ejs")
 				}
+
 				else
 				{
 					console.log("User Not Exist! \n")
@@ -130,19 +121,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 			})
 		}
-		//var dbo = client.db("login-auth")
-		//dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
-		//	console.log("Number of items:",numItems) // Use this to debug
-		//	if (numItems  == 1)
-		//	{
-		//		res.sendFile(__dirname + "/loggedIn.html")
-		//	}
-		//	else
-		//	{
-		//		console.log("User Not Exist! \n")
-		//		res.render("Login")
-		//	}
-		//})
+		
+		else{res.render("Login")}
 	})
 
 	app.post("/add_contractor", (req, res) => {
@@ -205,9 +185,104 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("CompanyWorkerHomepage")
 	})
 
+
+	app.post("/Register_New_Employee", (req, res) => {
+
+		var db = client.db("employers-workers")
+		var db_collection = db.collection("employersWorkers")
+		var first_name = req.body.first_name
+		var last_name = req.body.last_name
+		var gender = req.body.radio
+		var email = req.body.email
+		var phone_number = req.body.phone
+		var company_name = req.body.companyName
+		var username = first_name + "_" + last_name + "@" + company_name + ".sce"
+		var password = "123456789"
+		var data = null
+		// Check if the user name is already taken
+		if(db_collection){
+			db_collection.find({"first_name": first_name, "last_name": last_name}).count().then(function(numItems) {
+				console.log(numItems)
+				if(numItems){
+					username = first_name + "_" + last_name + numItems + "@" + company_name + ".sce"
+				}
+				data ={
+					"first_name": first_name,
+					"last_name": last_name,
+					"gender": gender,
+					"email": email,
+					"phone_number": phone_number,
+					"company_name": company_name,
+					"user": username,
+					"password": password
+				}
+				// Add a new contractor worker to "contractorWorkers" collection with all of his information
+				db_collection.insertOne(data, function (err, collection) {
+					if (err) {
+						throw err
+					}
+					console.log("Record inserted Successfully" + collection.insertedCount)
+				})
+				
+			})
+		}
+		var db_collection_login = db.collection("employersWorkersLogin")
+		data ={
+			"user": username,
+			"password": password
+		}
+		db_collection_login.insertOne(data, function (err, collection) {
+			if (err) {
+				throw err
+			}
+			console.log("Record inserted Successfully" + collection.insertedCount)
+		})
+		res.render("Login")
+	})
 	
+
+
+
+
 }).catch(console.error)
+
+
+
 
 app.listen(port, () => {
 	console.log("Listening to port 3000!!!")
 })
+
+
+
+
+
+//var data = {
+//	"user": user_name,
+//	"password": passwordd
+//}
+//console.log(data)
+//loginData.insertOne(data, function (err, collection) {
+//	if (err) {
+//		throw err
+//	}
+//	console.log("Record inserted Successfully" + collection.insertedCount)
+//})
+
+
+
+
+
+//var dbo = client.db("login-auth")
+//dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
+//	console.log("Number of items:",numItems) // Use this to debug
+//	if (numItems  == 1)
+//	{
+//		res.sendFile(__dirname + "/loggedIn.html")
+//	}
+//	else
+//	{
+//		console.log("User Not Exist! \n")
+//		res.render("Login")
+//	}
+//})
