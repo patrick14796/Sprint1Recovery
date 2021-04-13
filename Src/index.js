@@ -258,31 +258,31 @@ app.listen(port, () => {
 
 
 //var data = {
-	//	"user": user_name,
-	//	"password": passwordd
-	//}
-	//console.log(data)
-	//loginData.insertOne(data, function (err, collection) {
-	//	if (err) {
-	//		throw err
-	//	}
-	//	console.log("Record inserted Successfully" + collection.insertedCount)
-	//})
+//	"user": user_name,
+//	"password": passwordd
+//}
+//console.log(data)
+//loginData.insertOne(data, function (err, collection) {
+//	if (err) {
+//		throw err
+//	}
+//	console.log("Record inserted Successfully" + collection.insertedCount)
+//})
 
 
 
 
 
 //var dbo = client.db("login-auth")
-	//dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
-	//	console.log("Number of items:",numItems) // Use this to debug
-	//	if (numItems  == 1)
-	//	{
-	//		res.sendFile(__dirname + "/loggedIn.html")
-	//	}
-	//	else
-	//	{
-	//		console.log("User Not Exist! \n")
-	//		res.render("Login")
-	//	}
-	//})
+//dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
+//	console.log("Number of items:",numItems) // Use this to debug
+//	if (numItems  == 1)
+//	{
+//		res.sendFile(__dirname + "/loggedIn.html")
+//	}
+//	else
+//	{
+//		console.log("User Not Exist! \n")
+//		res.render("Login")
+//	}
+//})
