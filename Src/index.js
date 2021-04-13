@@ -72,7 +72,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		//res.render("search_contractor_worker", {users: result}
 		db_collection.find().toArray(function (err, allDetails) {
 			if (err) {
-				console.log(err);
+				console.log(err)
 			}
 			else {
 				res.render("search_contractor_worker", { details: allDetails })
@@ -98,51 +98,51 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var homepage_name=null
 		var db_collection = null
 		
-			switch(userType)
-			{
-			case "Company Worker":
-				var db = client.db("human-resources-workers")
-				db_collection = db.collection("humanResourcsesWorkersLogin")
-				homepage_name = "CompanyWorkerHomepage"
-				break
-			case "Contractor Worker":
-				db =client.db("contractor-workers")
-				db_collection = db.collection("companyWorkersLogin")
-				homepage_name = "contractor_worker_home_page"
-				break
-			case "Employee":
-				db = client.db("employers-workers")
-				db_collection = db.collection("employersWorkersLogin")
-				homepage_name = "CompanyWorkerHomepage"
-				break
-			}
-			if(db_collection){
-				db_collection.find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
-					console.log("Number of items:",numItems) // Use this to debug
-					if (numItems  == 1)
-					{
-						res.render(homepage_name + ".ejs")
-					}
-					else
-					{
-						console.log("User Not Exist! \n")
-						res.render("Login")
-					}
-				})
-			}
-			//var dbo = client.db("login-auth")
-			//dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
-			//	console.log("Number of items:",numItems) // Use this to debug
-			//	if (numItems  == 1)
-			//	{
-			//		res.sendFile(__dirname + "/loggedIn.html")
-			//	}
-			//	else
-			//	{
-			//		console.log("User Not Exist! \n")
-			//		res.render("Login")
-			//	}
-			//})
+		switch(userType)
+		{
+		case "Company Worker":
+			var db = client.db("human-resources-workers")
+			db_collection = db.collection("humanResourcsesWorkersLogin")
+			homepage_name = "CompanyWorkerHomepage"
+			break
+		case "Contractor Worker":
+			db =client.db("contractor-workers")
+			db_collection = db.collection("companyWorkersLogin")
+			homepage_name = "contractor_worker_home_page"
+			break
+		case "Employee":
+			db = client.db("employers-workers")
+			db_collection = db.collection("employersWorkersLogin")
+			homepage_name = "CompanyWorkerHomepage"
+			break
+		}
+		if(db_collection){
+			db_collection.find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
+				console.log("Number of items:",numItems) // Use this to debug
+				if (numItems  == 1)
+				{
+					res.render(homepage_name + ".ejs")
+				}
+				else
+				{
+					console.log("User Not Exist! \n")
+					res.render("Login")
+				}
+			})
+		}
+		//var dbo = client.db("login-auth")
+		//dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
+		//	console.log("Number of items:",numItems) // Use this to debug
+		//	if (numItems  == 1)
+		//	{
+		//		res.sendFile(__dirname + "/loggedIn.html")
+		//	}
+		//	else
+		//	{
+		//		console.log("User Not Exist! \n")
+		//		res.render("Login")
+		//	}
+		//})
 	})
 
 	app.post("/add_contractor", (req, res) => {
