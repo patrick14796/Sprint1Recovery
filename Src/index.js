@@ -177,19 +177,32 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					"email": email,
 					"gender": gender,
 					"skills": skills,
-					"username": username,
+					"user": username,
 					"password": password
 				}
+				// Add a new contractor worker to "contractorWorkers" collection with all of his information
 				db_collection.insertOne(data, function (err, collection) {
 					if (err) {
 						throw err
 					}
 					console.log("Record inserted Successfully" + collection.insertedCount)
 				})
-				res.render("CompanyWorkerHomepage")
+				
 			})
 		}
-		
+		// Add a new contractor worker to "contractorWorkersLogin" db with his username and password only
+		var db_collection_login = db.collection("contractorWorkersLogin")
+		data ={
+			"user": username,
+			"password": password
+		}
+		db_collection_login.insertOne(data, function (err, collection) {
+			if (err) {
+				throw err
+			}
+			console.log("Record inserted Successfully" + collection.insertedCount)
+		})
+		res.render("CompanyWorkerHomepage")
 	})
 
 	
