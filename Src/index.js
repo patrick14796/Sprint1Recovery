@@ -106,18 +106,18 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log("Number of items:",numItems) // Use this to debug
 				if (numItems  == 1)
 				{
-					res.render(homepage_name + ".ejs")
+					res.redirect("/" + homepage_name)
 				}
 
 				else
 				{
 					console.log("User Not Exist! \n")
-					res.render("Login")
+					res.redirect("/Login")
 				}
 			})
 		}
 		
-		else{res.render("Login")}
+		else{res.redirect("/Login")}
 	})
 
 	app.post("/add_contractor", (req, res) => {
@@ -145,7 +145,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				if(numItems){
 					console.log("There is an existing user with this ID, please try to restore your password if you already have a user")
 					console.log(contractor_id)
-					res.render("add_new_contractor_worker")
+					
+					res.redirect("/add_new_contractor_worker")
 				}
 				// If there is not a user with that ID
 				else {
@@ -190,7 +191,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						}
 						console.log("Record inserted Successfully" + collection.insertedCount)
 					})
-					res.render("CompanyWorkerHomepage")
+					res.redirect("/CompanyWorkerHomepage")
 				}
 			})
 			
@@ -250,7 +251,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			console.log("Record inserted Successfully" + collection.insertedCount)
 		})
-		res.render("Login")
+		res.redirect("/Login")
 	})
 	
 
