@@ -138,7 +138,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var gender = req.body.radio
 		var skills = req.body.skills
 		var username = first_name + "_" + last_name + "@contractor.sce"
-		var password = "123456789"
+		var password =(Math.floor(1000000 + Math.random() * 9000000)).toString()
 		var data = null
 		// Check if the user name is already taken
 		if(db_collection){
@@ -197,7 +197,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var phone_number = req.body.phone
 		var company_name = req.body.companyName
 		var username = first_name + "_" + last_name + "@" + company_name + ".sce"
-		var password = "123456789"
+		var password = (Math.floor(1000000 + Math.random() * 9000000)).toString()
 		var data = null
 		// Check if the user name is already taken
 		if(db_collection){
