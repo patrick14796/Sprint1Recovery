@@ -54,5 +54,9 @@ module.exports = function(app) {  //receiving "app" instance
 		res.render("contractor_worker_my_profile")
 	})
 
+	app.get("/contractor_worker_edit_profile", (req, res) => {
+		res.render("contractor_worker_edit_profile")
+	})
+
 }
 
