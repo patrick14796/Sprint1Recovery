@@ -53,13 +53,14 @@
                             <table>
                                 <thead>
                                     <tr class="row100 head">
-                                        <th class="cell100 column1">First name</th>
-                                        <th class="cell100 column2">Last name</th>
-                                        <th class="cell100 column3">Hourly Pay</th>
-                                        <th class="cell100 column4">City</th>
-                                        <th class="cell100 column5">Skills</th>
-										<th class="cell100 column6">Actions</th>
-										<th class="cell100 column7"></th>
+										<th class="cell100 column1">ID</th>
+                                        <th class="cell100 column2">First name</th>
+                                        <th class="cell100 column3">Last name</th>
+                                        <th class="cell100 column4">Hourly Pay</th>
+                                        <th class="cell100 column5">City</th>
+                                        <th class="cell100 column6">Skills</th>
+										<th class="cell100 column7">Actions</th>
+										<th class="cell100 column8"></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -69,15 +70,16 @@
                                 <tbody>
                                     <% details.forEach(function(item){ %>
                                         <tr class="row100 body">
-                                            <td class="cell100 column1"><%= item.first_name%></td>
-                                            <td class="cell100 column2"><%= item.last_name%></td>
-                                            <td class="cell100 column3"><%= item.hourly_pay%></td>
-                                            <td class="cell100 column4"><%= item.city%></td>
-                                            <td class="cell100 column5"><%= item.skills%></td>  
-											<td class="cell100 column6">
+											<td class="cell100 column1"><%= item.id%></td>
+                                            <td class="cell100 column2"><%= item.first_name%></td>
+                                            <td class="cell100 column3"><%= item.last_name%></td>
+                                            <td class="cell100 column4"><%= item.hourly_pay%></td>
+                                            <td class="cell100 column5"><%= item.city%></td>
+                                            <td class="cell100 column6"><%= item.skills%></td>  
+											<td class="cell100 column7">
 												<button class="btn-search" type="submit">View Profile</button>
 											</td>   
-											<td class="cell100 column7">
+											<td class="cell100 column8">
 												<button class="btn-search" type="submit">Delete Contractor</button>
 											</td>                               
                                         </tr>

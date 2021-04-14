@@ -764,10 +764,14 @@ th, td {
 }
 
 .column6 {
-	width: 5%;
+	width: 15%;
 }
 
 .column7 {
+	width: 5%;
+}
+
+.column8 {
 	width: 5%;
 }
 
