@@ -63,7 +63,15 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_worker_edit_profile", (req, res) => {
 		res.render("contractor_worker_edit_profile")
 	})
+
+	app.get("/careers", (req, res) => {
+		res.render("careers_page")
+	})
 	
+	app.get("/contact_us", (req, res) => {
+		res.render("contact_us_page")
+	})
+
 	app.get("/search_contractor_worker", (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
