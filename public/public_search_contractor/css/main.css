@@ -760,12 +760,20 @@ th, td {
 }
 
 .column5 {
-  width: 32%;
+  width: 15%;
+}
+
+.column6 {
+	width: 5%;
+}
+
+.column7 {
+	width: 5%;
 }
 
 .table100-head th {
-  padding-top: 18px;
-  padding-bottom: 18px;
+  padding-top: 22px;
+  padding-bottom: 22px;
 }
 
 .table100-body td {

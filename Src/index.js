@@ -40,10 +40,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("monitor_of_all_hires")
 	})
 	
-	app.get("/search_for_a_contractor_worker", (req, res) => {
-		res.render("search_for_a_contractor_worker")
-	})
-	
 	app.get("/statistics", (req, res) => {
 		res.render("statistics")
 	})
@@ -67,14 +63,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/search_contractor_worker", (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
-		//var result = db_collection.find({})
-		//res.render("search_contractor_worker", {users: result}
+		
 		db_collection.find().toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
 			}
 			else {
-				res.render("search_contractor_worker", { details: allDetails })
+				res.render("search_contractor_worker", {details: allDetails})
 			}
 		})
 	})
@@ -241,6 +236,44 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 	
 
+	// POST function for search in a human resources pages
+	app.post("/filter_search", (req, res) => {
+		var skill = req.body.skill
+		var hourly_pay = req.body.hourly_pay
+		var city = req.body.city
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		
+		if(db_collection){
+			// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
+			if(skill == "" && hourly_pay == "" && city == ""){
+				db_collection.find().toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			// If the company worker filled all 3 criterions then search all the contractor workers that fits
+			else if (skill && hourly_pay && city) {
+				db_collection.find({"skills": skill, "hourly_pay": hourly_pay, "city": city}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			else {
+				res.render("search_contractor_worker", {details: null})
+			}
+			
+		}
+	})
 
 
 
