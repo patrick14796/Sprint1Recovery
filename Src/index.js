@@ -191,8 +191,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						console.log("Record inserted Successfully" + collection.insertedCount)
 					})
 					res.render("CompanyWorkerHomepage")
-					}
-				})
+				}
+			})
 			
 		}
 		
