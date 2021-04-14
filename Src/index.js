@@ -40,10 +40,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("monitor_of_all_hires")
 	})
 	
-	app.get("/search_for_a_contractor_worker", (req, res) => {
-		res.render("search_for_a_contractor_worker")
-	})
-	
 	app.get("/statistics", (req, res) => {
 		res.render("statistics")
 	})
@@ -64,24 +60,28 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("contractor_worker_my_profile")
 	})
 
-	app.get("/contractor_worker_my_profile", (req, res) => {
-		res.render("contractor_worker_my_profile")
+	app.get("/contractor_worker_edit_profile", (req, res) => {
+		res.render("contractor_worker_edit_profile")
 	})
-	app.get("/recruiter_home_page", (req, res) => {
-		res.render("recruiters_home_page")
+
+	app.get("/careers", (req, res) => {
+		res.render("careers_page")
+	})
+	
+	app.get("/contact_us", (req, res) => {
+		res.render("contact_us_page")
 	})
 
 	app.get("/search_contractor_worker", (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
-		//var result = db_collection.find({})
-		//res.render("search_contractor_worker", {users: result}
+		
 		db_collection.find().toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
 			}
 			else {
-				res.render("search_contractor_worker", { details: allDetails })
+				res.render("search_contractor_worker", {details: allDetails})
 			}
 		})
 	})
@@ -118,23 +118,24 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log("Number of items:",numItems) // Use this to debug
 				if (numItems  == 1)
 				{
-					res.render(homepage_name + ".ejs")
+					res.redirect("/" + homepage_name)
 				}
 
 				else
 				{
 					console.log("User Not Exist! \n")
-					res.render("Login")
+					res.redirect("/Login")
 				}
 			})
 		}
 		
-		else{res.render("Login")}
+		else{res.redirect("/Login")}
 	})
 
 	app.post("/add_contractor", (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
+		var contractor_id = req.body.id
 		var first_name = req.body.first_name
 		var last_name = req.body.last_name
 		var hourly_pay = req.body.hourly_pay
@@ -147,49 +148,67 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var username = first_name + "_" + last_name + "@contractor.sce"
 		var password =(Math.floor(1000000 + Math.random() * 9000000)).toString()
 		var data = null
-		// Check if the user name is already taken
+		
 		if(db_collection){
-			db_collection.find({"first_name": first_name, "last_name": last_name}).count().then(function(numItems) {
+			// Check if the id belongs to another user
+			db_collection.find({"id": contractor_id}).count().then(function(numItems) {
+				console.log(contractor_id)
 				console.log(numItems)
 				if(numItems){
-					username = first_name + "_" + last_name + numItems + "@contractor.sce"
+					console.log("There is an existing user with this ID, please try to restore your password if you already have a user")
+					console.log(contractor_id)
+					
+					res.redirect("/add_new_contractor_worker")
 				}
-				data ={
-					"first_name": first_name,
-					"last_name": last_name,
-					"hourly_pay": hourly_pay,
-					"city": city,
-					"home": home,
-					"phone_number": phone_number,
-					"email": email,
-					"gender": gender,
-					"skills": skills,
-					"user": username,
-					"password": password
-				}
-				// Add a new contractor worker to "contractorWorkers" collection with all of his information
-				db_collection.insertOne(data, function (err, collection) {
-					if (err) {
-						throw err
+				// If there is not a user with that ID
+				else {
+					// Check if the user name is already taken
+					db_collection.find({"first_name": first_name, "last_name": last_name}).count().then(function(numItems) {
+						console.log(numItems)
+						if(numItems){
+							username = first_name + "_" + last_name + numItems + "@contractor.sce"
+						}
+						data ={
+							"id": contractor_id,
+							"first_name": first_name,
+							"last_name": last_name,
+							"hourly_pay": hourly_pay,
+							"city": city,
+							"home": home,
+							"phone_number": phone_number,
+							"email": email,
+							"gender": gender,
+							"skills": skills,
+							"user": username,
+							"password": password
+						}
+						// Add a new contractor worker to "contractorWorkers" collection with all of his information
+						db_collection.insertOne(data, function (err, collection) {
+							if (err) {
+								throw err
+							}
+							console.log("Record inserted Successfully" + collection.insertedCount)
+						})
+
+					})
+					// Add a new contractor worker to "contractorWorkersLogin" db with his username and password only
+					var db_collection_login = db.collection("contractorWorkersLogin")
+					data ={
+						"user": username,
+						"password": password
 					}
-					console.log("Record inserted Successfully" + collection.insertedCount)
-				})
-				
+					db_collection_login.insertOne(data, function (err, collection) {
+						if (err) {
+							throw err
+						}
+						console.log("Record inserted Successfully" + collection.insertedCount)
+					})
+					res.redirect("/CompanyWorkerHomepage")
+				}
 			})
+			
 		}
-		// Add a new contractor worker to "contractorWorkersLogin" db with his username and password only
-		var db_collection_login = db.collection("contractorWorkersLogin")
-		data ={
-			"user": username,
-			"password": password
-		}
-		db_collection_login.insertOne(data, function (err, collection) {
-			if (err) {
-				throw err
-			}
-			console.log("Record inserted Successfully" + collection.insertedCount)
-		})
-		res.render("CompanyWorkerHomepage")
+		
 	})
 
 
@@ -244,10 +263,48 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			console.log("Record inserted Successfully" + collection.insertedCount)
 		})
-		res.render("Login")
+		res.redirect("/Login")
 	})
 	
 
+	// POST function for search in a human resources pages
+	app.post("/filter_search", (req, res) => {
+		var skill = req.body.skill
+		var hourly_pay = req.body.hourly_pay
+		var city = req.body.city
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		
+		if(db_collection){
+			// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
+			if(skill == "" && hourly_pay == "" && city == ""){
+				db_collection.find().toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			// If the company worker filled all 3 criterions then search all the contractor workers that fits
+			else if (skill && hourly_pay && city) {
+				db_collection.find({"skills": skill, "hourly_pay": hourly_pay, "city": city}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			else {
+				res.render("search_contractor_worker", {details: null})
+			}
+			
+		}
+	})
 
 
 

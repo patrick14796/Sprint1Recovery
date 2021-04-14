@@ -31,6 +31,12 @@
                 <div class="card-body">
                     <form id="add_form" action="/add_contractor" method="POST">
                         <div class="form-row">
+                            <div class="name">ID</div>
+                            <div class="value">
+                                <input class="input--style-6" type="text" name="id" required required pattern="[0-9]{9}">
+                            </div>
+                        </div>
+						<div class="form-row">
                             <div class="name">First name</div>
                             <div class="value">
                                 <input class="input--style-6" type="text" name="first_name" required required pattern="[a-zA-Z]+">
