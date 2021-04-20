@@ -307,6 +307,27 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 
+	app.post('/delete/:id', (req,res)=>{
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		var myquery = { id: req.params.id }
+
+		if(db_collection){
+			db_collection.deleteOne(myquery, function(err, obj) {
+				if (err) throw err
+			})
+		}
+		
+		// IN ORDER FOR THIS TO DELETE WELL WE NEED TO ADD ID FOR EACH USER IN THE LOGIN DB AS WELL
+		db_collection = db.collection("contractorWorkersLogin")
+		if(db_collection){
+			db_collection.deleteOne(myquery, function(err, obj) {
+				if (err) throw err
+			});
+		}
+		return
+	})
 
 }).catch(console.error)
 

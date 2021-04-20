@@ -66,7 +66,7 @@
                             </table>
                         </div>
                         <div class="table100-body js-pscroll">
-                            <table>
+                            <table id="contractor-workers-table">
                                 <tbody>
                                     <% details.forEach(function(item){ %>
                                         <tr class="row100 body">
@@ -77,10 +77,10 @@
                                             <td class="cell100 column5"><%= item.city%></td>
                                             <td class="cell100 column6"><%= item.skills%></td>  
 											<td class="cell100 column7">
-												<button class="btn-search" type="submit">View Profile</button>
+												<button class="btn-search" type="button">View Profile</button>
 											</td>   
 											<td class="cell100 column8">
-												<button class="btn-search" type="submit">Delete Contractor</button>
+												<button class="btn-delete" onclick="delete_contractor(this)" type="button">Delete Contractor</button>
 											</td>                               
                                         </tr>
                                     <% }) %>
@@ -110,9 +110,41 @@
                 ps.update();
             })
         });
-            
-        
     </script>
+	<script>
+		function addRowHandlers() {
+    		var table = document.getElementById("contractor-workers-table");
+    		var rows = table.getElementsByTagName("tr");
+    		for (i = 0; i < rows.length; i++) {
+    		    var currentRow = table.rows[i];
+    		    var createClickHandler = function(row) {
+					return function() {
+						var cell = row.getElementsByTagName("td")[0]
+    		            var id = cell.innerHTML
+						cell = row.getElementsByTagName("td")[1]
+						var first_name = cell.innerHTML
+						cell = row.getElementsByTagName("td")[2]
+						var last_name = cell.innerHTML
+						var to_delete = confirm('Are you sure you want to delete ' + first_name + ' ' + last_name + ' ID: ' + id)
+						if (to_delete) {
+							fetch('/delete/'+ id, { method: 'POST' }).then(function (response) {
+								if (response.ok) {
+									return
+								}
+								throw new Error('Request failed.')
+								}).catch(function (error) {
+									console.log(error)
+							})
+						}
+						
+    		        }
+    		    }
+
+    		    currentRow.onclick = createClickHandler(currentRow);
+    		}
+		}
+		window.onload = addRowHandlers();
+	</script>
 
 <!--===============================================================================================-->
     <script src="js/main.js"></script>
