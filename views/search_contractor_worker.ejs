@@ -116,7 +116,8 @@
     		var table = document.getElementById("contractor-workers-table");
     		var rows = table.getElementsByTagName("tr");
     		for (i = 0; i < rows.length; i++) {
-    		    var currentRow = table.rows[i];
+    		    var currentRow = table.rows[i]
+				var currentDeleteBtn = currentRow.getElementsByTagName("td")[7]
     		    var createClickHandler = function(row) {
 					return function() {
 						var cell = row.getElementsByTagName("td")[0]
@@ -141,7 +142,7 @@
     		        }
     		    }
 
-    		    currentRow.onclick = createClickHandler(currentRow);
+    		    currentDeleteBtn.onclick = createClickHandler(currentRow);
     		}
 		}
 		window.onload = addRowHandlers();
