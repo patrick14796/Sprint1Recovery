@@ -152,11 +152,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		if(db_collection){
 			// Check if the id belongs to another user
 			db_collection.find({"id": contractor_id}).count().then(function(numItems) {
-				console.log(contractor_id)
 				console.log(numItems)
 				if(numItems){
 					console.log("There is an existing user with this ID, please try to restore your password if you already have a user")
-					console.log(contractor_id)
 					
 					res.redirect("/add_new_contractor_worker")
 				}
@@ -194,6 +192,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					// Add a new contractor worker to "contractorWorkersLogin" db with his username and password only
 					var db_collection_login = db.collection("contractorWorkersLogin")
 					data ={
+						"id": contractor_id,
 						"user": username,
 						"password": password
 					}
@@ -307,6 +306,30 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 
+	app.post("/delete/:id", (req,res)=>{
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		var myquery = { id: req.params.id }
+
+		if(db_collection){
+			// Deleting contractor worker from collection contractorWorkers
+			db_collection.deleteOne(myquery, function(err, obj) {
+				if (err) throw err
+				return obj
+			})
+		}
+		
+		db_collection = db.collection("contractorWorkersLogin")
+		if(db_collection){
+			// Deleting contractor worker from collection contractorWorkersLogin
+			db_collection.deleteOne(myquery, function(err, obj) {
+				if (err) throw err
+				return obj
+			})
+		}
+		return res
+	})
 
 }).catch(console.error)
 
