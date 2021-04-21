@@ -129,6 +129,7 @@
 						if (to_delete) {
 							fetch('/delete/'+ id, { method: 'POST' }).then(function (response) {
 								if (response.ok) {
+									console.log("OKk")
 									return
 								}
 								throw new Error('Request failed.')
