@@ -74,7 +74,9 @@
                           <div class="col-xs-6">
                               <label for="first_name"><h4>First name</h4></label>
                               <br>
-                              <td >Rona</td>
+							  <% if(details!=null) { %>
+                              <td ><%= details[0].first_name%></td>
+							  <% } %>
                           </div>
                       </div>
 
@@ -82,7 +84,9 @@
                           <div class="col-xs-6">
                             <label for="last_name"><h4>Last name</h4></label>
                             <br>
-                            <td >Nazarov</td>
+                            <% if(details!=null) { %>
+							<td ><%= details[0].last_name%></td>
+							<% } %>
                           </div>
                       </div>
 
@@ -90,7 +94,9 @@
                         <div class="col-xs-6">
                             <label for="city"><h4>City</h4></label>
                             <br>
-                            <td >Yavne</td>    
+                            <% if(details!=null) { %>
+							<td ><%= details[0].city%></td>
+							<% } %>  
                         </div>
                     </div>
 
@@ -98,14 +104,18 @@
                         <div class="col-xs-6">
                             <label for="address"><h4>Home address</h4></label>
                             <br>
-                            <td >Tsalaf 3</td>    
+                            <% if(details!=null) { %>
+							<td ><%= details[0].home%></td>
+							<% } %> 
                         </div>
                     </div>
                       <div class="form-group">
                           <div class="col-xs-6">
                               <label for="phone"><h4>Phone</h4></label>
                               <br>
-                              <td >0533383663</td>  
+                              <% if(details!=null) { %>
+								<td ><%= details[0].phone_number%></td>
+							  <% } %>
                             </div>
                       </div>
 
@@ -113,7 +123,9 @@
                           <div class="col-xs-6">
                               <label for="email"><h4>Email</h4></label>
                               <br>
-                              <td >ronanazarov@gmail.com</td>  
+                              <% if(details!=null) { %>
+								<td ><%= details[0].email%></td>
+							  <% } %> 
                             </div>
                       </div>
 
@@ -121,7 +133,9 @@
                           <div class="col-xs-6">
                               <label for="gender"><h4>Gender</h4></label>
                               <br>
-                              <td >Female</td> 
+                              <% if(details!=null) { %>
+								<td ><%= details[0].gender%></td>
+							  <% } %> 
                           </div>
                           
                       </div>
@@ -130,7 +144,9 @@
                           <div class="col-xs-6">
                               <label for="skills"><h4>Skills</h4></label>
                               <br>
-                              <td >CSS, JAVA</td> 
+                              <% if(details!=null) { %>
+								<td ><%= details[0].skills%></td>
+							  <% } %> 
                           </div>
                       </div>
                      

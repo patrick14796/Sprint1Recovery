@@ -56,12 +56,22 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("contractor_worker_home_page")
 	})
 	
-	app.get("/contractor_worker_my_profile", (req, res) => {
-		res.render("contractor_worker_my_profile")
+	app.get("/contractor_worker_my_profile/:id", (req, res) => {
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.params.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				res.render("contractor_worker_my_profile", {details: allDetails})
+			}
+		})	
 	})
 
 	app.get("/contractor_worker_edit_profile", (req, res) => {
-		res.render("contractor_worker_edit_profile")
+		res.sendFile("contractor_worker_edit_profile")
 	})
 
 	app.get("/careers", (req, res) => {
@@ -85,6 +95,49 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 		})
 	})
+
+	app.get("/delete/:id", (req,res)=>{
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		var myquery = { id: req.params.id }
+
+		if(db_collection){
+			// Deleting contractor worker from collection contractorWorkers
+			db_collection.deleteOne(myquery, function(err, obj) {
+				if (err) throw err
+				return obj
+			})
+			res.redirect("/search_contractor_worker")
+		}
+		
+		db_collection = db.collection("contractorWorkersLogin")
+		if(db_collection){
+			// Deleting contractor worker from collection contractorWorkersLogin
+			db_collection.deleteOne(myquery, function(err, obj) {
+				if (err) throw err
+				return obj
+			})
+		}
+	})
+
+
+	app.get("/contractor_worker_profile/:id", (req,res) => {
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.params.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				res.render("contractor_worker_my_profile", {details: allDetails})
+			}
+		})		
+	})
+
+
+
 	// POST functions
 	app.post("/auth", (req, res) => {
 		var user_name = req.body.Email_Address
@@ -303,32 +356,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			
 		}
-	})
-
-
-	app.post("/delete/:id", (req,res)=>{
-		// Connect contractor workers db and collection
-		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
-		var myquery = { id: req.params.id }
-
-		if(db_collection){
-			// Deleting contractor worker from collection contractorWorkers
-			db_collection.deleteOne(myquery, function(err, obj) {
-				if (err) throw err
-				return obj
-			})
-		}
-		
-		db_collection = db.collection("contractorWorkersLogin")
-		if(db_collection){
-			// Deleting contractor worker from collection contractorWorkersLogin
-			db_collection.deleteOne(myquery, function(err, obj) {
-				if (err) throw err
-				return obj
-			})
-		}
-		return res
 	})
 
 }).catch(console.error)
