@@ -1,0 +1,188 @@
+
+* {
+	box-sizing: border-box;
+  }
+ 
+body,html{
+	height: 100%;
+	margin: 0;
+	margin: 0;
+	font-family: Arial;
+	font-size: 17px;
+}
+
+/*
+ * HTML5 Boilerplate
+ *
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+   /* * Hide from both screenreaders and browsers: h5bp.com/u */
+   .hidden {display: none !important; visibility: hidden; }
+
+   /* * Hide only visually, but have it available for screenreaders: h5bp.com/v */
+   .visuallyhidden {border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+
+   /* * Extends the .visuallyhidden class to allow the element to be focusable * when navigated to via the keyboard: h5bp.com/p */
+
+   .visuallyhidden.focusable:active,
+   .visuallyhidden.focusable:focus {clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; } /* * Hide visually and from screenreaders, but maintain layout */
+
+   .invisible { visibility: hidden; }
+
+   .clearfix:before,
+   .clearfix:after {content: " "; /* 1 */ display: table; /* 2 */ }
+
+.clearfix:after {clear: both; }
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+   * { box-sizing: border-box; }
+   html,
+   button,
+   input,
+   select,
+   textarea {color: #000; }
+
+   body { font-size: 1em; line-height: 1;   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNSIgaGVpZ2h0PSIxNSI+CjxyZWN0IHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgZmlsbD0iIzI4MjgyOCI+PC9yZWN0Pgo8Y2lyY2xlIGN4PSIzIiBjeT0iNC4zIiByPSIxLjgiIGZpbGw9IiMzOTM5MzkiPjwvY2lyY2xlPgo8Y2lyY2xlIGN4PSIzIiBjeT0iMyIgcj0iMS44IiBmaWxsPSJibGFjayI+PC9jaXJjbGU+CjxjaXJjbGUgY3g9IjEwLjUiIGN5PSIxMi41IiByPSIxLjgiIGZpbGw9IiMzOTM5MzkiPjwvY2lyY2xlPgo8Y2lyY2xlIGN4PSIxMC41IiBjeT0iMTEuMyIgcj0iMS44IiBmaWxsPSJibGFjayI+PC9jaXJjbGU+Cjwvc3ZnPg=="); }
+   ::selection { background: #b3d4fc; text-shadow: none; }
+
+   textarea { resize: none; }
+.author {
+    font-family: Helvetica, Arial, sans-serif;
+   	font-size: 16px;
+   	font-weight: bold;
+   	color: #FFF;
+   	padding: 10px 20px;
+   	background: rgba(0,0,0,.3);
+  
+   	border-radius: 5px;
+    text-decoration: none;
+   	box-shadow: inset 0px 0px 10px 2px rgba(0,0,0,.5);
+   	text-shadow: 0px 1px 0px rgba(0,0,0,.5), 0px -1px 0px rgba(255,255,255,.3); 
+   	box-shadow: inset 0px 0px 3px rgba(0,0,0,.7);  
+  position: absolute; top: 20px; left: 20px; 
+}
+.author:hover { color: #50b6fa;} 
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+   #board { padding: 100px 30px 30px; margin-top: 40px; overflow-y: visible;}
+   .note { 
+   	float: left;
+   	display: block; position: relative;
+   	padding: 1em;
+   	max-width: 300px;
+   	min-height: 300px;
+   	margin: 0 30px 30px 0; 
+   	background: -webkit-linear-gradient(#FEF4AC 0%, #F4E183 100%);
+   	box-shadow: 5px 5px 10px 5px rgba(33,33,33,.5);
+   	-webkit-transform: rotate(1deg);
+    -webkit-transform:skew(-1deg,1deg); 
+   	-webkit-transition:-webkit-transform .15s linear; 
+     transform: rotate(1deg);
+     transform:skew(-1deg,1deg); 
+     transition:-webkit-transform .15s linear; 
+   }  
+   .note:hover { cursor: move;} 
+   .note.ui-draggable-dragging:nth-child(n) { 
+   	transition: all .15s; 
+   	-webkit-transition: all .15s;
+   	box-shadow:5px 5px 10px 3px rgba(0,0,0,.3);  
+   	-webkit-transform: scale(1.125);
+   	transform: scale(1.125) !important;  
+   	z-index: 100;
+   	cursor: move; 
+        
+   }  
+
+   .note textarea {
+   	background-color: transparent;
+   	border: none;
+   	font-family: 'Gloria Hallelujah', cursive;
+   	width: 100%;
+   	 }
+
+   .note .title { font-size: 1.5em; line-height: 1.2; color: #000; height: 54px; margin-top: 20px; }
+   .note .cnt   { min-height: 160px; line-height: 1.2;}
+
+   .button {
+   	font-family: Helvetica, Arial, sans-serif;
+   	font-size: 16px;
+   	font-weight: bold;
+   	color: #ffffff;
+   	padding: 10px 20px;
+   	background: -webkit-gradient(linear, left top, left bottom, from(#50b6fa), to(#0089ab));
+   	border-radius: 5px;
+   	box-shadow: 1px 1px 1px rgba(0,0,0,.3),inset 0px -1px 2px -1px rgba(0,0,0,.5), inset 0px 1px 2px 1px rgba(255,255,255,.3);
+   	text-shadow: 0px -1px 0px rgba(0,0,0,.5), 0px 1px 0px rgba(255,255,255,.3); 
+   	text-decoration: none;
+   	border: 1px solid rgba(0,0,0,.5);
+   	-webkit-transition:-webkit-transform .15s linear; 
+     transition:-webkit-transform .15s linear; 
+
+
+   }
+   
+   .button:hover  { 
+      background: #50b6fa; box-shadow: 0px 1px 3px rgba(0,0,0,0.5), inset 0 0 5px rgba(255,255,255,.3) 
+   }
+   .button:active { 
+   	background: -webkit-gradient(linear, left top, left bottom, from(#0089ab), to(#50b6fa)); padding: 11px 20px 9px;
+   	text-shadow: 0px 1px 0px rgba(0,0,0,.4), 0px -1px 0px rgba(255,255,255,.3); 
+   	box-shadow: inset 0px 0px 3px rgba(0,0,0,.7);
+   }
+   .remove.button { 
+   	display: block;
+   	position: absolute; 
+   	top: 5px; right: 5px;
+   	width: 36px; height: 36px; 
+   	border-radius: 50%; 
+   	background: -webkit-gradient(linear, left top, left bottom, from(#e01c12), to(#660606));
+   	text-align: center; line-height: 36px; padding: 0px !important;
+   	border-color: #b30000;
+   	font-style: 1.6em;
+    font-weight: bolder;
+    line-height: 36px;
+      font-family: Helvetica, Arial, sans-serif;
+   }
+   .remove.button:hover { 
+   	background: -webkit-gradient(linear, left top, left bottom, from(#660606), to(#e01c12));
+   }
+
+   #add_new { position: fixed; right: 20px; z-index: 100; }
+
+   .note:nth-child(2n) {  
+   	-webkit-transform:rotate(.5deg); 
+     transform:rotate(.5deg); 
+   	position:relative;  
+   	top: 5px;  
+   	background: -webkit-gradient(linear, left top, left bottom, from(#cfc), to(#bfffbf));
+
+   }  
+   .note:nth-child(3n) {  
+   	-webkit-transform:rotate(-1deg);  
+     transform:rotate(-1deg);  
+   	background: -webkit-gradient(linear, left top, left bottom, from(#ccf), to(#bfbfff));
+   }  
+   
+
+
+
+
+
+
+
+
+
+
