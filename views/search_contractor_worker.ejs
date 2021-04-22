@@ -77,10 +77,10 @@
                                             <td class="cell100 column5"><%= item.city%></td>
                                             <td class="cell100 column6"><%= item.skills%></td>  
 											<td class="cell100 column7">
-												<button class="btn-search" type="button">View Profile</button>
+												<button class="btn-view" type="button">View Profile</button>
 											</td>   
 											<td class="cell100 column8">
-												<button class="btn-delete" onclick="delete_contractor(this)" type="button">Delete Contractor</button>
+												<button class="btn-delete" type="button">Delete Contractor</button>
 											</td>                               
                                         </tr>
                                     <% }) %>
@@ -117,8 +117,9 @@
     		var rows = table.getElementsByTagName("tr");
     		for (i = 0; i < rows.length; i++) {
     		    var currentRow = table.rows[i]
+				var currentViewBtn = currentRow.getElementsByTagName("td")[6]
 				var currentDeleteBtn = currentRow.getElementsByTagName("td")[7]
-    		    var createClickHandler = function(row) {
+    		    var createDeleteClickHandler = function(row) {
 					return function() {
 						var cell = row.getElementsByTagName("td")[0]
     		            var id = cell.innerHTML
@@ -128,21 +129,21 @@
 						var last_name = cell.innerHTML
 						var to_delete = confirm('Are you sure you want to delete ' + first_name + ' ' + last_name + ' ID: ' + id)
 						if (to_delete) {
-							fetch('/delete/'+ id, { method: 'POST' }).then(function (response) {
-								if (response.ok) {
-									console.log("OKk")
-									return
-								}
-								throw new Error('Request failed.')
-								}).catch(function (error) {
-									console.log(error)
-							})
+							window.location.href = 'delete/'+ id;
 						}
 						
     		        }
     		    }
+				var createViewClickHandler = function(row) {
+					return async function() {
+						var cell = row.getElementsByTagName("td")[0]
+    		            var id = cell.innerHTML
+						window.location.href = 'contractor_worker_profile/'+ id;
+    		        }
+    		    }
 
-    		    currentDeleteBtn.onclick = createClickHandler(currentRow);
+    		    currentDeleteBtn.onclick = createDeleteClickHandler(currentRow);
+				currentViewBtn.onclick = createViewClickHandler(currentRow);
     		}
 		}
 		window.onload = addRowHandlers();
