@@ -106,6 +106,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			// Deleting contractor worker from collection contractorWorkers
 			db_collection.deleteOne(myquery, function(err, obj) {
 				if (err) throw err
+				return obj
 			})
 			res.redirect("/search_contractor_worker")
 		}
@@ -115,6 +116,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			// Deleting contractor worker from collection contractorWorkersLogin
 			db_collection.deleteOne(myquery, function(err, obj) {
 				if (err) throw err
+				return obj
 			})
 		}
 	})
