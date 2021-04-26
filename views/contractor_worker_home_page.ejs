@@ -206,7 +206,13 @@
             <div id="make-note" hidden>
               <div class="popup">
                 <h4> <span class="verb"></span> note on <span id="noteDate">2019 12 5</span></h4>
-                <input class="note-title" type="text" name="title" placeholder="note title ..." />
+                <select class="note-title" name="title" placeholder="note title ..." required>
+                  <option style="display:none;" class="placeholder" selected disabled value="">Choose Event</option>
+                  <option value="Sick Day">Sick Day</option>
+                  <option value="Work Day">Work Day</option>
+                  <option value="Vacation">Vacation</option>
+                  <option value="Perosnal Reminder">Personal Reminder</option>
+                </select>
                 <textarea class="note-content" id="edit-post-it" name="post-it"
                   placeholder="note description ..." ></textarea>
                 <span style="color:red;" id="warning"></span>

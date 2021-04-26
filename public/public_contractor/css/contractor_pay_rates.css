@@ -1,0 +1,42 @@
+* {
+	box-sizing: border-box;
+  }
+ 
+
+  html,body{	
+  height: 100%;
+	margin: 0;
+	margin: 0;
+	font-size: 17px;
+  overflow: hidden;
+  }
+  #Graph{
+    height: 100%;
+    width: 100%;
+  }
+  #line{
+    height: 80%;
+    width: 90%;
+  }
+  circle[animetion]{
+    transition: 0.2s;
+    stroke-width: 0;
+    stroke: rgb(83, 162, 215,0.3);
+}
+circle[animetion][start]{
+    stroke-width: 8;
+}
+
+svg g[show_data]{
+    animation-name: show_smoth;
+    animation-duration: 0.3s;
+}
+@keyframes show_smoth{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
