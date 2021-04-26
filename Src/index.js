@@ -42,12 +42,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("CompanyWorkerHomepage")
 	})
 
-<<<<<<< HEAD
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
 		res.render("recruiters_home_page")
 	})
-=======
->>>>>>> 4de64008c040547a71753dd2d3b9c0dde45d540a
+
 	
 	app.get("/Register", (req, res) => {
 		res.render("Register")
@@ -94,24 +92,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_worker_edit_profile", authUser, authRole("Contractor Worker"), (req, res) => {
 		res.sendFile("contractor_worker_edit_profile")
 	})
-<<<<<<< HEAD
+
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
 		res.render("recruiters_home_page")
-=======
 
-	app.get("/recruiters_home_page", (req, res) => {
-		var db = client.db("contractor-workers")
-		var db_collection = db.collection("contractorWorkers")
-		
-		db_collection.find().toArray(function (err, allDetails) {
-			if (err) {
-				console.log(err)
-			}
-			else {
-				res.render("recruiters_home_page", {details: allDetails})
-			}
-		})
->>>>>>> 4de64008c040547a71753dd2d3b9c0dde45d540a
 	})
 
 
