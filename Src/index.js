@@ -3,18 +3,18 @@ const port = process.env.PORT || 3000
 const app = express()
 app.set("view engine", "ejs")
 app.use(express.static("public"))
-const session = require("express-session");
-const {authUser, authRole} = require('./simpleAuth')
+const session = require("express-session")
+const {authUser, authRole} = require("./simpleAuth")
 // initialize express-session to allow us track the logged-in user across sessions.
 app.use(
 	session({
-	  key: "user_sid",
-	  secret: "somerandonstuffs",
-	  resave: false,
-	  saveUninitialized: false,
-	  cookie: {
-		expires: 600000,
-	  },
+		key: "user_sid",
+		secret: "somerandonstuffs",
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			expires: 600000,
+		},
 	})
 )
 
