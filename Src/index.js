@@ -42,9 +42,12 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("CompanyWorkerHomepage")
 	})
 
+<<<<<<< HEAD
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
 		res.render("recruiters_home_page")
 	})
+=======
+>>>>>>> 4de64008c040547a71753dd2d3b9c0dde45d540a
 	
 	app.get("/Register", (req, res) => {
 		res.render("Register")
@@ -91,8 +94,24 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_worker_edit_profile", authUser, authRole("Contractor Worker"), (req, res) => {
 		res.sendFile("contractor_worker_edit_profile")
 	})
+<<<<<<< HEAD
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
 		res.render("recruiters_home_page")
+=======
+
+	app.get("/recruiters_home_page", (req, res) => {
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		
+		db_collection.find().toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				res.render("recruiters_home_page", {details: allDetails})
+			}
+		})
+>>>>>>> 4de64008c040547a71753dd2d3b9c0dde45d540a
 	})
 
 
@@ -386,6 +405,44 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else {
 				res.render("search_contractor_worker", {details: null})
+			}
+			
+		}
+	})
+
+	app.post("/filter_search_by_recruiter", (req, res) => {
+		var skill = req.body.skill
+		var hourly_pay = req.body.hourly_pay
+		var city = req.body.city
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		
+		if(db_collection){
+			// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
+			if(skill == "" && hourly_pay == "" && city == ""){
+				db_collection.find().toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("recruiters_home_page", {details: allDetails})
+					}
+				})
+			}
+			// If the company worker filled all 3 criterions then search all the contractor workers that fits
+			else if (skill && hourly_pay && city) {
+				db_collection.find({"skills": skill, "hourly_pay": hourly_pay, "city": city}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("recruiters_home_page", {details: allDetails})
+					}
+				})
+			}
+			else {
+				res.render("recruiters_home_page", {details: null})
 			}
 			
 		}
