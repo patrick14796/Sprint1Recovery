@@ -27,6 +27,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/CompanyWorkerHomepage", (req, res) => {
 		res.render("CompanyWorkerHomepage")
 	})
+
+	app.get("/recruiters_home_page", (req, res) => {
+		res.render("recruiters_home_page")
+	})
 	
 	app.get("/Register", (req, res) => {
 		res.render("Register")
@@ -169,7 +173,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		case "Employee":
 			db = client.db("employers-workers")
 			db_collection = db.collection("employersWorkersLogin")
-			homepage_name = "CompanyWorkerHomepage"
+			homepage_name = "recruiters_home_page"
 			break
 		}
 
