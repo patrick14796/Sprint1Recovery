@@ -43,7 +43,17 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
-		res.render("recruiters_home_page")
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		
+		db_collection.find().toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				res.render("recruiters_home_page", {details: allDetails})
+			}
+		})
 	})
 
 	
@@ -92,12 +102,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_worker_edit_profile", authUser, authRole("Contractor Worker"), (req, res) => {
 		res.sendFile("contractor_worker_edit_profile")
 	})
-
-	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
-		res.render("recruiters_home_page")
-
-	})
-
 
 	app.get("/careers", (req, res) => {
 		res.render("careers_page")
