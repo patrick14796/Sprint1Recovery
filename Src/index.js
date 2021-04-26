@@ -73,6 +73,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_worker_edit_profile", (req, res) => {
 		res.sendFile("contractor_worker_edit_profile")
 	})
+	app.get("/recruiter_home_page", (req, res) => {
+		res.render("recruiters_home_page")
+	})
+
 
 	app.get("/careers", (req, res) => {
 		res.render("careers_page")

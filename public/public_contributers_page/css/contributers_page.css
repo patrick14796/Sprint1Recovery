@@ -445,7 +445,7 @@
     position: fixed;
     grid-template-columns: 300px 300px 300px;
     grid-gap: 50px;
-    bottom:10%;
+    bottom:0;
     justify-content: center;
     align-items: center;
     background-color: transparent;
