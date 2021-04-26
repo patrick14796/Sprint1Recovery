@@ -168,6 +168,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		})		
 	})
 
+	app.get("/hire_contractor", (req, res) => {
+		res.render("hire_contractor")
+	})
 
 
 	// POST functions
