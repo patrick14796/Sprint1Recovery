@@ -464,7 +464,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							if(day[0] == date)
 							{
 								console.log("cant' hire in this day!")
-								res.redirect("back");
+								res.redirect("back")
 								
 							}
 						
