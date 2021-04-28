@@ -456,6 +456,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 				else {
 					try {
+						var day
 						var temp=allDetails[0].not_able_to_work
 						for(day of temp)
 						{
@@ -463,19 +464,20 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							if(day[0] == date)
 							{
 								console.log("cant' hire in this day!")
-								res.redirect('back');
+								res.redirect("back");
 								
 							}
 						
 						}
-					
+						
+						var job
 						var contractor_hiring = allDetails[0].hiring
 						for(job of contractor_hiring)
 						{
 							if(job[0] == date && job[3] == id_of_recruiter)
 							{
 								console.log("cant hire twice by same recruiter!\n")
-								res.redirect('back');
+								res.redirect("back")
 								
 							}
 						}
