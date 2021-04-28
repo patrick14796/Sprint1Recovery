@@ -155,11 +155,12 @@
                            <div class="col-xs-12">
                                 <br>
                                 <ul class="list-inline m-0">
-                                    
-                                    <a href="#" class="btn btn-primary a-btn-slide-text">
+                                	<% if(allowed) { %>
+                                    <a href="contractor_worker_edit_profile" class="btn btn-primary a-btn-slide-text">
                                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                         <span><strong>Edit</strong></span>            
                                     </a>
+									<% } %>
                                 </ul>
                             </div>
                       </div>
