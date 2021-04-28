@@ -457,7 +457,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 				else {
 					var all_hiring = []
-					for(var i=0; i < allDetails.length; ++i){
+					var i = 0
+					for(i=0; i < allDetails.length; ++i){
 						var contractor_hirings = allDetails[i].hiring
 						for (var j=0; j<contractor_hirings.length; ++j){
 							var one_hire = {
@@ -473,7 +474,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					}
 					// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
 					if(recrutier_id != ""){
-						for (var i=all_hiring.length; i>0; --i){
+						for (i=all_hiring.length; i>0; --i){
 							if(all_hiring[i-1].recrutier_id != recrutier_id){
 								all_hiring.splice(i-1, 1)
 							}
@@ -481,7 +482,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 					}
 					if(contractor_name != ""){
-						for (var i=all_hiring.length; i>0; --i){
+						for (i=all_hiring.length; i>0; --i){
 							if(all_hiring[i-1].full_name != contractor_name){
 								all_hiring.splice(i-1, 1)
 
@@ -489,7 +490,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						}
 					}
 					if(date != ""){
-						for (var i=all_hiring.length; i>0; --i){
+						for (i=all_hiring.length; i>0; --i){
 							if(all_hiring[i-1].date != date){
 								all_hiring.splice(i-1, 1)
 							}
@@ -608,7 +609,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var enter_gender = req.body.male
 		var gender_val = "Male"
 		if(!enter_gender){
-			gender = req.body.female
 			gender_val = "Female"
 		}
 
