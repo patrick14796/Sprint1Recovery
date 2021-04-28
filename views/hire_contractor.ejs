@@ -1,100 +1,47 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+	<base href="/">
 	<header>
-		<%- include('../partials/header_company_worker'); %>
+		<%- include('../partials/header_recruiter'); %>
 	</header>
   <head>
-  	<title>Hire Calendar</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<base href="/"> 
+    <!-- <link> doesn't need a closing tag -->
+    <link href="CSS/Master.css" rel="stylesheet" type="text/css">
+    <!-- include the jQuery UI style sheet -->
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- include jQuery -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- include jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script  src="public_try/calandar.js"></script>
+  </head>
+  <body>
+		<form id="hire_withCalander" action="/hire" method="POST">
+    		<div id="Datepicker1"></div>
+			<div id="unvailable"></div>
+    		<script type="text/javascript">
+      			$(function() {
+        			$("#Datepicker1").datepicker({
+        	 		numberOfMonths: 0
+        			}); 
+      			});
+    		</script>
 	
-	<link rel="stylesheet" href="public_hire_contractor/css/style.css">
+			<p>Date: <input type="text" name = "date_of_hire" id="datepicker" /></p>
+			<p>Start Event: <input type="text"  name = "Start_work" maxlength="5"  id="start_hire"/></p>
+			<p>End Event: <input type="text" id="End_hire" name = "end_work" maxlength="5" /></p>
+			<p><button class="button_hire" type="submit">Hire</button></p>
+			<input type="hidden" name="contractor_id" id="hiddenInput"/>
 
-	</head>
-	<body>
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Calendar #08</h2>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="content w-100">
-				    <div class="calendar-container">
-				      <div class="calendar"> 
-				        <div class="year-header"> 
-				          <span class="left-button fa fa-chevron-left" id="prev"> </span> 
-				          <span class="year" id="label"></span> 
-				          <span class="right-button fa fa-chevron-right" id="next"> </span>
-				        </div> 
-				        <table class="months-table w-100"> 
-				          <tbody>
-				            <tr class="months-row">
-				              <td class="month">Jan</td> 
-				              <td class="month">Feb</td> 
-				              <td class="month">Mar</td> 
-				              <td class="month">Apr</td> 
-				              <td class="month">May</td> 
-				              <td class="month">Jun</td> 
-				              <td class="month">Jul</td>
-				              <td class="month">Aug</td> 
-				              <td class="month">Sep</td> 
-				              <td class="month">Oct</td>          
-				              <td class="month">Nov</td>
-				              <td class="month">Dec</td>
-				            </tr>
-				          </tbody>
-				        </table> 
-				        
-				        <table class="days-table w-100"> 
-				          <td class="day">Sun</td> 
-				          <td class="day">Mon</td> 
-				          <td class="day">Tue</td> 
-				          <td class="day">Wed</td> 
-				          <td class="day">Thu</td> 
-				          <td class="day">Fri</td> 
-				          <td class="day">Sat</td>
-				        </table> 
-				        <div class="frame"> 
-				          <table class="dates-table w-100"> 
-			              <tbody class="tbody">             
-			              </tbody> 
-				          </table>
-				        </div> 
-				        <button class="button" id="add-button">Add Event</button>
-				      </div>
-				    </div>
-				    <div class="events-container">
-				    </div>
-				    <div class="dialog" id="dialog">
-				        <h2 class="dialog-header"> Hire </h2>
-				        <form class="form" id="form">
-				          <div class="form-container" align="center">
-				            <label class="form-label" id="valueFromMyButton" for="name">Start Hiring</label>
-				            <input class="input" type="text" id="name" maxlength="5" required required pattern="[0-9][0-9]:[0-9][0-9]">
-				            <label class="form-label" id="valueFromMyButton" for="count">End Hiring</label>
-				            <input class="input" type="text" id="count" maxlength="5" required required pattern="[0-9][0-9]:[0-9][0-9]">
-				            <input type="button" value="Cancel" class="button" id="cancel-button">
-				            <input type="button" value="OK" class="button button-white" id="ok-button">
-				          </div>
-				        </form>
-				      </div>
-				  </div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<script src="public_hire_contractor/js/jquery.min.js"></script>
-  <script src="public_hire_contractor/js/popper.js"></script>
-  <script src="public_hire_contractor/js/bootstrap.min.js"></script>
-  <script src="public_hire_contractor/js/main.js"></script>
+    		<script>
+        		var input = document.getElementById('hiddenInput');
+				var id="<%= id %>";
+				input.value = id
+    		</script>
+		</form>
+		<script>var id="<%= id %>";</script>
 
 	</body>
 </html>
+
