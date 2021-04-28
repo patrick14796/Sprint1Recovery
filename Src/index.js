@@ -521,7 +521,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var enter_gender = req.body.male
 		var gender_val = "Male"
 		if(!enter_gender){
-			gender = req.body.female
 			gender_val = "Female"
 		}
 
