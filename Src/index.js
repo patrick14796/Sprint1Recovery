@@ -173,6 +173,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 
+	app.get("/contractor_history_of_hiring", (req, res) => {
+		res.render("contractor_history_of_hiring")
+	})
+
 	// POST functions
 	app.post("/auth", (req, res) => {
 		var user_name = req.body.Email_Address
