@@ -36,16 +36,22 @@
                     <h2 class="title">Registration Form</h2>
                     <form action="/Register_New_Employee" method="POST">
                         <div class="row row-space">
+							<div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">id</label>
+                                    <input class="input--style-4" type="text" name="id" required required pattern="[0-9]{9}">
+                                </div>
+                            </div>
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">first name</label>
-                                    <input class="input--style-4" type="text" name="first_name">
+                                    <input class="input--style-4" type="text" name="first_name" required required pattern="[a-zA-Z]+">
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">last name</label>
-                                    <input class="input--style-4" type="text" name="last_name">
+                                    <input class="input--style-4" type="text" name="last_name" required required pattern="[a-zA-Z]+">
                                 </div>
                             </div>
                         </div>
@@ -70,13 +76,13 @@
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">Email</label>
-                                    <input class="input--style-4" type="email" name="email">
+                                    <input class="input--style-4" type="email" name="email" required required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">Phone Number</label>
-                                    <input class="input--style-4" type="text" name="phone">
+                                    <input class="input--style-4" type="text" name="phone" required required pattern="[0-9]{10}">
                                 </div>
                             </div>
                         </div>

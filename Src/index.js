@@ -274,7 +274,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							"gender": gender,
 							"skills": skills,
 							"user": username,
-							"password": password
+							"password": password,
+							"not_able_to_work":[],
+							"hiring":[],
+							"ratings":[]
 						}
 						// Add a new contractor worker to "contractorWorkers" collection with all of his information
 						db_collection.insertOne(data, function (err, collection) {
@@ -311,6 +314,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 		var db = client.db("employers-workers")
 		var db_collection = db.collection("employersWorkers")
+		var id=req.body.id
 		var first_name = req.body.first_name
 		var last_name = req.body.last_name
 		var gender = req.body.radio
@@ -328,6 +332,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					username = first_name + "_" + last_name + numItems + "@" + company_name + ".sce"
 				}
 				data ={
+					"id":id,
 					"first_name": first_name,
 					"last_name": last_name,
 					"gender": gender,
@@ -335,7 +340,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					"phone_number": phone_number,
 					"company_name": company_name,
 					"user": username,
-					"password": password
+					"password": password,
+					"hiring":[]
 				}
 				// Add a new contractor worker to "contractorWorkers" collection with all of his information
 				db_collection.insertOne(data, function (err, collection) {
