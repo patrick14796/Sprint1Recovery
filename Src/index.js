@@ -142,6 +142,16 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 
 	// POST functions
+	app.post("/add_note_calendar" ,(req,res) => {
+     var date= req.d;
+	 var title=req.t;
+	 var db =client.db("contractor-workers")
+	 var db_collection = db.collection("contractorWorkers")
+	 
+	 console.log("something happens")
+	});
+
+
 	app.post("/auth", (req, res) => {
 		var user_name = req.body.Email_Address
 		var passwordd = req.body.pass

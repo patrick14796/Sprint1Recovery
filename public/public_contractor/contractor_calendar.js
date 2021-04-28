@@ -376,11 +376,11 @@ $(document).ready(function() {
           currentFullYear.year === todayYear
         ) {
           let todayFullDate =
-            state.todayYear +
-            " " +
             (state.todayMonth + 1) +
-            " " +
-            state.todayDate;
+            "/" +
+            (state.todayDate) +
+            "/" +
+            state.todayYear;
           let isTodayHasNotes = notes.filter(note => note.date === todayFullDate);
           let viewNote = "";
           if (isTodayHasNotes.length > 0) {
@@ -425,11 +425,9 @@ $(document).ready(function() {
             //exp 2019 10 24
             week.children[j].classList.add("currMonth");
             let currentFullDate =
-              currentFullMonth.year +
-              " " +
               (currentFullMonth.month_idx + 1) +
-              " " +
-              currentWeek[j].day;
+              "/" +  currentWeek[j].day + "/" +  currentFullMonth.year;
+
             let notesFound = notes.filter(
               note => note.date === currentFullDate
             )[0];
@@ -599,11 +597,11 @@ $(document).ready(function() {
         console.log("noteId:", noteId);
         if (noteId == "current-day") {
           noteDate =
-            state.todayYear +
-            " " +
             (state.todayMonth + 1) +
-            " " +
-            state.todayDate;
+            "/" +
+            (state.todayDate) +
+            "/" +
+            state.todayYear;
           note = notes.filter(n => n.date == noteDate);
         } else {
           note = notes.filter(n => n.id == noteId);
@@ -612,7 +610,7 @@ $(document).ready(function() {
         noteDate = note[0].date;
         openModal(true);
         fillNotePopup(note[0]);
-        addNote(noteDate.split(" ")[2], noteId);
+        addNote(noteDate.split("/")[2], noteId);
       } else if (e.target.classList.contains("currMonth")) {
         noteId = e.target.id;
         noteDate = e.target.innerHTML;
@@ -644,7 +642,7 @@ $(document).ready(function() {
       noteId = e.target.parentElement.parentElement.id;
       if (noteId == "current-day") {
         noteDate =
-          state.todayYear + " " + (state.todayMonth + 1) + " " + state.todayDate;
+        (state.todayMonth + 1)+  "/" + (state.todayMonth + 1) + "/" + state.todayDate;
         note = notes.filter(n => n.date == noteDate);
       } else {
         note = notes.filter(n => n.id == noteId);
@@ -658,7 +656,7 @@ $(document).ready(function() {
       verb.innerHTML = verbWord;
   
       console.log("xXx");
-      addNote(noteDate.split(" ")[2], noteId);
+      addNote(noteDate.split("/")[2], noteId);
     }
   });
   
@@ -678,11 +676,11 @@ $(document).ready(function() {
   //create note
   saveBtnInPopup.addEventListener("click", () => {
     const noteDate =
-      currentFullMonth.year +
-      " " +
       (currentFullMonth.month_idx + 1) +
-      " " +
-      getSelectedNoteDay;
+      "/" +
+      getSelectedNoteDay+
+      "/" +
+      currentFullMonth.year;
     let oldNote = notes.filter(note => note.date == noteDate)[0];
     if (oldNote) {
       notes = notes.filter(note => oldNote.id !== note.id);
@@ -695,12 +693,16 @@ $(document).ready(function() {
       date: noteDate
     };
   
-    if (noteTitleInput.value.trim() !== "" &&noteTitleInput.value.trim() !== " " ) {
+    if (noteTitleInput.value.trim() !== "" &&noteTitleInput.value.trim() !== "/" ) {
       console.log("newNote:", newNote);
       notes.push(newNote);
       closeModal(true);
       printMonthCalendarInDOM();
       updateLocalStorage();
+      $.post("/add_note_calendar",function (newNote){
+        var d=newNote[date]
+        var t=newNote[title]
+      });
     } else {
       document.getElementById("warning").innerHTML = "Please fill all fields";
     }
@@ -710,7 +712,7 @@ $(document).ready(function() {
   deleteBtnInPopup.addEventListener("click", () => {
     if (getSelectedNoteId == "current-day") {
       noteDate =
-        state.todayYear + " " + (state.todayMonth + 1) + " " + state.todayDate;
+      (state.todayMonth + 1)+  "/" + (state.todayMonth + 1) + "/" + state.todayDate;
       notes = notes.filter(note => note.date !== noteDate);
       document
         .getElementById("current-day")
