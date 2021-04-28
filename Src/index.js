@@ -172,12 +172,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	// POST functions
 	app.post("/add_note_calendar" ,(req,res) => {
-     var date= req.d;
-	 var title=req.t;
+     var date= req.body.d;
+	 var title=req.body.t;
+	 var dec=req.body.e;
 	 var db =client.db("contractor-workers")
 	 var db_collection = db.collection("contractorWorkers")
-	 
-	 console.log("something happens")
+	 db_collection.updateOne({"id":req.session.user.id},{$push:{not_able_to_work:[date,title,dec]}})
+	 console.log(date,title,dec)
 	});
 
 

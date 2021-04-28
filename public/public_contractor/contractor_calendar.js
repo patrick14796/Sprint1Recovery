@@ -693,16 +693,13 @@ $(document).ready(function() {
       date: noteDate
     };
   
-    if (noteTitleInput.value.trim() !== "" &&noteTitleInput.value.trim() !== "/" ) {
+    if (noteTitleInput.value.trim() !== "" && noteTitleInput.value.trim() !== "/" ) {
       console.log("newNote:", newNote);
       notes.push(newNote);
       closeModal(true);
       printMonthCalendarInDOM();
       updateLocalStorage();
-      $.post("/add_note_calendar",function (newNote){
-        var d=newNote[date]
-        var t=newNote[title]
-      });
+      $.post("/add_note_calendar",{d : newNote.date, t : newNote.title,e : newNote.desc});
     } else {
       document.getElementById("warning").innerHTML = "Please fill all fields";
     }
