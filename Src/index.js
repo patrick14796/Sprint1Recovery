@@ -518,6 +518,12 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var enter_home_address = req.body.home_address
 		var enter_phone = req.body.phone
 		var enter_email = req.body.email
+		var enter_gender = req.body.male
+		var gender_val = "Male"
+		if(!enter_gender){
+			gender = req.body.female
+			gender_val = "Female"
+		}
 
 		var db =client.db("contractor-workers")
 		var	db_collection = db.collection("contractorWorkers")
@@ -529,7 +535,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					city: enter_city,
 					home: enter_home_address,
 					phone_number: enter_phone,
-					email: enter_email
+					email: enter_email,
+					gender: gender_val
 				}
 			})
 			res.redirect("/contractor_worker_my_profile")
