@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  
+    <header>
+        <%- include('../partials/header_recruiter'); %>
+    </header>
+	<head>
+		<title>Recruiter Homepage & Search for contractor Workers</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->  
+		<link rel="icon" type="image/png" href="public_search_contractor/images/icons/favicon.ico"/>
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="public_search_contractor/vendor/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="public_search_contractor/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="public_search_contractor/vendor/animate/animate.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="public_search_contractor/vendor/select2/select2.min.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="public_search_contractor/vendor/perfect-scrollbar/perfect-scrollbar.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="public_search_contractor/css/util.css">
+		<link rel="stylesheet" type="text/css" href="public_search_contractor/css/main.css">
+	<!--===============================================================================================-->
+	</head>
+	<body>
+		<div class="s01">
+			<form action="/filter_search_by_recruiter" method="POST">
+			  <div class="inner-form">
+				<div class="input-field first-wrap">
+				  <input id="search" type="text" name="skill" placeholder="What skill are you looking for?"/>
+				</div>
+				<div class="input-field second-wrap">
+				  <input id="location" type="text" name="hourly_pay" placeholder="hourly pay"/>
+				</div>
+				<div class="input-field second-wrap">
+					<input id="location" type="text" name="city" placeholder="city"/>
+				</div>
+				<div class="input-field third-wrap">
+				  <button class="btn-search" type="submit">Search</button>
+				</div>
+			  </div>
+			</form>
+		</div>
+		<% if(details!=null) { %>
+		<div class="limiter">
+			<div class="container-table100">
+				<div class="wrap-table100">
+					<div class="table100 ver1 m-b-110">
+						<div class="table100-head">
+								<table>
+									<thead>
+										<tr class="row100 head">
+											<th class="cell100 column1">ID</th>
+											<th class="cell100 column2">First name</th>
+											<th class="cell100 column3">Last name</th>
+											<th class="cell100 column4">Hourly Pay</th>
+											<th class="cell100 column5">City</th>
+											<th class="cell100 column6">Skills</th>
+											<th class="cell100 column7">Actions</th>
+											<th class="cell100 column8"></th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+							<div class="table100-body js-pscroll">
+								<table id="contractor-workers-table">
+									<tbody>
+										<% details.forEach(function(item){ %>
+											<tr class="row100 body">
+												<td class="cell100 column1"><%= item.id%></td>
+												<td class="cell100 column2"><%= item.first_name%></td>
+												<td class="cell100 column3"><%= item.last_name%></td>
+												<td class="cell100 column4"><%= item.hourly_pay%></td>
+												<td class="cell100 column5"><%= item.city%></td>
+												<td class="cell100 column6"><%= item.skills%></td>  
+												<td class="cell100 column7">
+													<button class="btn-view" type="button">View Profile</button>
+												</td>   
+												<td class="cell100 column8">
+													<button class="btn-Hire" type="button">Hire</button>
+												</td>                               
+											</tr>
+										<% }) %>
+									</tbody>
+								</table>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+		<% } %>
+	
+	<!--===============================================================================================-->  
+		<script src="public_search_contractor/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+		<script src="public_search_contractor/vendor/bootstrap/js/popper.js"></script>
+		<script src="public_search_contractor/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+		<script src="public_search_contractor/vendor/select2/select2.min.js"></script>
+	<!--===============================================================================================-->
+		<script src="public_search_contractor/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+		<script>
+			$('.js-pscroll').each(function(){
+				var ps = new PerfectScrollbar(this);
+	
+				$(window).on('resize', function(){
+					ps.update();
+				})
+			});
+		</script>
+		<script>
+			function addRowHandlers() {
+				var table = document.getElementById("contractor-workers-table");
+				var rows = table.getElementsByTagName("tr");
+				for (i = 0; i < rows.length; i++) {
+					var currentRow = table.rows[i]
+					var currentViewBtn = currentRow.getElementsByTagName("td")[6]
+					var currentHireBtn = currentRow.getElementsByTagName("td")[7]
+					var createHireClickHandler = function(row) {
+						return function() {
+							var cell = row.getElementsByTagName("td")[0]
+							var id = cell.innerHTML
+														
+							
+						}
+					}
+					var createViewClickHandler = function(row) {
+						return async function() {
+							var cell = row.getElementsByTagName("td")[0]
+							var id = cell.innerHTML
+							window.location.href = 'contractor_worker_profile/'+ id;
+						}
+					}
+	
+					currentHireBtn.onclick = createHireClickHandler(currentRow);
+					currentViewBtn.onclick = createViewClickHandler(currentRow);
+				}
+			}
+			window.onload = addRowHandlers();
+		</script>
+	
+	<!--===============================================================================================-->
+		<script src="js/main.js"></script>
+	</body>
+</html>
+
+

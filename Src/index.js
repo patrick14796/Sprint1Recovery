@@ -3,6 +3,20 @@ const port = process.env.PORT || 3000
 const app = express()
 app.set("view engine", "ejs")
 app.use(express.static("public"))
+const session = require("express-session")
+const {authUser, authRole} = require("./simpleAuth")
+// initialize express-session to allow us track the logged-in user across sessions.
+app.use(
+	session({
+		key: "user_sid",
+		secret: "somerandonstuffs",
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			expires: 600000,
+		},
+	})
+)
 
 const MongoClient = require("mongodb").MongoClient
 const bodyParser = require("body-parser")
@@ -24,27 +38,42 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("contributers_page")
 	})
 	
-	app.get("/CompanyWorkerHomepage", (req, res) => {
+	app.get("/CompanyWorkerHomepage", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("CompanyWorkerHomepage")
 	})
+
+	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		
+		db_collection.find().toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				res.render("recruiters_home_page", {details: allDetails})
+			}
+		})
+	})
+
 	
 	app.get("/Register", (req, res) => {
 		res.render("Register")
 	})
 	
-	app.get("/add_new_contractor_worker", (req, res) => {
+	app.get("/add_new_contractor_worker", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("add_new_contractor_worker")
 	})
 	
-	app.get("/monitor_of_all_hires", (req, res) => {
+	app.get("/monitor_of_all_hires", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("monitor_of_all_hires")
 	})
 	
-	app.get("/statistics", (req, res) => {
+	app.get("/statistics", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("statistics")
 	})
 	
-	app.get("/shifts_monitor", (req, res) => {
+	app.get("/shifts_monitor", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("shifts_monitor")
 	})
 	
@@ -52,11 +81,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("why_us_page")
 	})
 	
-	app.get("/contractor_worker_home_page", (req, res) => {
+	app.get("/contractor_worker_home_page", authUser, authRole("Contractor Worker"), (req, res) => {
 		res.render("contractor_worker_home_page")
 	})
 	
-	app.get("/contractor_worker_my_profile/:id", (req, res) => {
+	app.get("/contractor_worker_my_profile/:id", authUser, authRole("Company Worker"), (req, res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
 		var	db_collection = db.collection("contractorWorkers")
@@ -70,7 +99,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		})	
 	})
 
-	app.get("/contractor_worker_edit_profile", (req, res) => {
+	app.get("/contractor_worker_edit_profile", authUser, authRole("Contractor Worker"), (req, res) => {
 		res.sendFile("contractor_worker_edit_profile")
 	})
 
@@ -81,11 +110,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contact_us", (req, res) => {
 		res.render("contact_us_page")
 	})
-	app.get("/contractor_pay_rates", (req, res) => {
+	app.get("/contractor_pay_rates", authUser, authRole("Recruiter"), (req, res) => {
 		res.render("contractor_pay_rates")
 	})
 
-	app.get("/search_contractor_worker", (req, res) => {
+	app.get("/search_contractor_worker", authUser, authRole("Compnay Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 		
@@ -99,7 +128,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		})
 	})
 
-	app.get("/delete/:id", (req,res)=>{
+	app.get("/delete/:id", authUser, authRole("Compnay Worker"), (req,res)=>{
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
 		var	db_collection = db.collection("contractorWorkers")
@@ -125,7 +154,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 
-	app.get("/contractor_worker_profile/:id", (req,res) => {
+	app.get("/contractor_worker_profile/:id", authUser, authRole("Compnay Worker"), (req,res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
 		var	db_collection = db.collection("contractorWorkers")
@@ -159,6 +188,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var homepage_name=null
 		var db_collection = null
 		var db = null
+		var type = null
 
 		switch(userType)
 		{
@@ -166,24 +196,31 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			db = client.db("human-resources-workers")
 			db_collection = db.collection("humanResourcsesWorkersLogin")
 			homepage_name = "CompanyWorkerHomepage"
+			type = "Company Worker"
 			break
 		case "Contractor Worker":
 			db =client.db("contractor-workers")
 			db_collection = db.collection("contractorWorkersLogin")
 			homepage_name = "contractor_worker_home_page"
+			type = "Contractor Worker"
 			break
 		case "Employee":
 			db = client.db("employers-workers")
 			db_collection = db.collection("employersWorkersLogin")
-			homepage_name = "CompanyWorkerHomepage"
+			homepage_name = "recruiters_home_page"
+			type = "Recruiter"
 			break
 		}
 
 		if(db_collection){
-			db_collection.find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
-				console.log("Number of items:",numItems) // Use this to debug
-				if (numItems  == 1)
+			db_collection.find({"user":user_name , "password":passwordd}).toArray(function (err, users) {
+				if (users.length  == 1)
 				{
+					console.log(users[0])
+					req.session.user = {
+						"id": users[0].id,
+						"type": type
+					}
 					res.redirect("/" + homepage_name)
 				}
 
@@ -366,6 +403,44 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else {
 				res.render("search_contractor_worker", {details: null})
+			}
+			
+		}
+	})
+
+	app.post("/filter_search_by_recruiter", (req, res) => {
+		var skill = req.body.skill
+		var hourly_pay = req.body.hourly_pay
+		var city = req.body.city
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		
+		if(db_collection){
+			// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
+			if(skill == "" && hourly_pay == "" && city == ""){
+				db_collection.find().toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("recruiters_home_page", {details: allDetails})
+					}
+				})
+			}
+			// If the company worker filled all 3 criterions then search all the contractor workers that fits
+			else if (skill && hourly_pay && city) {
+				db_collection.find({"skills": skill, "hourly_pay": hourly_pay, "city": city}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("recruiters_home_page", {details: allDetails})
+					}
+				})
+			}
+			else {
+				res.render("recruiters_home_page", {details: null})
 			}
 			
 		}
