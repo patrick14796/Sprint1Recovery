@@ -113,6 +113,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_pay_rates", authUser, authRole("Recruiter"), (req, res) => {
 		res.render("contractor_pay_rates")
 	})
+	
 
 	app.get("/search_contractor_worker", authUser, authRole("Compnay Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
@@ -180,6 +181,16 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	 db_collection.updateOne({"id":req.session.user.id},{$push:{not_able_to_work:[date,title,dec]}})
 	 console.log(date,title,dec)
 	});
+	app.post("/delete_note_calendar" ,(req,res) => {
+		var date= req.body.d;
+		var title=req.body.t;
+	 	var dec=req.body.e;
+		var db =client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.updateOne({"id":req.session.user.id},{$pull:{not_able_to_work:[date,title,dec]}})
+		console.log("Deleted note",date,title,dec)
+	   });
+   
 
 
 	app.post("/auth", (req, res) => {
