@@ -114,7 +114,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("contractor_pay_rates")
 	})
 
-	app.get("/search_contractor_worker", authUser, authRole("Compnay Worker"), (req, res) => {
+	app.get("/search_contractor_worker", authUser, authRole("Company Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 		
@@ -128,7 +128,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		})
 	})
 
-	app.get("/delete/:id", authUser, authRole("Compnay Worker"), (req,res)=>{
+	app.get("/delete/:id", authUser, authRole("Company Worker"), (req,res)=>{
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
 		var	db_collection = db.collection("contractorWorkers")
@@ -154,7 +154,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 
-	app.get("/contractor_worker_profile/:id", authUser, authRole("Compnay Worker"), (req,res) => {
+	app.get("/contractor_worker_profile/:id", authUser, authRole("Company Worker"), (req,res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
 		var	db_collection = db.collection("contractorWorkers")
@@ -168,6 +168,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		})		
 	})
 
+	app.get("/hire_contractor/:id", (req, res) => {
+		res.render("hire_contractor",{"id":req.params.id})
+	})
 
 
 	// POST functions
@@ -435,6 +438,64 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			
 		}
 	})
+
+	app.post("/hire", (req, res) => {
+		var id_of_contractor = req.body.contractor_id
+		var id_of_recruiter =  req.session.user.id
+		var date = req.body.date_of_hire
+		var start = req.body.Start_work
+		var end = req.body.end_work
+
+		
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		if(db_collection){
+			db_collection.find({"id": id_of_contractor}).toArray(function (err, allDetails) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					try {
+						var day
+						var temp=allDetails[0].not_able_to_work
+						for(day of temp)
+						{
+
+							if(day[0] == date)
+							{
+								console.log("cant' hire in this day!")
+								res.redirect("back")
+								
+							}
+						
+						}
+						
+						var job
+						var contractor_hiring = allDetails[0].hiring
+						for(job of contractor_hiring)
+						{
+							if(job[0] == date && job[3] == id_of_recruiter)
+							{
+								console.log("cant hire twice by same recruiter!\n")
+								res.redirect("back")
+								
+							}
+						}
+
+						db_collection.updateOne({"id":id_of_contractor},{$push:{hiring:[date,start,end,id_of_recruiter]}})
+
+						db =client.db("employers-workers")
+						db_collection = db.collection("employersWorkers")
+						db_collection.updateOne({"id":id_of_recruiter},{$push:{hiring:[date,start,end,id_of_contractor]}})
+						res.redirect("/recruiters_home_page")
+					} catch (error) {
+						console.log("Ad matay????")
+					}
+				}
+			})
+		}
+	})
+
 
 }).catch(console.error)
 
