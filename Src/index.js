@@ -66,7 +66,33 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 	
 	app.get("/monitor_of_all_hires", authUser, authRole("Company Worker"), (req, res) => {
-		res.render("monitor_of_all_hires")
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		
+		db_collection.find().toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var all_hiring = []
+				for(var i=0; i < allDetails.length; ++i){
+					var contractor_hirings = allDetails[i].hiring
+					for (var j=0; j<contractor_hirings.length; ++j){
+						var one_hire = {
+							"contractor_id": allDetails[i].id,
+							"full_name": allDetails[i].first_name + " " + allDetails[i].last_name,
+							"date": contractor_hirings[j][0],
+							"start": contractor_hirings[j][1],
+							"end": contractor_hirings[j][2],
+							"recrutier_id": contractor_hirings[j][3]
+						}
+						all_hiring.push(one_hire)
+					}
+					
+				}
+				res.render("monitor_of_all_hires", {details: all_hiring})
+			}
+		})
 	})
 	
 	app.get("/statistics", authUser, authRole("Company Worker"), (req, res) => {
@@ -412,6 +438,67 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			else {
 				res.render("search_contractor_worker", {details: null})
 			}
+			
+		}
+	})
+
+	app.post("/filter_monitor_hiring", (req, res) => {
+		var recrutier_id = req.body.recrutier_id
+		var contractor_name = req.body.contractor_name
+		var date = req.body.date
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		
+		if(db_collection){
+			db_collection.find().toArray(function (err, allDetails) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var all_hiring = []
+					for(var i=0; i < allDetails.length; ++i){
+						var contractor_hirings = allDetails[i].hiring
+						for (var j=0; j<contractor_hirings.length; ++j){
+							var one_hire = {
+								"contractor_id": allDetails[i].id,
+								"full_name": allDetails[i].first_name + " " + allDetails[i].last_name,
+								"date": contractor_hirings[j][0],
+								"start": contractor_hirings[j][1],
+								"end": contractor_hirings[j][2],
+								"recrutier_id": contractor_hirings[j][3]
+							}
+							all_hiring.push(one_hire)
+						}
+					}
+					// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
+					if(recrutier_id != ""){
+						for (var i=all_hiring.length; i>0; --i){
+							if(all_hiring[i-1].recrutier_id != recrutier_id){
+								all_hiring.splice(i-1, 1)
+							}
+						}
+
+					}
+					if(contractor_name != ""){
+						for (var i=all_hiring.length; i>0; --i){
+							if(all_hiring[i-1].full_name != contractor_name){
+								all_hiring.splice(i-1, 1)
+
+							}
+						}
+					}
+					if(date != ""){
+						for (var i=all_hiring.length; i>0; --i){
+							if(all_hiring[i-1].date != date){
+								all_hiring.splice(i-1, 1)
+							}
+						}
+						
+					}
+					res.render("monitor_of_all_hires", {details: all_hiring})
+				}
+			})
 			
 		}
 	})
