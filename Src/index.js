@@ -85,6 +85,21 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("contractor_worker_home_page")
 	})
 	
+	app.get("/send_data_calendar", authUser, authRole("Contractor Worker"), (req, res) => {
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				
+				res.json({details: allDetails})
+			}
+		})	
+	})
+
 	app.get("/contractor_worker_my_profile/:id", authUser, authRole("Company Worker"), (req, res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
