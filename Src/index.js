@@ -593,7 +593,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						var contractor_hiring = allDetails[0].hiring
 						for(job of contractor_hiring)
 						{
-							if(job[0] == date && job[3] == id_of_recruiter)
+							if(job[0] == date)
 							{
 								console.log("cant hire twice by same recruiter!\n")
 								res.redirect("back")
