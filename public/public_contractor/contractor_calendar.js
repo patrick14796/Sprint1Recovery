@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
   const currentDayDOM = document.getElementById("cur-day"),
   currentMonthDOM = document.getElementById("cur-month"),
@@ -174,9 +175,15 @@ if (!colorsFound) {
   applyTheme();
 }
 
+
 //update local storage
 function updateLocalStorage() {
-  let currentNotes = notes;
+  var d;
+  $.get("/send_data_calendar",function(data){
+    d=data.details[0].not_able_to_work
+    //console.log(d)
+  })
+  let currentNotes = d;
   localStorage.setItem("notes", JSON.stringify(currentNotes));
   localStorage.setItem("theme", JSON.stringify(currentColor));
   applyTheme();
@@ -624,7 +631,6 @@ document.body.addEventListener("click", e => {
     noteDateInPopup.innerHTML = noteDate;
     verb.innerHTML = verbWord;
 
-    console.log("xXx");
     addNote(noteDate.split("/")[2], noteId);
   }
 });
@@ -663,13 +669,11 @@ saveBtnInPopup.addEventListener("click", () => {
   };
 
   if (noteTitleInput.value.trim() !== "" && noteTitleInput.value.trim() !== "/" ) {
-    console.log("newNote:", newNote);
     notes.push(newNote);
     closeModal(true);
     printMonthCalendarInDOM();
     updateLocalStorage();
     $.post("/add_note_calendar",{d : newNote.date, t : newNote.title,e : newNote.desc});
-    console.log($.get("/contractor_worker_home_page").details)
   } else {
     document.getElementById("warning").innerHTML = "Please fill all fields";
   }
@@ -685,12 +689,10 @@ deleteBtnInPopup.addEventListener("click", () => {
       .getElementById("current-day")
       .classList.remove("tooltip-container");
   } else {
-    console.log("notes before",notes)
     var y=noteDate.innerHTML;
     var n;
     for(var i = 0 ;i<notes.length;++i){
       if(notes[i].date == y){
-        console.log(notes[i])
         n = notes[i];
       }
     }
@@ -710,7 +712,6 @@ function makeClockTikTok() {
     let hours = new Date().getHours();
     const minutes = new Date().getMinutes();
     const seconds = new Date().getSeconds();
-    // console.log("seconds:", seconds);
     let in12hours = 12;
     let dayState = "AM";
 
