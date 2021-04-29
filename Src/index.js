@@ -652,9 +652,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.post("/add_note_calendar" ,(req,res) => {
-		var date= req.body.d;
-		var title=req.body.t;
-		var dec=req.body.e;
+		var date= req.body.d
+		var title=req.body.t
+		var dec=req.body.e
 		var db =client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 		if(title == "Work Day")
@@ -664,19 +664,19 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			var end_work = det[1]
 			var rec_id = det[2]
 			db_collection.updateOne({"id":req.session.user.id},{$push:{shifts:[date,start_work,end_work,rec_id]}})
-			req.render("contractor_worker_home_page")
+			res.render("contractor_worker_home_page")
 		}
 		else{
 			db_collection.updateOne({"id":req.session.user.id},{$push:{not_able_to_work:[date,title,dec]}})
-			req.render("contractor_worker_home_page")
+			res.render("contractor_worker_home_page")
 		}
 		
 	})
 
 	app.post("/delete_note_calendar" ,(req,res) => {
-		var date= req.body.d;
-		var title=req.body.t;
-		var dec=req.body.e;
+		var date= req.body.d
+		var title=req.body.t
+		var dec=req.body.e
 		var db =client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 		if(title == "Work Day"){
@@ -685,12 +685,12 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			var end_work = det[1]
 			var rec_id = det[2]
 			db_collection.updateOne({"id":req.session.user.id},{$pull:{shifts:[date,start_work,end_work,rec_id]}})
-			req.render("contractor_worker_home_page")
+			res.render("contractor_worker_home_page")
 
 		}
 		else {
 			db_collection.updateOne({"id":req.session.user.id},{$pull:{not_able_to_work:[date,title,dec]}})
-			req.render("contractor_worker_home_page")
+			res.render("contractor_worker_home_page")
 		}
 		
 	})
