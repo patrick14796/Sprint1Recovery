@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     const currentDayDOM = document.getElementById("cur-day"),
     currentMonthDOM = document.getElementById("cur-month"),
@@ -152,27 +151,31 @@ $(document).ready(function() {
   
   var notes;
   let staticNotes = [
-    {
-      id: 235684345,
-      title: "running marathon",
-      desc:
-        "blah lbah lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
-      date: "2019 10 31"
-    },
-    {
-      id: 784534534,
-      title: "The Burger Chief opening event",
-      desc: "lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
-      date: "2019 10 2"
-    },
-    {
-      id: 345463516,
-      title: "Jamal's Birthday",
-      desc: "lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
-      date: "2019 11 22"
-    }
+   
   ];
-  
+  $.get("/send_data_calendar",function(data){
+	d=data.details[0].not_able_to_work
+	
+	for(var i=0; i<d.length; ++i){
+		staticNotes.push({
+			id: d[i][0],
+      		title: d[i][1],
+      		desc: d[i][2],
+      		date: d[i][0]
+		});
+	}
+	d=data.details[0].shifts
+	for(var i=0; i<d.length; ++i){
+		staticNotes.push({
+			id: d[i][0],
+      		title: "Work Day",
+      		desc: d[i][1] + "\n" + d[i][2] + "\n" + d[i][3],
+      		date: d[i][0]
+		});
+	}
+	localStorage.setItem("notes", JSON.stringify(staticNotes));
+	showCalenderInfo()
+  })
   let notesFound = localStorage.getItem("notes");
   let colorsFound = localStorage.getItem("theme");
   
@@ -193,9 +196,15 @@ $(document).ready(function() {
     applyTheme();
   }
   
+  
   //update local storage
   function updateLocalStorage() {
-    let currentNotes = notes;
+    var d;
+    $.get("/send_data_calendar",function(data){
+      d=data.details[0].not_able_to_work
+      //console.log(d)
+    })
+    let currentNotes = d;
     localStorage.setItem("notes", JSON.stringify(currentNotes));
     localStorage.setItem("theme", JSON.stringify(currentColor));
     applyTheme();
@@ -315,12 +324,7 @@ $(document).ready(function() {
     }
   
     return result;
-    //**** previous version of this code was returning just days without state
-    //**** like [1,2,3] instead of day and its state like [{day:1,"prevMonth"}]
-    // return Array.from(
-    //  { length: firstDayIndex },
-    //  (_, i) => prevMonthDays - firstDayIndex + i
-    // );
+   
   }
   // this will print an array of with days of prev month and next month crosponds to the calender table
   function calcMonthCalendar() {
@@ -364,7 +368,7 @@ $(document).ready(function() {
       for (let j = 0; j < 7; j++) {
         week.children[j].style.backgroundColor = "white";
         week.children[j].style.opacity = 1;
-        // console.log(currentWeek[j].day);
+        
         if (currentWeek[j].day === 1) {
           currentMonthStarted = true;
         }
@@ -376,11 +380,11 @@ $(document).ready(function() {
           currentFullYear.year === todayYear
         ) {
           let todayFullDate =
-            state.todayYear +
-            " " +
             (state.todayMonth + 1) +
-            " " +
-            state.todayDate;
+            "/" +
+            (state.todayDate) +
+            "/" +
+            state.todayYear;
           let isTodayHasNotes = notes.filter(note => note.date === todayFullDate);
           let viewNote = "";
           if (isTodayHasNotes.length > 0) {
@@ -395,13 +399,12 @@ $(document).ready(function() {
                 `;
             week.children[j].classList.add("tooltip-container");
           }
-          // week.children[j].innerHTML = viewNote;
-          // week.children[j].id = notesFound.id;
+       
   
           week.children[
             j
           ].innerHTML = `${currentWeek[j].day}${viewNote}`;
-          // week.children[j].innerHTML = currentWeek[j].day;
+    
           week.children[j].id = "current-day";
           week.children[j].classList.add("currMonth");
           week.children[j].style.backgroundColor = "#e1e1e1";
@@ -425,11 +428,9 @@ $(document).ready(function() {
             //exp 2019 10 24
             week.children[j].classList.add("currMonth");
             let currentFullDate =
-              currentFullMonth.year +
-              " " +
               (currentFullMonth.month_idx + 1) +
-              " " +
-              currentWeek[j].day;
+              "/" +  currentWeek[j].day + "/" +  currentFullMonth.year;
+  
             let notesFound = notes.filter(
               note => note.date === currentFullDate
             )[0];
@@ -452,7 +453,7 @@ $(document).ready(function() {
             }
           }
         }
-        // console.log("xZx: ", currentWeek[j]);
+      
       }
     }
   }
@@ -599,11 +600,11 @@ $(document).ready(function() {
         console.log("noteId:", noteId);
         if (noteId == "current-day") {
           noteDate =
-            state.todayYear +
-            " " +
             (state.todayMonth + 1) +
-            " " +
-            state.todayDate;
+            "/" +
+            (state.todayDate) +
+            "/" +
+            state.todayYear;
           note = notes.filter(n => n.date == noteDate);
         } else {
           note = notes.filter(n => n.id == noteId);
@@ -612,7 +613,7 @@ $(document).ready(function() {
         noteDate = note[0].date;
         openModal(true);
         fillNotePopup(note[0]);
-        addNote(noteDate.split(" ")[2], noteId);
+        addNote(noteDate.split("/")[2], noteId);
       } else if (e.target.classList.contains("currMonth")) {
         noteId = e.target.id;
         noteDate = e.target.innerHTML;
@@ -620,13 +621,7 @@ $(document).ready(function() {
           noteDate = state.todayDate;
         }
         verbWord = "Create";
-        //delete two below
-        // noteDate =
-        //  currentFullMonth.year +
-        //  " " +
-        //  currentFullMonth.month +
-        //  " " +
-        //  e.target.innerHTML;
+   
   
         openModal(true);
         addNote(noteDate, noteId);
@@ -644,7 +639,7 @@ $(document).ready(function() {
       noteId = e.target.parentElement.parentElement.id;
       if (noteId == "current-day") {
         noteDate =
-          state.todayYear + " " + (state.todayMonth + 1) + " " + state.todayDate;
+        (state.todayMonth + 1)+  "/" + (state.todayDay + 1) + "/" + state.todayYear;
         note = notes.filter(n => n.date == noteDate);
       } else {
         note = notes.filter(n => n.id == noteId);
@@ -657,8 +652,7 @@ $(document).ready(function() {
       noteDateInPopup.innerHTML = noteDate;
       verb.innerHTML = verbWord;
   
-      console.log("xXx");
-      addNote(noteDate.split(" ")[2], noteId);
+      addNote(noteDate.split("/")[2], noteId);
     }
   });
   
@@ -674,15 +668,15 @@ $(document).ready(function() {
     getSelectedNoteDay = noteDateDay;
     getSelectedNoteId = noteDateId;
   }
-
+  
   //create note
   saveBtnInPopup.addEventListener("click", () => {
     const noteDate =
-      currentFullMonth.year +
-      " " +
       (currentFullMonth.month_idx + 1) +
-      " " +
-      getSelectedNoteDay;
+      "/" +
+      getSelectedNoteDay+
+      "/" +
+      currentFullMonth.year;
     let oldNote = notes.filter(note => note.date == noteDate)[0];
     if (oldNote) {
       notes = notes.filter(note => oldNote.id !== note.id);
@@ -695,12 +689,12 @@ $(document).ready(function() {
       date: noteDate
     };
   
-    if (noteTitleInput.value.trim() !== "" &&noteTitleInput.value.trim() !== " " ) {
-      console.log("newNote:", newNote);
+    if (noteTitleInput.value.trim() !== "" && noteTitleInput.value.trim() !== "/" ) {
       notes.push(newNote);
       closeModal(true);
       printMonthCalendarInDOM();
       updateLocalStorage();
+      $.post("/add_note_calendar",{d : newNote.date, t : newNote.title,e : newNote.desc});
     } else {
       document.getElementById("warning").innerHTML = "Please fill all fields";
     }
@@ -710,12 +704,20 @@ $(document).ready(function() {
   deleteBtnInPopup.addEventListener("click", () => {
     if (getSelectedNoteId == "current-day") {
       noteDate =
-        state.todayYear + " " + (state.todayMonth + 1) + " " + state.todayDate;
+      (state.todayMonth + 1) +  "/" + (state.date) + "/" + state.todayYear;
       notes = notes.filter(note => note.date !== noteDate);
       document
         .getElementById("current-day")
         .classList.remove("tooltip-container");
     } else {
+      var y=noteDate.innerHTML;
+      var n;
+      for(var i = 0 ;i<notes.length;++i){
+        if(notes[i].date == y){
+          n = notes[i];
+        }
+      }
+      $.post("/delete_note_calendar",{d : n.date, t : n.title,e : n.desc});
       notes = notes.filter(note => note.id !== parseFloat(getSelectedNoteId));
     }
     updateLocalStorage();
@@ -731,7 +733,6 @@ $(document).ready(function() {
       let hours = new Date().getHours();
       const minutes = new Date().getMinutes();
       const seconds = new Date().getSeconds();
-      // console.log("seconds:", seconds);
       let in12hours = 12;
       let dayState = "AM";
   
@@ -789,4 +790,4 @@ $(document).ready(function() {
   //2- i used date object as a string instead of date formate in notes
   //3- as the feauters progress i end up with a spagheti code ! sorry :(
   // FACT: it wouldn't be possible without the builtin date object "new Date()" thanks javascript !
-});
+  });
