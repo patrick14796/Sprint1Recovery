@@ -141,7 +141,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		})	
 	})
 
-	app.get("/contractor_worker_edit_profile", authUser, authRole("Contractor Worker"), (req, res) => {
+	app.get("/contractor_worker_edit_my_profile", authUser, authRole("Contractor Worker"), (req, res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
 		var	db_collection = db.collection("contractorWorkers")
@@ -151,7 +151,22 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else{
 				var user = allDetails[0]
-				res.render("contractor_worker_edit_profile", {"first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
+				res.render("contractor_worker_edit_profile", {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
+			}
+		})	
+	})
+
+	app.get("/contractor_worker_edit_profile/:id", authUser, authRole("Company Worker"), (req, res) => {
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.params.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				var user = allDetails[0]
+				res.render("contractor_worker_edit_profile", {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
 			}
 		})	
 	})
@@ -616,22 +631,18 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.post("/save_new_contractor_information", (req, res) => {
+		var enter_contractor_id = req.body.contractor_id
 		var enter_first_name = req.body.first_name
 		var enter_last_name = req.body.last_name
 		var enter_city = req.body.city
 		var enter_home_address = req.body.home_address
 		var enter_phone = req.body.phone
 		var enter_email = req.body.email
-		var enter_gender = req.body.male
-		var gender_val = "Male"
-		if(!enter_gender){
-			gender_val = "Female"
-		}
 
 		var db =client.db("contractor-workers")
 		var	db_collection = db.collection("contractorWorkers")
 		if(db_collection){
-			db_collection.updateOne({"id":req.session.user.id},{$set:
+			db_collection.updateOne({"id":enter_contractor_id},{$set:
 				{
 					first_name: enter_first_name,
 					last_name: enter_last_name,
@@ -639,13 +650,27 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					home: enter_home_address,
 					phone_number: enter_phone,
 					email: enter_email,
-					gender: gender_val
 				}
 			})
-			res.redirect("/contractor_worker_my_profile")
+			if(req.session.user.type == "Contractor Worker")
+			{
+				res.redirect("/contractor_worker_my_profile")
+			}
+			else{
+				res.redirect("/contractor_worker_profile/" + enter_contractor_id)
+			}
+			
 		}
 		else{
-			res.render("/contractor_worker_edit_profile")
+			if(req.session.user.type == "Contractor Worker")
+			{
+				res.redirect("/contractor_worker_my_profile")
+			}
+			else
+			{
+				res.redirect("/contractor_worker_profile/" + enter_contractor_id)
+			}
+			
 		}
 		
 
