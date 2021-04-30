@@ -215,7 +215,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else{
-				res.render("contractor_worker_profile", {details: allDetails, type: req.session.user.type})
+				res.render("contractor_worker_my_profile", {details: allDetails})
 			}
 		})		
 	})
