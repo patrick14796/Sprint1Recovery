@@ -136,7 +136,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else{
-				res.render("contractor_worker_profile", {details: allDetails, allowed: false})
+				res.render("contractor_worker_profile", {details: allDetails, type: req.session.user.type})
 			}
 		})	
 	})
@@ -163,7 +163,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contact_us", (req, res) => {
 		res.render("contact_us_page")
 	})
-	app.get("/contractor_pay_rates", authUser, authRole("Recruiter"), (req, res) => {
+	app.get("/contractor_pay_rates", authUser, authRole("Contractor Worker"), (req, res) => {
 		res.render("contractor_pay_rates")
 	})
 
@@ -215,7 +215,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else{
-				res.render("contractor_worker_profile", {details: allDetails, allowed: true})
+				res.render("contractor_worker_profile", {details: allDetails, type: req.session.user.type})
 			}
 		})		
 	})
