@@ -151,11 +151,30 @@ $(document).ready(function() {
   
   var notes;
   let staticNotes = [
-   
+    {
+      id: 235684345,
+      title: "running marathon",
+      desc:
+        "blah lbah lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
+      date: "2019 10 31"
+    },
+    {
+      id: 784534534,
+      title: "The Burger Chief opening event",
+      desc: "lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
+      date: "2019 10 2"
+    },
+    {
+      id: 345463516,
+      title: "Jamal's Birthday",
+      desc: "lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
+      date: "2019 11 22"
+    }
   ];
   $.get("/send_data_calendar",function(data){
+  console.log(data)
 	d=data.details[0].not_able_to_work
-	
+  console.log(d)
 	for(var i=0; i<d.length; ++i){
 		staticNotes.push({
 			id: d[i][0],
@@ -173,12 +192,13 @@ $(document).ready(function() {
       		date: d[i][0]
 		});
 	}
-	localStorage.setItem("notes", JSON.stringify(staticNotes));
-	showCalenderInfo()
+  localStorage.setItem("notes", JSON.stringify(staticNotes));
+  showCalenderInfo()
   })
+  localStorage.setItem("notes", JSON.stringify(staticNotes));
   let notesFound = localStorage.getItem("notes");
   let colorsFound = localStorage.getItem("theme");
-  
+
   if (!notesFound) {
     console.log("notes not Found");
     localStorage.setItem("notes", JSON.stringify(staticNotes));
@@ -192,6 +212,7 @@ $(document).ready(function() {
     localStorage.setItem("theme", JSON.stringify(staticCurrentColor));
     currentColor = staticCurrentColor;
   } else {
+    
     currentColor = JSON.parse(colorsFound);
     applyTheme();
   }
