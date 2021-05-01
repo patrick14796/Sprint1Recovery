@@ -261,7 +261,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var db_collection = db.collection("contractorWorkers")
 		db_collection.updateOne({"id":req.session.user.id},{$pull:{not_able_to_work:[date,title,dec]}})
 		console.log("Deleted note",date,title,dec)
-	   })
+	})
    
 	app.post("/auth", (req, res) => {
 		var user_name = req.body.Email_Address
