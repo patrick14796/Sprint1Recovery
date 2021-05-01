@@ -241,22 +241,22 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	// POST functions
 	app.post("/add_note_calendar" ,(req,res) => {
-     var date=req.body.d
-	 var title=req.body.t
-	 var dec=req.body.e
+     var date = req.body.d
+	 var title = req.body.t
+	 var dec = req.body.e
 	 console.log(res)
-	 var db =client.db("contractor-workers")
+	 var db = client.db("contractor-workers")
 	 var db_collection = db.collection("contractorWorkers")
 	 db_collection.updateOne({"id":req.session.user.id},{$push:{not_able_to_work:[date,title,dec]}})
 	 console.log(date,title,dec)
 	})
 	app.post("/delete_note_calendar" ,(req,res) => {
-		var date=req.body.d
-		var title=req.body.t
-	 	var dec=req.body.e
+		var date = req.body.d
+		var title = req.body.t
+	 	var dec = req.body.e
 		console.log(res)
-		var db=client.db("contractor-workers")
-		var db_collection=db.collection("contractorWorkers")
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
 		db_collection.updateOne({"id":req.session.user.id},{$pull:{not_able_to_work:[date,title,dec]}})
 		console.log("Deleted note",date,title,dec)
 	   })
