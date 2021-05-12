@@ -75,6 +75,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		console.log(hire_old_date)
 		var start = null
 		var end = null
+		var rec_id = null
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 		
@@ -769,9 +770,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else {
-				shifts = allDetails[0].shifts
-				old_start = null
-				old_end = null
+				var shifts = allDetails[0].shifts
+				var old_start = null
+				var old_end = null
 				for(var i=0; i<shifts.length; ++i){
 					if(shifts[i][0] == shift_date){
 						old_start = shifts[i][1]
