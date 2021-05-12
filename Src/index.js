@@ -94,6 +94,19 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else{
+				res.json({details: allDetails})
+			}
+		})	
+	})
+	app.get("/get_data_payrate", authUser, authRole("Contractor Worker"), (req, res) => {
+		// Connect contractor workers db and collection
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
 				
 				res.json({details: allDetails})
 			}
@@ -125,8 +138,17 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contact_us", (req, res) => {
 		res.render("contact_us_page")
 	})
-	app.get("/contractor_pay_rates", authUser, authRole("Recruiter"), (req, res) => {
-		res.render("contractor_pay_rates")
+	app.get("/contractor_pay_rates", authUser, authRole("Contractor Worker"), (req, res) => {
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				res.render("contractor_pay_rates",{details: allDetails})
+			}
+		})
 	})
 	
 
