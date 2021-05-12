@@ -150,7 +150,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else{
 				var user = allDetails[0]
-				res.render("contractor_worker_edit_profile", {"type": req.session.user.type, "id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
+				res.render("contractor_worker_edit_profile", {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
 			}
 		})	
 	})
@@ -165,7 +165,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else{
 				var user = allDetails[0]
-				res.render("contractor_worker_edit_profile", {"type": req.session.user.type, "id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
+				res.render("contractor_worker_edit_profile", {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
 			}
 		})	
 	})
@@ -241,20 +241,21 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	// POST functions
 	app.post("/add_note_calendar" ,(req,res) => {
-		var date = req.body.d
+
+	 	var date = req.body.d
 		var title = req.body.t
 		var dec = req.body.e
 		console.log(res)
-		var db = client.db("contractor-workers")
-		var db_collection = db.collection("contractorWorkers")
-		db_collection.updateOne({"id":req.session.user.id},{$push:{not_able_to_work:[date,title,dec]}})
-		console.log(date,title,dec)
+	 	var db = client.db("contractor-workers")
+	 	var db_collection = db.collection("contractorWorkers")
+	 	db_collection.updateOne({"id":req.session.user.id},{$push:{not_able_to_work:[date,title,dec]}})
+	 	console.log(date,title,dec)
 	})
-
 	app.post("/delete_note_calendar" ,(req,res) => {
+
 		var date = req.body.d
 		var title = req.body.t
-		var dec = req.body.e
+	 	var dec = req.body.e
 		console.log(res)
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
