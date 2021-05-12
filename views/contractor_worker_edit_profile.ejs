@@ -1,7 +1,14 @@
 <base href="/`">
-<header>
-    <%- include('../partials/navbar_contractor_worker'); %>
-</header>
+<% if(type == "Company Worker") { %>
+	<header>
+			<%- include('../partials/header_company_worker'); %>
+	</header>
+<% } %>
+<% if(type == "Contractor Worker") { %>
+	<header>
+		<%- include('../partials/navbar_contractor_worker'); %>
+	</header>
+<% } %>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

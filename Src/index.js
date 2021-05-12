@@ -150,7 +150,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else{
 				var user = allDetails[0]
-				res.render("contractor_worker_edit_profile", {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
+				res.render("contractor_worker_edit_profile", {"type": req.session.user.type, "id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
 			}
 		})	
 	})
@@ -165,7 +165,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else{
 				var user = allDetails[0]
-				res.render("contractor_worker_edit_profile", {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
+				res.render("contractor_worker_edit_profile", {"type": req.session.user.type, "id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
 			}
 		})	
 	})
