@@ -241,7 +241,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	// POST functions
 	app.post("/add_note_calendar" ,(req,res) => {
-
 	 	var date = req.body.d
 		var title = req.body.t
 		var dec = req.body.e
