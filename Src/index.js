@@ -56,6 +56,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		})
 	})
 
+	app.get("/contractor_add_new_shift" ,(req,res) => {
+		res.render("contractor_add_new_shift")
+	})
 	
 	app.get("/Register", (req, res) => {
 		res.render("Register")
@@ -63,6 +66,52 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	
 	app.get("/add_new_contractor_worker", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("add_new_contractor_worker")
+	})
+
+	app.get("/contractor_worker_edit_shift/:date", authUser, (req, res) => {
+		var hire_old_date = req.params.date
+		hire_old_date = hire_old_date.replace(".", "/")
+		hire_old_date = hire_old_date.replace(".", "/")
+		console.log(hire_old_date)
+		var start = null
+		var end = null
+		var rec_id = null
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var contr_shifts = allDetails[0].shifts
+				for(var i = 0; i<contr_shifts.length; ++i){
+					if(contr_shifts[i][0] == hire_old_date){
+						start = contr_shifts[i][1]
+						end = contr_shifts[i][2]
+						rec_id = contr_shifts[i][3]
+					}
+				}
+				res.render("contractor_worker_edit_shift", {"old_date": hire_old_date, "end_hire": end, "start_hire": start, "rec_id": rec_id})
+			}
+		})
+		
+	})
+
+	app.get("/contractor_shifts", authUser, (req, res) => {
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var contr_shifts = allDetails[0].shifts 
+				res.render("contractor_shifts", {details: contr_shifts})
+			}
+		})
+		
 	})
 	
 	app.get("/monitor_of_all_hires", authUser, authRole("Company Worker"), (req, res) => {
@@ -651,6 +700,17 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		}
 	})
 
+	app.post("/add_new_shift", (req, res) => {
+		var db =client.db("contractor-workers")
+		var	db_collection = db.collection("contractorWorkers")
+		var date = req.body.date_of_shift
+		var start_work = req.body.start_work
+		var end_work = req.body.end_work
+		var rec_id = req.body.rec_id
+		db_collection.updateOne({"id":req.session.user.id},{$push:{shifts:[date,start_work,end_work,rec_id]}})
+		res.redirect("/contractor_shifts")
+	})
+
 	app.post("/save_new_contractor_information", (req, res) => {
 		var enter_contractor_id = req.body.contractor_id
 		var enter_first_name = req.body.first_name
@@ -695,6 +755,36 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		}
 		
 
+	})
+
+	app.post("/save_new_shift", (req, res) => {
+		var shift_date = req.body.hiddenDate
+		var start_hire = req.body.start_work
+		var end_hire = req.body.end_work
+		var rec_id = req.body.hiddenID
+	
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var shifts = allDetails[0].shifts
+				var old_start = null
+				var old_end = null
+				for(var i=0; i<shifts.length; ++i){
+					if(shifts[i][0] == shift_date){
+						old_start = shifts[i][1]
+						old_end = shifts[i][2]
+						break
+					}
+				}
+				db_collection.updateOne({"id":req.session.user.id, "shifts": { $in : [[shift_date, old_start, old_end, rec_id]]}}, {$set: {"shifts.$": [shift_date, start_hire, end_hire, rec_id]}})
+				res.redirect("/contractor_shifts")
+			}
+		})
+		
 	})
 
 	app.post("/add_note_calendar" ,(req,res) => {
