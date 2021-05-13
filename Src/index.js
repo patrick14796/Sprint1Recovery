@@ -414,7 +414,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							"password": password,
 							"not_able_to_work":[],
 							"hiring":[],
-							"ratings":[]
+							"ratings":[],
+							"shifts":[],
+							"job_requests":[]
 						}
 						// Add a new contractor worker to "contractorWorkers" collection with all of his information
 						db_collection.insertOne(data, function (err, collection) {
