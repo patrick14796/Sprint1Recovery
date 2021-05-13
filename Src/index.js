@@ -137,7 +137,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		
 		db_collection.find().toArray(function (err, allDetails) {
 			if (err) {
-			    console.log(err)
+				console.log(err)
 			}
 			else {
 				var all_hiring = []
@@ -264,11 +264,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	app.get("/accept_job_request/:recrutier_date", authUser, (req, res) => {
 		var data = req.params.recrutier_date
-		data = data.split('_')
+		data = data.split("_")
 		var rec_id = data[0]
 		var date = data[1]
-		date = date.split('.')
-		date = date.join('/')
+		date = date.split(".")
+		date = date.join("/")
 
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
@@ -301,11 +301,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	app.get("/decline_job_request/:recrutier_date", authUser, (req, res) => {
 		var data = req.params.recrutier_date
-		data = data.split('_')
+		data = data.split("_")
 		var rec_id = data[0]
 		var date = data[1]
-		date = date.split('.')
-		date = date.join('/')
+		date = date.split(".")
+		date = date.join("/")
 
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
