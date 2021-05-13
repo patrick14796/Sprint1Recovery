@@ -4,7 +4,7 @@
     <%- include('../partials/navbar_contractor_worker'); %>
 </header>
 <head>
-    <title>Shifts</title>
+    <title>Your Job Requests</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->  
@@ -26,9 +26,6 @@
 </head>
 
 <body>
-    <a href="contractor_add_new_shift">
-        <span><strong>Add new shift</strong></span>            
-    </a>
     <% if(details!=null) { %>
     <div class="limiter">
         <div class="container-table100">
@@ -40,10 +37,9 @@
                                     <tr class="row100 head">
                                         <th class="cell100 column1">Recrutier ID</th>
                                         <th class="cell100 column2">Date</th>
-                                        <th class="cell100 column3">Start</th>
-                                        <th class="cell100 column4">End</th>
-                                        <th class="cell100 column7">Actions</th>
-                                        <th class="cell100 column8"></th>
+                                        <th class="cell100 column3">Start Hour</th>
+                                        <th class="cell100 column4">End Hour</th>
+                                        <th class="cell100 column5">Status</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -57,9 +53,7 @@
                                             <td class="cell100 column2"><%= item[0]%></td>
                                             <td class="cell100 column3"><%= item[1]%></td>
                                             <td class="cell100 column4"><%= item[2]%></td>
-                                            <td class="cell100 column5">
-                                                <button class="btn-view" type="button">Edit shift</button>
-                                            </td>                                
+                                            <td class="cell100 column5"><%= item[4]%></td>
                                         </tr>
                                     <% }) %>
                                 </tbody>
@@ -70,7 +64,7 @@
         </div>
     </div>
     <% } %>
-
+    
 <!--===============================================================================================-->  
     <script src="public_search_contractor/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
@@ -89,28 +83,6 @@
             })
         });
     </script>
-    <script>
-        function addRowHandlers() {
-            var table = document.getElementById("contractor-workers-table");
-            var rows = table.getElementsByTagName("tr");
-            for (i = 0; i < rows.length; i++) {
-                var currentRow = table.rows[i]
-                var currentViewBtn = currentRow.getElementsByTagName("td")[4]
-                var editClickHandler = function(row) {
-                    return function() {
-                        var cell = row.getElementsByTagName("td")[1]
-                        var date = cell.innerHTML
-                        date = date.replaceAll("/", ".");
-                        window.location.href = 'contractor_worker_edit_shift/'+ date;
-                    }
-                }
-
-                currentViewBtn.onclick = editClickHandler(currentRow);
-            }
-        }
-        window.onload = addRowHandlers();
-    </script>
-
 <!--===============================================================================================-->
     <script src="js/main.js"></script>
 

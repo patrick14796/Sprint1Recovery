@@ -23,7 +23,7 @@ const bodyParser = require("body-parser")
 MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useUnifiedTopology: true }).then(client => {
 	console.log("Connected to Database")
 	app.use(bodyParser.urlencoded({ extended: true }))
-
+	
 	// GET functions
 	app.get("/", (req, res) => {
 		res.render("Homepage")
@@ -41,7 +41,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/CompanyWorkerHomepage", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("CompanyWorkerHomepage")
 	})
-
+	
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
@@ -59,13 +59,30 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_add_new_shift" ,(req,res) => {
 		res.render("contractor_add_new_shift")
 	})
-	
+		
 	app.get("/Register", (req, res) => {
 		res.render("Register")
 	})
-	
+		
 	app.get("/add_new_contractor_worker", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("add_new_contractor_worker")
+	})
+
+	app.get("/contractor_job_requests_status", authUser, (req, res) => {
+		var db =client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				var waiting_requests = allDetails[0].job_requests
+				var approved_requests = allDetails[0].hiring
+				var canceled_requests = allDetails[0].canceled_jobs
+				var all_job_requests = waiting_requests.concat(approved_requests, canceled_requests)
+				res.render("contractor_job_requests_status", {details: all_job_requests})
+			}
+		})  
 	})
 
 	app.get("/contractor_worker_edit_shift/:date", authUser, (req, res) => {
@@ -78,7 +95,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var rec_id = null
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
-		
+				
 		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
@@ -95,13 +112,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				res.render("contractor_worker_edit_shift", {"old_date": hire_old_date, "end_hire": end, "start_hire": start, "rec_id": rec_id})
 			}
 		})
-		
+				
 	})
 
 	app.get("/contractor_shifts", authUser, (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
-		
+				
 		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
@@ -111,9 +128,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				res.render("contractor_shifts", {details: contr_shifts})
 			}
 		})
-		
+				
 	})
-	
+		
 	app.get("/monitor_of_all_hires", authUser, authRole("Company Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
@@ -143,19 +160,19 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 		})
 	})
-	
+		
 	app.get("/statistics", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("statistics")
 	})
-	
+		
 	app.get("/shifts_monitor", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("shifts_monitor")
 	})
-	
+		
 	app.get("/why_us_page", (req, res) => {
 		res.render("why_us_page")
 	})
-	
+		
 	app.get("/contractor_worker_home_page", authUser, authRole("Contractor Worker"), (req, res) => {
 		res.render("contractor_worker_home_page")
 	})
@@ -163,7 +180,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/send_data_calendar", authUser, authRole("Contractor Worker"), (req, res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
@@ -172,14 +189,14 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(allDetails[0].hiring)
 				res.send(allDetails)
 			}
-		})	
+		})  
 	})
 
-	
+		
 	app.get("/contractor_worker_profile/:id", authUser, (req, res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		db_collection.find({"id": req.params.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
@@ -187,13 +204,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			else{
 				res.render("contractor_worker_profile", {details: allDetails, type: req.session.user.type})
 			}
-		})	
+		})  
 	})
 
 	app.get("/contractor_worker_edit_my_profile", authUser, authRole("Contractor Worker"), (req, res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
@@ -202,13 +219,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				var user = allDetails[0]
 				res.render("contractor_worker_edit_profile", {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
 			}
-		})	
+		})  
 	})
 
 	app.get("/contractor_worker_edit_profile/:id", authUser, authRole("Company Worker"), (req, res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		db_collection.find({"id": req.params.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
@@ -217,20 +234,108 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				var user = allDetails[0]
 				res.render("contractor_worker_edit_profile", {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home":user.home, "phone":user.phone_number, "email": user.email, "gender":user.gender})
 			}
-		})	
+		})  
 	})
 
 	app.get("/careers", (req, res) => {
 		res.render("careers_page")
 	})
-	
+		
 	app.get("/contact_us", (req, res) => {
 		res.render("contact_us_page")
 	})
 	app.get("/contractor_pay_rates", authUser, authRole("Contractor Worker"), (req, res) => {
 		res.render("contractor_pay_rates")
 	})
-	
+
+	app.get("/contractor_job_requests", authUser, authRole("Contractor Worker"), (req, res) => {
+		var db =client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				var job_requests = allDetails[0].job_requests
+				res.render("contractor_job_requests", {details: job_requests})
+			}
+		})  
+	})
+
+	app.get("/accept_job_request/:recrutier_date", authUser, (req, res) => {
+		var data = req.params.recrutier_date
+		data = data.split("_")
+		var rec_id = data[0]
+		var date = data[1]
+		date = date.split(".")
+		date = date.join("/")
+
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				var job_requests = allDetails[0].job_requests
+				var start = null
+				var end = null
+
+				for(var i=0; i<job_requests.length; ++i){
+					if(job_requests[i][0] == date && job_requests[i][3] == rec_id){
+						start = job_requests[i][1]
+						end = job_requests[i][2]
+						break
+					}
+				}
+				db_collection.updateOne({"id":req.session.user.id, "job_requests": { $in : [[date, start, end, rec_id, "Waiting for approval"]]}}, {$pull: {"job_requests": { $in : [[date, start, end, rec_id, "Waiting for approval"]]}}})
+				if(db_collection.updateOne({"id":req.session.user.id},{$push:{hiring:[date,start,end,rec_id, "Approved"]}})){
+					res.redirect("/contractor_worker_home_page")
+				}
+				else{
+					res.redirect("/contractor_worker_home_page")
+				}
+			}
+		})
+	})
+
+	app.get("/decline_job_request/:recrutier_date", authUser, (req, res) => {
+		var data = req.params.recrutier_date
+		data = data.split("_")
+		var rec_id = data[0]
+		var date = data[1]
+		date = date.split(".")
+		date = date.join("/")
+
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				var job_requests = allDetails[0].job_requests
+				var start = null
+				var end = null
+
+				for(var i=0; i<job_requests.length; ++i){
+					if(job_requests[i][0] == date && job_requests[i][3] == rec_id){
+						start = job_requests[i][1]
+						end = job_requests[i][2]
+						break
+					}
+				}
+				db_collection.updateOne({"id":req.session.user.id, "job_requests": { $in : [[date, start, end, rec_id, "Waiting for approval"]]}}, {$pull: {"job_requests": { $in : [[date, start, end, rec_id, "Waiting for approval"]]}}})
+				if(db_collection.updateOne({"id":req.session.user.id},{$push:{canceled_jobs:[date,start,end,rec_id, "Declined"]}})){
+					res.redirect("/contractor_worker_home_page")
+				}
+				else{
+					res.redirect("/contractor_worker_home_page")
+				}
+			}
+		})
+	})
+		
 
 	app.get("/search_contractor_worker", authUser, authRole("Company Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
@@ -249,7 +354,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/delete/:id", authUser, authRole("Company Worker"), (req,res)=>{
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		var myquery = { id: req.params.id }
 
 		if(db_collection){
@@ -274,7 +379,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_worker_my_profile", authUser, authRole("Contractor Worker"), (req,res) => {
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
@@ -282,7 +387,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			else{
 				res.render("contractor_worker_my_profile", {details: allDetails})
 			}
-		})		
+		})      
 	})
 
 	app.get("/hire_contractor/:id", (req, res) => {
@@ -300,8 +405,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		db_collection.updateOne({"id":req.session.user.id},{$push:{not_able_to_work:[date,title,dec]}})
 		console.log(date,title,dec)
 	})
-	app.post("/delete_note_calendar" ,(req,res) => {
 
+	app.post("/delete_note_calendar" ,(req,res) => {
 		var date = req.body.d
 		var title = req.body.t
 		var dec = req.body.e
@@ -311,7 +416,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		db_collection.updateOne({"id":req.session.user.id},{$pull:{not_able_to_work:[date,title,dec]}})
 		console.log("Deleted note",date,title,dec)
 	})
-   
+	
 	app.post("/auth", (req, res) => {
 		var user_name = req.body.Email_Address
 		var passwordd = req.body.pass
@@ -361,7 +466,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 			})
 		}
-		
 		else{res.redirect("/Login")}
 	})
 
@@ -416,7 +520,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							"hiring":[],
 							"ratings":[],
 							"shifts":[],
-							"job_requests":[]
+							"job_requests":[],
+							"canceled_jobs":[]
 						}
 						// Add a new contractor worker to "contractorWorkers" collection with all of his information
 						db_collection.insertOne(data, function (err, collection) {
@@ -425,7 +530,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							}
 							console.log("Record inserted Successfully" + collection.insertedCount)
 						})
-
 					})
 					// Add a new contractor worker to "contractorWorkersLogin" db with his username and password only
 					var db_collection_login = db.collection("contractorWorkersLogin")
@@ -445,12 +549,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			})
 			
 		}
-		
 	})
 
-
 	app.post("/Register_New_Employee", (req, res) => {
-
 		var db = client.db("employers-workers")
 		var db_collection = db.collection("employersWorkers")
 		var id=req.body.id
@@ -480,7 +581,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					"company_name": company_name,
 					"user": username,
 					"password": password,
-					"hiring":[]
+					"hiring":[],
+					"job_requests": []
 				}
 				// Add a new contractor worker to "contractorWorkers" collection with all of his information
 				db_collection.insertOne(data, function (err, collection) {
@@ -505,7 +607,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		})
 		res.redirect("/Login")
 	})
-	
+		
 
 	// POST function for search in a human resources pages
 	app.post("/filter_search", (req, res) => {
@@ -514,7 +616,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var city = req.body.city
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		
 		if(db_collection){
 			// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
@@ -552,7 +654,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var date = req.body.date
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		
 		if(db_collection){
 			db_collection.find().toArray(function (err, allDetails) {
@@ -589,7 +691,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						for (i=all_hiring.length; i>0; --i){
 							if(all_hiring[i-1].full_name != contractor_name){
 								all_hiring.splice(i-1, 1)
-
 							}
 						}
 					}
@@ -614,7 +715,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var city = req.body.city
 		// Connect contractor workers db and collection
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		
 		if(db_collection){
 			// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
@@ -655,7 +756,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 		
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		if(db_collection){
 			db_collection.find({"id": id_of_contractor}).toArray(function (err, allDetails) {
 				if (err) {
@@ -667,14 +768,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						var temp=allDetails[0].not_able_to_work
 						for(day of temp)
 						{
-
 							if(day[0] == date)
 							{
 								console.log("cant' hire in this day!")
 								res.redirect("back")
-								
 							}
-						
 						}
 						
 						var job
@@ -685,15 +783,14 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							{
 								console.log("cant hire twice by same recruiter!\n")
 								res.redirect("back")
-								
 							}
 						}
 
-						db_collection.updateOne({"id":id_of_contractor},{$push:{hiring:[date,start,end,id_of_recruiter]}})
+						db_collection.updateOne({"id":id_of_contractor},{$push:{job_requests:[date,start,end,id_of_recruiter, "Waiting for approval"]}})
 
 						db =client.db("employers-workers")
 						db_collection = db.collection("employersWorkers")
-						db_collection.updateOne({"id":id_of_recruiter},{$push:{hiring:[date,start,end,id_of_contractor]}})
+						db_collection.updateOne({"id":id_of_recruiter},{$push:{job_requests:[date,start,end,id_of_contractor, "Waiting for approval"]}})
 						res.redirect("/recruiters_home_page")
 					} catch (error) {
 						console.log("Ad matay????")
@@ -705,7 +802,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	app.post("/add_new_shift", (req, res) => {
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		var date = req.body.date_of_shift
 		var start_work = req.body.start_work
 		var end_work = req.body.end_work
@@ -724,7 +821,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var enter_email = req.body.email
 
 		var db =client.db("contractor-workers")
-		var	db_collection = db.collection("contractorWorkers")
+		var db_collection = db.collection("contractorWorkers")
 		if(db_collection){
 			db_collection.updateOne({"id":enter_contractor_id},{$set:
 				{
@@ -743,7 +840,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			else{
 				res.redirect("/contractor_worker_profile/" + enter_contractor_id)
 			}
-			
 		}
 		else{
 			if(req.session.user.type == "Contractor Worker")
@@ -754,10 +850,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			{
 				res.redirect("/contractor_worker_profile/" + enter_contractor_id)
 			}
-			
 		}
-		
-
 	})
 
 	app.post("/save_new_shift", (req, res) => {
@@ -765,7 +858,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var start_hire = req.body.start_work
 		var end_hire = req.body.end_work
 		var rec_id = req.body.hiddenID
-	
+		
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
@@ -787,7 +880,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				res.redirect("/contractor_shifts")
 			}
 		})
-		
 	})
 
 	app.post("/add_note_calendar" ,(req,res) => {
@@ -809,7 +901,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			db_collection.updateOne({"id":req.session.user.id},{$push:{not_able_to_work:[date,title,dec]}})
 			res.render("contractor_worker_home_page")
 		}
-		
 	})
 
 	app.post("/delete_note_calendar" ,(req,res) => {
@@ -825,55 +916,44 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			var rec_id = det[2]
 			db_collection.updateOne({"id":req.session.user.id},{$pull:{shifts:[date,start_work,end_work,rec_id]}})
 			res.render("contractor_worker_home_page")
-
 		}
 		else {
 			db_collection.updateOne({"id":req.session.user.id},{$pull:{not_able_to_work:[date,title,dec]}})
 			res.render("contractor_worker_home_page")
 		}
-		
 	})
 
-
 }).catch(console.error)
-
-
-
 
 app.listen(port, () => {
 	console.log("Listening to port 3000!!!")
 })
 
-
-
-
-
 //var data = {
-//	"user": user_name,
-//	"password": passwordd
+//  "user": user_name,
+//  "password": passwordd
 //}
 //console.log(data)
 //loginData.insertOne(data, function (err, collection) {
-//	if (err) {
-//		throw err
-//	}
-//	console.log("Record inserted Successfully" + collection.insertedCount)
+//  if (err) {
+//      throw err
+//  }
+//  console.log("Record inserted Successfully" + collection.insertedCount)
 //})
-
 
 
 
 
 //var dbo = client.db("login-auth")
 //dbo.collection("loginData").find({"user":user_name , "password":passwordd}).count().then(function(numItems) {
-//	console.log("Number of items:",numItems) // Use this to debug
-//	if (numItems  == 1)
-//	{
-//		res.sendFile(__dirname + "/loggedIn.html")
-//	}
-//	else
-//	{
-//		console.log("User Not Exist! \n")
-//		res.render("Login")
-//	}
+//  console.log("Number of items:",numItems) // Use this to debug
+//  if (numItems  == 1)
+//  {
+//      res.sendFile(__dirname + "/loggedIn.html")
+//  }
+//  else
+//  {
+//      console.log("User Not Exist! \n")
+//      res.render("Login")
+//  }
 //})
