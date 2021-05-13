@@ -169,6 +169,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else{
+				console.log(allDetails[0].hiring)
 				res.send(allDetails)
 			}
 		})	

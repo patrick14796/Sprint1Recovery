@@ -207,15 +207,29 @@ function updateLocalStorage() {
     }
 
 
-
+	
 	d=data[0].hiring
-    for(var i=0; i<d.length; ++i){
-      staticNotes.push({
-        id: d[i][0],
+    for(var j=0; j<d.length; ++j){
+	  var dat = d[j][0].split('/')
+	  var day = dat[0]
+	  if (day[0] == '0'){
+		  day= day.substring(1,day.length)
+	  	}
+	  var mont = dat[1]
+	  if (mont[0] == '0'){
+		mont= mont.substring(1,mont.length)
+		}  
 
-            title: "Work Day",
-            desc: d[i][1]+ '\n' +d[i][2],
-            date: d[i][0]
+		dat[0]=day
+		dat[1]=mont
+
+		dat=dat.join('/')
+		
+      staticNotes.push({
+        id: d[j][0],
+		title: "Work Day",
+        desc: d[j][1]+ '\n' +d[j][2],
+        date: dat
       });
     }
 
