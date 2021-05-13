@@ -205,6 +205,21 @@ function updateLocalStorage() {
             date: d[i][0]
       });
     }
+
+
+	d=data[0].hiring
+    for(var i=0; i<d.length; ++i){
+      staticNotes.push({
+        id: d[i][0],
+            title: "Work Day",
+            desc: d[i][1]+ '\n' +d[i][2],
+            date: d[i][0]
+      });
+    }
+
+
+
+
     localStorage.setItem("notes", JSON.stringify(staticNotes));
     localStorage.setItem("notes", JSON.stringify(staticNotes));
 
