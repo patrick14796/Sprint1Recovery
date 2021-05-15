@@ -408,7 +408,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						]
 						// formatting (0 padding and concatenation)
 						result = result.map(function(v) {
-							return v < 10 ? "0" + v : v;
+							return v < 10 ? "0" + v : v
 						}).join(":")
 
 						var total = result.split(":")
@@ -1106,9 +1106,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			
 				transporter.sendMail(mailOptions, function(error, info){
 					if (error) {
-					  console.log(error);
+						console.log(error)
 					} else {
-					  console.log("Email sent: " + info.response);
+						console.log("Email sent: " + info.response)
 					}
 					res.redirect("/shifts_monitor")
 				})
@@ -1126,7 +1126,7 @@ app.listen(port, () => {
 
 function toSeconds(time_str) {
 	// Extract hours, minutes and seconds
-	var parts = time_str.split(":");
+	var parts = time_str.split(":")
 	// compute  and return total seconds
 	return parts[0] * 3600 + // an hour has 3600 seconds
 		parts[1] * 60   // a minute has 60 seconds
