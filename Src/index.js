@@ -686,6 +686,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 								throw err
 							}
 							console.log("Record inserted Successfully" + collection.insertedCount)
+							// Send an email to the new contractor with his username and password
+							var message = "Welcome " + first_name + " " + last_name + "!\nWe are happy that you chose to be a contractor worker in our company."
+							message = message + "\nYour login information is:\nUsername: " + username + "\nPassword: " + password + "\n\nHope you will enjoy our site!"
+							send_an_email(email, "Welcome to SCE Contractor!", message)
 						})
 					})
 					// Add a new contractor worker to "contractorWorkersLogin" db with his username and password only
@@ -742,12 +746,17 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					"job_requests": [],
 					"work_history": []
 				}
-				// Add a new contractor worker to "contractorWorkers" collection with all of his information
+				// Add a new employee to "employersWorkers" collection with all of his information
 				db_collection.insertOne(data, function (err, collection) {
 					if (err) {
 						throw err
 					}
 					console.log("Record inserted Successfully" + collection.insertedCount)
+
+					// Send an email to the new employee with his username and password
+					var message = "Welcome " + first_name + " " + last_name + "!\nWe are happy that you chose to work with our company."
+					message = message + "\nYour login information is:\nUsername: " + username + "\nPassword: " + password + "\n\nHope you will enjoy our site!"
+					send_an_email(email, "Welcome to SCE Contractor!", message)
 				})
 				
 			})
@@ -1163,31 +1172,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				message = message + date + "\nStart Hour:" + start + "\nEnd Hour: " + end +"\nRecurtier ID: " + recrutier_id
 				message = message + "\nThe report message: " + report_input + "\nPlease fix it as soon as possible.\nThank you in advance."
 				var contractor_email = allDetails[0].email
-				
-				var nodemailer = require("nodemailer")
-				var transporter = nodemailer.createTransport({
-					service: "gmail",
-					auth: {
-						user: "companymailsce@gmail.com",
-						pass: "sce147258369"
-					}
-				})
-			
-				var mailOptions = {
-					from: "companymailsce@gmail.com",
-					to: contractor_email,
-					subject: "Report on a shift you entered",
-					text: message
-				}
-			
-				transporter.sendMail(mailOptions, function(error, info){
-					if (error) {
-						console.log(error)
-					} else {
-						console.log("Email sent: " + info.response)
-					}
-					res.redirect("/shifts_monitor")
-				})
+				var subject = "Report on a shift you entered"
+				send_an_email(contractor_email, subject, message)
+				res.redirect("/shifts_monitor")
 			}
 		})  		
 	})
@@ -1210,6 +1197,33 @@ function toSeconds(time_str) {
 	return parts[0] * 3600 + // an hour has 3600 seconds
 		parts[1] * 60   // a minute has 60 seconds
 }
+
+function send_an_email(receiver_email, subject, message) {
+	var nodemailer = require("nodemailer")
+	var transporter = nodemailer.createTransport({
+		service: "gmail",
+		auth: {
+			user: "companymailsce@gmail.com",
+			pass: "sce147258369"
+		}
+	})
+
+	var mailOptions = {
+		from: "companymailsce@gmail.com",
+		to: receiver_email,
+		subject: subject,
+		text: message
+	}
+
+	transporter.sendMail(mailOptions, function(error, info){
+		if (error) {
+			console.log(error)
+		} else {
+			console.log("Email sent: " + info.response)
+		}
+	})
+}
+
 //var data = {
 //  "user": user_name,
 //  "password": passwordd
