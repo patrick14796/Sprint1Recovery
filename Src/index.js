@@ -783,6 +783,66 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					}
 				})
 			}
+			else if (skill && hourly_pay) {
+				db_collection.find({"skills": skill, "hourly_pay": hourly_pay}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			else if (skill && city) {
+				db_collection.find({"skills": skill, "city": city}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			else if (hourly_pay && city) {
+				db_collection.find({"hourly_pay": hourly_pay, "city": city}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			else if (skill) {
+				db_collection.find({"skills": skill}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			else if (hourly_pay) {
+				db_collection.find({"hourly_pay": hourly_pay}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
+			else if (city) {
+				db_collection.find({"city": city}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", {details: allDetails})
+					}
+				})
+			}
 			else {
 				res.render("search_contractor_worker", {details: null})
 			}
