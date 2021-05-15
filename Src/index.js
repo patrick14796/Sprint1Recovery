@@ -125,7 +125,23 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else {
 				var contr_shifts = allDetails[0].shifts 
-				res.render("contractor_shifts", {details: contr_shifts})
+				res.render("contractor_shifts", {details: contr_shifts, type: "Contractor Worker"})
+			}
+		})
+				
+	})
+
+	app.get("/view_a_contractor_shifts/:id", authUser, (req, res) => {
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+				
+		db_collection.find({"id": req.params.id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var contr_shifts = allDetails[0].shifts 
+				res.render("contractor_shifts", {details: contr_shifts, type: "Company Worker"})
 			}
 		})
 				
@@ -1113,9 +1129,12 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					res.redirect("/shifts_monitor")
 				})
 			}
-		})  
+		})  		
+	})
 
-		
+	app.post("/view_contractor_shifts" ,(req,res) => {
+		var contractor_id = req.body.contractor_id
+		res.redirect("/view_a_contractor_shifts/" + contractor_id)
 	})
 
 }).catch(console.error)
