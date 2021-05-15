@@ -174,7 +174,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else {
-				all_shifts = []
+				var all_shifts = []
 				for(var i=0; i<allDetails.length; ++i) {
 					var curr_contractor_worker = allDetails[i].id
 					for(var j=0; j<allDetails[i].shifts.length; ++j) {
@@ -405,11 +405,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							Math.floor((difference % 3600) / 60), // MINUTES
 							// the remainder is the number of seconds
 							difference % 60 // SECONDS
-						];
+						]
 						// formatting (0 padding and concatenation)
 						result = result.map(function(v) {
-							return v < 10 ? '0' + v : v;
-						}).join(':');
+							return v < 10 ? "0" + v : v;
+						}).join(":")
 
 						var total = result.split(":")
 						var total_hours = total[0]
@@ -462,8 +462,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else{
-				// Get contractor hourly pay
-				var hourly_pay = allDetails[0].hourly_pay
 				// Find the recrutier that's hired him for this job
 				var con_shifts = allDetails[0].shifts
 				for(var i=0; i<con_shifts.length; ++i){
@@ -1089,21 +1087,22 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				message = message + date + "\nStart Hour:" + start + "\nEnd Hour: " + end +"\nRecurtier ID: " + recrutier_id
 				message = message + "\nThe report message: " + report_input + "\nPlease fix it as soon as possible.\nThank you in advance."
 				var contractor_email = allDetails[0].email
-				var nodemailer = require('nodemailer');
+				
+				var nodemailer = require("nodemailer")
 				var transporter = nodemailer.createTransport({
 					service: "gmail",
 					auth: {
-					  user: "companymailsce@gmail.com",
-					  pass: "sce147258369"
+						user: "companymailsce@gmail.com",
+						pass: "sce147258369"
 					}
-				});
+				})
 			
 				var mailOptions = {
 					from: "companymailsce@gmail.com",
 					to: contractor_email,
 					subject: "Report on a shift you entered",
 					text: message
-				};
+				}
 			
 				transporter.sendMail(mailOptions, function(error, info){
 					if (error) {
@@ -1112,7 +1111,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					  console.log("Email sent: " + info.response);
 					}
 					res.redirect("/shifts_monitor")
-				});
+				})
 			}
 		})  
 
@@ -1126,11 +1125,11 @@ app.listen(port, () => {
 })
 
 function toSeconds(time_str) {
-    // Extract hours, minutes and seconds
-    var parts = time_str.split(':');
-    // compute  and return total seconds
-    return parts[0] * 3600 + // an hour has 3600 seconds
-           parts[1] * 60   // a minute has 60 seconds
+	// Extract hours, minutes and seconds
+	var parts = time_str.split(":");
+	// compute  and return total seconds
+	return parts[0] * 3600 + // an hour has 3600 seconds
+		parts[1] * 60   // a minute has 60 seconds
 }
 //var data = {
 //  "user": user_name,
