@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/patrick14796/Sprint1#readme",
   "dependencies": {
+    "alert": "^5.0.10",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
@@ -31,7 +32,8 @@
     "express-session": "^1.17.1",
     "mongo": "^0.1.0",
     "mongoose": "^5.12.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.6.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.15",

@@ -166,7 +166,27 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 		
 	app.get("/shifts_monitor", authUser, authRole("Company Worker"), (req, res) => {
-		res.render("shifts_monitor")
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		
+		db_collection.find().toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var all_shifts = []
+				for(var i=0; i<allDetails.length; ++i) {
+					var curr_contractor_worker = allDetails[i].id
+					for(var j=0; j<allDetails[i].shifts.length; ++j) {
+						var curr_shift = allDetails[i].shifts[j]
+						curr_shift.push(curr_contractor_worker)
+						all_shifts.push(curr_shift)
+					}
+					
+				}
+				res.render("company_worker_shifts_monitor", {details: all_shifts})
+			}
+		})
 	})
 		
 	app.get("/why_us_page", (req, res) => {
@@ -335,7 +355,127 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 		})
 	})
+	
+	app.get("/company_worker_confirm_shift/:contractor_date", authUser, (req, res) => {
+		var data = req.params.contractor_date
+		data = data.split("_")
+		var contractor_id = data[0]
+		var date = data[1]
+		date = date.split(".")
+		date = date.join("/")
+		var rec_id = null
+		var total_pay = 0
+		var start = ""
+		var end = ""
+
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		// Update DB that the shift is confirmed - entering it to array ratings
+		// rec name, total pay, date
+		db_collection.find({"id": contractor_id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				// Get contractor hourly pay
+				var hourly_pay = allDetails[0].hourly_pay
+				// Find the recrutier that's hired him for this job
+				var con_shifts = allDetails[0].shifts
+				for(var i=0; i<con_shifts.length; ++i){
+					if(con_shifts[i][0] == date){
+						rec_id = con_shifts[i][3]
+						start = con_shifts[i][1]
+						end = con_shifts[i][2]
+						// If can't calculate total time because the input isn't in the right format
+						if (start.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) == null || end.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) == null){
+							console.log("You need to report this shift")
+							//let alert = require('alert');  
+							//alert("Message: This shift has en error in it's hours, you can't confirm it.\nYou need to report it.")
+							res.redirect("/shifts_monitor")
+							return
+						}
+						var difference = Math.abs(toSeconds(start) - toSeconds(end))
+						// compute hours, minutes and seconds
+						var result = [
+							// an hour has 3600 seconds so we have to compute how often 3600 fits
+							// into the total number of seconds
+							Math.floor(difference / 3600), // HOURS
+							// similar for minutes, but we have to "remove" the hours first;
+							// this is easy with the modulus operator
+							Math.floor((difference % 3600) / 60), // MINUTES
+							// the remainder is the number of seconds
+							difference % 60 // SECONDS
+						]
+						// formatting (0 padding and concatenation)
+						result = result.map(function(v) {
+							return v < 10 ? "0" + v : v
+						}).join(":")
+
+						var total = result.split(":")
+						var total_hours = total[0]
+						var total_minutes = total[1]
+						total_pay = hourly_pay * total_hours + (total_minutes / 60) * hourly_pay
+						break
+					}
+				}
+				// Find recurtier company name
+				var recrutiers_db = client.db("employers-workers")
+				var recrutiers_db_collection = recrutiers_db.collection("employersWorkers")
+
+				recrutiers_db_collection.find({"id": rec_id}).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						var rec_company_name = allDetails[0].company_name
+						db_collection.updateOne({"id": contractor_id}, {$push:{ratings: [rec_company_name, total_pay.toString(), date]}})
+						db_collection.updateOne({"id": contractor_id, "shifts": { $in : [[date, start, end, rec_id]]}}, {$pull: {"shifts": { $in : [[date, start, end, rec_id]]}}})
+						// Push this shift to the history of the contractor
+						db_collection.updateOne({"id": contractor_id}, {$push:{work_history: [date, start, end, rec_id]}})
+						// Push this shift to the history of the recrutier
+						recrutiers_db_collection.updateOne({"id": rec_id}, {$push:{work_history: [date, start, end, contractor_id]}})
+						res.redirect("/shifts_monitor")
+					}
+				})
+				
+			}
+		})
 		
+
+	})
+
+	app.get("/company_worker_report_shift/:contractor_date", authUser, (req, res) => {
+		var data = req.params.contractor_date
+		data = data.split("_")
+		var contractor_id = data[0]
+		var date = data[1]
+		date = date.split(".")
+		date = date.join("/")
+		var rec_id = null
+		var start = ""
+		var end = ""
+
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": contractor_id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				// Find the recrutier that's hired him for this job
+				var con_shifts = allDetails[0].shifts
+				for(var i=0; i<con_shifts.length; ++i){
+					if(con_shifts[i][0] == date){
+						rec_id = con_shifts[i][3]
+						start = con_shifts[i][1]
+						end = con_shifts[i][2]
+						res.render("report_shift", {"con_id": contractor_id, "rec_id": rec_id, "date": date, "start": start, "end": end})
+						break
+					}
+				}
+			}
+		})
+	})
 
 	app.get("/search_contractor_worker", authUser, authRole("Company Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
@@ -521,7 +661,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							"ratings":[],
 							"shifts":[],
 							"job_requests":[],
-							"canceled_jobs":[]
+							"canceled_jobs":[],
+							"work_history": []
 						}
 						// Add a new contractor worker to "contractorWorkers" collection with all of his information
 						db_collection.insertOne(data, function (err, collection) {
@@ -582,7 +723,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					"user": username,
 					"password": password,
 					"hiring":[],
-					"job_requests": []
+					"job_requests": [],
+					"work_history": []
 				}
 				// Add a new contractor worker to "contractorWorkers" collection with all of his information
 				db_collection.insertOne(data, function (err, collection) {
@@ -923,12 +1065,72 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		}
 	})
 
+	app.post("/report" ,(req,res) => {
+		var contractor_id = req.body.contractor_id
+		var date = req.body.date_hire
+		var recrutier_id = req.body.recrutier_id
+		var start = req.body.start_work
+		var end = req.body.end_work
+		var report_input = req.body.report_input
+		
+
+		// Find contractor email address
+		var db =client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({"id": contractor_id}).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else{
+				var name = allDetails[0].first_name
+				var message = "Hello " + name + ",\n" + "You got a report on a shift you entered.\nShift information:\nDate: "
+				message = message + date + "\nStart Hour:" + start + "\nEnd Hour: " + end +"\nRecurtier ID: " + recrutier_id
+				message = message + "\nThe report message: " + report_input + "\nPlease fix it as soon as possible.\nThank you in advance."
+				var contractor_email = allDetails[0].email
+				
+				var nodemailer = require("nodemailer")
+				var transporter = nodemailer.createTransport({
+					service: "gmail",
+					auth: {
+						user: "companymailsce@gmail.com",
+						pass: "sce147258369"
+					}
+				})
+			
+				var mailOptions = {
+					from: "companymailsce@gmail.com",
+					to: contractor_email,
+					subject: "Report on a shift you entered",
+					text: message
+				}
+			
+				transporter.sendMail(mailOptions, function(error, info){
+					if (error) {
+						console.log(error)
+					} else {
+						console.log("Email sent: " + info.response)
+					}
+					res.redirect("/shifts_monitor")
+				})
+			}
+		})  
+
+		
+	})
+
 }).catch(console.error)
 
 app.listen(port, () => {
 	console.log("Listening to port 3000!!!")
 })
 
+function toSeconds(time_str) {
+	// Extract hours, minutes and seconds
+	var parts = time_str.split(":")
+	// compute  and return total seconds
+	return parts[0] * 3600 + // an hour has 3600 seconds
+		parts[1] * 60   // a minute has 60 seconds
+}
 //var data = {
 //  "user": user_name,
 //  "password": passwordd
