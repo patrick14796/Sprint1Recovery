@@ -22,7 +22,7 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <head>
-  <title>Bootstrap Example</title>
+  <title>Profile</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -173,9 +173,16 @@
                                 </ul>
                             </div>
                       </div>
-
               	</form>
-              
+				  <% if(type == "Company Worker") { %>
+					<form id="view_contractor_shifts" action="/view_contractor_shifts" method="POST">
+						<button class="btn btn--radius-2 btn--blue-2" type="submit">View Contractor Attendance Clock</button>
+						<div>
+							<input type="hidden" name="contractor_id" id="hiddenInput"/>
+						</div>	
+					</form>
+					
+					<% } %>
               <hr>
               
              </div><!--/tab-pane-->
@@ -199,6 +206,7 @@
 		{
 			window.onload = addEditOnClick();
 		}
+		document.getElementById("hiddenInput").value = "<%=  details[0].id %>";
 		
 	</script>
                                                       
