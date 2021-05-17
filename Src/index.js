@@ -447,9 +447,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						db_collection.updateOne({"id": contractor_id}, {$push:{ratings: [rec_company_name, total_pay.toString(), date]}})
 						db_collection.updateOne({"id": contractor_id, "shifts": { $in : [[date, start, end, rec_id]]}}, {$pull: {"shifts": { $in : [[date, start, end, rec_id]]}}})
 						// Push this shift to the history of the contractor
-						db_collection.updateOne({"id": contractor_id}, {$push:{work_history: [date, start, end, rec_id]}})
+						db_collection.updateOne({"id": contractor_id}, {$push:{work_history: [date, start, end, rec_id, rec_company_name]}})
 						// Push this shift to the history of the recrutier
-						recrutiers_db_collection.updateOne({"id": rec_id}, {$push:{work_history: [date, start, end, contractor_id]}})
+						recrutiers_db_collection.updateOne({"id": rec_id}, {$push:{work_history: [date, start, end, contractor_id, rec_company_name]}})
 						res.redirect("/shifts_monitor")
 					}
 				})
