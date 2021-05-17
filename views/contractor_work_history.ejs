@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="public_contractor/css/contractor_work_history.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script language ="javascript" type="text/javascript" src="public_contractor/contractor_pay_rates.js"></script>
+      
+    </head>
+    <header>
+        <%- include('../partials/navbar_contractor_worker'); %>
+    </header>
+  <body>
+    <h2 id="greeting"><%= details[0].first_name%> <%= details[0].last_name%> this is all of your work history</h2>
+
+        
+                <section>
+                    <!--for demo wrap-->
+                    <div class="tbl-header">
+                      <table cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                          <tr>
+                            <th>Company</th>
+                            <th>Company ID</th>
+                            <th>Date</th>
+                            <th>Starting Hour</th>
+                            <th>Ending Hour</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                    <div class="tbl-content">
+                      <table cellpadding="0" cellspacing="0" border="0">
+                        <tbody>
+                            <% details[0].work_history.forEach(function(item){ %> 
+                                <tr>
+                                    <td><%= item[4]%></td>
+                                    <td><%= item[3]%></td>
+                                    <td><%= item[0]%></td>
+                                    <td><%= item[1]%></td>
+                                    <td><%= item[2]%></td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+    </div>
+    
+  </body>
+</html>
