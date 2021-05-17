@@ -280,12 +280,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contact_us", (req, res) => {
 		res.render("contact_us_page")
 	})
-	
 	// של איוון לא למחוקקקקקקק
 	app.get("/contractor_pay_rates", authUser, authRole("Contractor Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
 			var db_collection = db.collection("contractorWorkers")
-			
 			db_collection.find().toArray(function (err, allDetails) {
 				if (err) {
 					console.log(err)
@@ -295,7 +293,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 			})
 		})
-
 		app.get("/get_data_payrate", authUser, authRole("Contractor Worker"), (req, res) => {
 			var db =client.db("contractor-workers")
 			var db_collection = db.collection("contractorWorkers")
@@ -311,7 +308,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			app.get("/contractor_worker_work_history", authUser, authRole("Contractor Worker"), (req, res) => {
 				var db = client.db("contractor-workers")
 					var db_collection = db.collection("contractorWorkers")
-					
 					db_collection.find().toArray(function (err, allDetails) {
 						if (err) {
 							console.log(err)
@@ -321,7 +317,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						}
 					})
 				})	
-	
 	///
 	app.get("/contractor_job_requests", authUser, authRole("Contractor Worker"), (req, res) => {
 		var db =client.db("contractor-workers")
@@ -336,7 +331,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 		})  
 	})
-
 	app.get("/accept_job_request/:recrutier_date", authUser, (req, res) => {
 		var data = req.params.recrutier_date
 		data = data.split("_")
@@ -344,7 +338,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var date = data[1]
 		date = date.split(".")
 		date = date.join("/")
-
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 		db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
