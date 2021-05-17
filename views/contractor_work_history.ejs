@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="public_contractor/css/contractor_work_history.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script language ="javascript" type="text/javascript" src="public_contractor/contractor_pay_rates.js"></script>
+      
+    </head>
+    <header>
+        <%- include('../partials/navbar_contractor_worker'); %>
+    </header>
+  <body>
+    <h2 id="greeting"><%= details[0].first_name%> <%= details[0].last_name%> this is all of your work history</h2>
+
+        
+                <section>
+                    <!--for demo wrap-->
+                    <div class="tbl-header">
+                      <table cellpadding="0" cellspacing="0" border="0">
+                        <thead>
+                          <tr>
+                            <th>Code</th>
+                            <th>Company</th>
+                            <th>Price</th>
+                            <th>Change</th>
+                            <th>Change %</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                    <div class="tbl-content">
+                      <table cellpadding="0" cellspacing="0" border="0">
+                        <tbody>
+                            <% details[0].ratings.forEach(function(item){ %> 
+                                <tr>
+                                    <td><%= item[0]%></td>
+                                    <td><%= item[2]%></td>
+                                    <td><%= item[1]%></td>
+                                    <td><%= item[1]%></td>
+                                    <td><%= item[1]%></td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+    </div>
+    
+  </body>
+</html>

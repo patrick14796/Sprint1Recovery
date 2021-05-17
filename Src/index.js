@@ -308,6 +308,19 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 			})  
 			})
+			app.get("/contractor_worker_work_history", authUser, authRole("Contractor Worker"), (req, res) => {
+				var db = client.db("contractor-workers")
+					var db_collection = db.collection("contractorWorkers")
+					
+					db_collection.find().toArray(function (err, allDetails) {
+						if (err) {
+							console.log(err)
+						}
+						else {
+							res.render("contractor_work_history", {details: allDetails})
+						}
+					})
+				})	
 	
 	///
 	app.get("/contractor_job_requests", authUser, authRole("Contractor Worker"), (req, res) => {
