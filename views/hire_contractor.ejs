@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<base href="/">
+	<header>
+		<%- include('../partials/header_recruiter'); %>
+	</header>
+  <head>
+	<base href="/"> 
+    <!-- <link> doesn't need a closing tag -->
+    <link href="CSS/Master.css" rel="stylesheet" type="text/css">
+    <!-- include the jQuery UI style sheet -->
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- include jQuery -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- include jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script  src="public_try/calandar.js"></script>
+  </head>
+  <body>
+		<form id="hire_withCalander" action="/hire" method="POST">
+    		<div id="Datepicker1"></div>
+			<div id="unvailable"></div>
+    		<script type="text/javascript">
+      			$(function() {
+        			$("#Datepicker1").datepicker({
+        	 		numberOfMonths: 0
+        			}); 
+      			});
+    		</script>
+	
+			<p>Date: <input type="text" name = "date_of_hire" id="datepicker" /></p>
+			<p>Start Event: <input type="text"  name = "Start_work" maxlength="5"  id="start_hire"/></p>
+			<p>End Event: <input type="text" id="End_hire" name = "end_work" maxlength="5" /></p>
+			<p><button class="button_hire" type="submit">Hire</button></p>
+			<input type="hidden" name="contractor_id" id="hiddenInput"/>
+
+    		<script>
+        		var input = document.getElementById('hiddenInput');
+				var id="<%= id %>";
+				input.value = id
+    		</script>
+		</form>
+
+	</body>
+</html>
+

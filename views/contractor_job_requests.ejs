@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<header>
+    <%- include('../partials/navbar_contractor_worker'); %>
+</header>
+<head>
+    <title>Your Job Requests</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->  
+    <link rel="icon" type="image/png" href="public_search_contractor/images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="public_search_contractor/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="public_search_contractor/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="public_search_contractor/vendor/animate/animate.css">
+<!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="public_search_contractor/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="public_search_contractor/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="public_search_contractor/css/util.css">
+    <link rel="stylesheet" type="text/css" href="public_search_contractor/css/main.css">
+<!--===============================================================================================-->
+</head>
+
+<body>
+    <% if(details!=null) { %>
+    <div class="limiter">
+        <div class="container-table100">
+            <div class="wrap-table100">
+                <div class="table100 ver1 m-b-110">
+                    <div class="table100-head">
+                            <table>
+                                <thead>
+                                    <tr class="row100 head">
+										<th class="cell100 column1">Recrutier ID</th>
+                                        <th class="cell100 column2">Date</th>
+                                        <th class="cell100 column3">Start Hour</th>
+                                        <th class="cell100 column4">End Hour</th>
+										<th class="cell100 column7">Actions</th>
+										<th class="cell100 column8"></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="table100-body js-pscroll">
+                            <table id="contractor-workers-table">
+                                <tbody>
+                                    <% details.forEach(function(item){ %>
+                                        <tr class="row100 body">
+											<td class="cell100 column1"><%= item[3]%></td>
+                                            <td class="cell100 column2"><%= item[0]%></td>
+                                            <td class="cell100 column3"><%= item[1]%></td>
+                                            <td class="cell100 column4"><%= item[2]%></td> 
+											<td class="cell100 column7">
+												<button class="btn-view" type="button">Accept</button>
+											</td>
+											<td class="cell100 column8">
+												<button class="btn-delete" type="button">Decline</button>
+											</td>  
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+	
+<!--===============================================================================================-->  
+    <script src="public_search_contractor/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+    <script src="public_search_contractor/vendor/bootstrap/js/popper.js"></script>
+    <script src="public_search_contractor/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+    <script src="public_search_contractor/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+    <script src="public_search_contractor/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script>
+        $('.js-pscroll').each(function(){
+            var ps = new PerfectScrollbar(this);
+
+            $(window).on('resize', function(){
+                ps.update();
+            })
+        });
+    </script>
+	<script>
+		function addRowHandlers() {
+    		var table = document.getElementById("contractor-workers-table");
+    		var rows = table.getElementsByTagName("tr");
+    		for (i = 0; i < rows.length; i++) {
+    		    var currentRow = table.rows[i]
+				var currentAcceptBtn = currentRow.getElementsByTagName("td")[4]
+				var currentDeclineBtn = currentRow.getElementsByTagName("td")[5]
+    		    var createAcceptClickHandler = function(row) {
+					return function() {
+						var cell = row.getElementsByTagName("td")[0]
+    		            var rec_id = cell.innerHTML
+						cell = row.getElementsByTagName("td")[1]
+						var date = cell.innerHTML
+						cell = row.getElementsByTagName("td")[2]
+						var start = cell.innerHTML
+						cell = row.getElementsByTagName("td")[3]
+						var end = cell.innerHTML
+						
+						date = date.split('/')
+						date = date.join('.')
+						window.location.href = 'accept_job_request/' + rec_id + '_' + date;
+    		        }
+    		    }
+				var createDeclineClickHandler = function(row) {
+					return async function() {
+						var cell = row.getElementsByTagName("td")[0]
+    		            var rec_id = cell.innerHTML
+						cell = row.getElementsByTagName("td")[1]
+						var date = cell.innerHTML
+						cell = row.getElementsByTagName("td")[2]
+						var start = cell.innerHTML
+						cell = row.getElementsByTagName("td")[3]
+						var end = cell.innerHTML
+						
+						date = date.split('/')
+						date = date.join('.')
+						window.location.href = 'decline_job_request/' + rec_id + '_' + date;
+    		        }
+    		    }
+
+    		    currentAcceptBtn.onclick = createAcceptClickHandler(currentRow);
+				currentDeclineBtn.onclick = createDeclineClickHandler(currentRow);
+    		}
+		}
+		window.onload = addRowHandlers();
+	</script>
+
+<!--===============================================================================================-->
+    <script src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<base href="/">
+	<header>
+		<%- include('../partials/navbar_contractor_worker'); %>
+	</header>
+  <head>
+	<base href="/"> 
+  </head>
+  <body>
+		<form id="hire_withCalander" action="/save_new_shift" method="POST">
+			<p>Edit Shift</p>
+			<p>Date: <input type="text" id = "date_of_hire" name="date_hire"/></p>
+			<p>Start Event: <input type="text" maxlength="5" name="start_work" id="start_hire"/></p>
+			<p>End Event: <input type="text" id="end_hire" name = "end_work" maxlength="5" /></p>
+			<p><button class="button_save" type="submit">Save</button></p>
+			<input type="hidden" name="hiddenID" id="hiddenInput"/>
+			<input type="hidden" name="hiddenDate" id="hiddenInputDate"/>
+
+
+    		<script>
+				var input = document.getElementById('hiddenInput');
+				var id="<%= rec_id %>";
+				input.value = id
+        		var input = document.getElementById('date_of_hire');
+				var old_date="<%= old_date %>";
+				input.value = old_date;
+				input.disabled = true;
+				document.getElementById('hiddenInputDate').value = old_date;
+				document.getElementById('end_hire').value = "<%= end_hire %>";
+				document.getElementById('start_hire').value = "<%= start_hire %>";
+    		</script>
+		</form>
+
+	</body>
+</html>
+

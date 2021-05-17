@@ -1,7 +1,16 @@
 <base href="/">
+<% if(type == "Company Worker") { %>
 <header>
-    <%- include('../partials/navbar_contractor_worker'); %>
+		<%- include('../partials/header_company_worker'); %>
 </header>
+<% } %>
+<% if(type == "Recruiter") { %>
+	<header>
+	<%- include('../partials/header_recruiter'); %>
+	</header>
+
+<% } %>
+
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -13,7 +22,7 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <head>
-  <title>Bootstrap Example</title>
+  <title>Profile</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -155,16 +164,25 @@
                            <div class="col-xs-12">
                                 <br>
                                 <ul class="list-inline m-0">
-                                    <a href="contractor_worker_edit_my_profile" class="btn btn-primary a-btn-slide-text">
+                                	<% if(type == "Company Worker") { %>
+                                    <a class="btn btn-primary a-btn-slide-text" id="edit_btn">
                                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                         <span><strong>Edit</strong></span>            
                                     </a>
+									<% } %>
                                 </ul>
                             </div>
                       </div>
-
               	</form>
-              
+				  <% if(type == "Company Worker") { %>
+					<form id="view_contractor_shifts" action="/view_contractor_shifts" method="POST">
+						<button class="btn btn--radius-2 btn--blue-2" type="submit">View Contractor Attendance Clock</button>
+						<div>
+							<input type="hidden" name="contractor_id" id="hiddenInput"/>
+						</div>	
+					</form>
+					
+					<% } %>
               <hr>
               
              </div><!--/tab-pane-->
@@ -173,4 +191,22 @@
 
         </div><!--/col-9-->
     </div><!--/row-->
+
+	<script>
+		function addEditOnClick() {
+			var id="<%=  details[0].id %>";
+			var edit_btn = document.getElementById("edit_btn");
+			edit_btn.onclick = function(){
+				console.log(id)
+				window.location.href = 'contractor_worker_edit_profile/'+ id;
+			}
+		}
+		var type = "<%=  type %>";
+		if(type == "Company Worker")
+		{
+			window.onload = addEditOnClick();
+		}
+		document.getElementById("hiddenInput").value = "<%=  details[0].id %>";
+		
+	</script>
                                                       

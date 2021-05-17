@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<base href="/">
+	<header>
+		<%- include('../partials/header_company_worker'); %>
+	</header>
+  <head>
+	<base href="/"> 
+   
+  </head>
+  <body>
+		<form id="send_report_shift" action="/report" method="POST">
+			<p>Shift information:</p>
+			<p>Contractor ID: <input type="text" id = "contractor_id" name="contractor_id"/></p>
+			<p>Date: <input type="text" id = "date_of_hire" name="date_hire"/></p>
+			<p>Recrutier ID: <input type="text" id = "recrutier_id" name="recrutier_id"/></p>
+			<p>Start Event: <input type="text" maxlength="5" name="start_work" id="start_hire"/></p>
+			<p>End Event: <input type="text" id="end_hire" name = "end_work"/></p>
+			<p>Report Text: <textarea class="textarea--style-6" id="report_input" name="report_input"></textarea></p>
+			<p><button class="button_report" type="submit">Report</button></p>
+
+
+    		<script>
+				var con_id="<%= con_id %>";
+				document.getElementById('contractor_id').value = con_id
+				document.getElementById('contractor_id').readOnly = true;
+				var id="<%= rec_id %>";
+				document.getElementById('recrutier_id').value = id
+				document.getElementById('recrutier_id').readOnly = true;
+				var date="<%= date %>";
+				document.getElementById('date_of_hire').value = date;
+				document.getElementById('date_of_hire').readOnly = true;
+				var start="<%= start %>";
+				document.getElementById('start_hire').value = start
+				document.getElementById('start_hire').readOnly = true;
+				var end="<%= end %>";
+				document.getElementById('end_hire').value = end
+				document.getElementById('end_hire').readOnly = true;
+    		</script>
+		</form>
+
+	</body>
+</html>
+

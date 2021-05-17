@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<base href="/">
+	<header>
+		<%- include('../partials/navbar_contractor_worker'); %>
+	</header>
+  <head>
+	<base href="/"> 
+  </head>
+  <body>
+		<form id="hire_withCalander" action="/add_new_shift" method="POST">
+			<p>Recrutier ID: <input type="text" id="recrutier_id" name = "rec_id"/></p>
+			<p>Date: <input type="text" name = "date_of_shift" id="date" /></p>
+			<p>Start Event: <input type="text"  name = "start_work" maxlength="5"  id="start_work"/></p>
+			<p>End Event: <input type="text" id="End_hire" name = "end_work" maxlength="5" /></p>
+			<p><button class="button_hire" type="submit">Add new shift</button></p>
+		</form>
+
+	</body>
+</html>
+

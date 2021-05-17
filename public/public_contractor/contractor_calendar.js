@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
   const currentDayDOM = document.getElementById("cur-day"),
   currentMonthDOM = document.getElementById("cur-month"),
@@ -152,9 +151,26 @@ let staticCurrentColor = {
 
 var notes;
 let staticNotes = [
- 
+  {
+    id: 235684345,
+    title: "running marathon",
+    desc:
+      "blah lbah lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
+    date: "2019 10 31"
+  },
+  {
+    id: 784534534,
+    title: "The Burger Chief opening event",
+    desc: "lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
+    date: "2019 10 2"
+  },
+  {
+    id: 345463516,
+    title: "Jamal's Birthday",
+    desc: "lorem ipsum sodem qwerty oiuy lorem ipsum sodem qwerty oiuy",
+    date: "2019 11 22"
+  }
 ];
-
 let notesFound = localStorage.getItem("notes");
 let colorsFound = localStorage.getItem("theme");
 
@@ -171,6 +187,7 @@ if (!colorsFound) {
   localStorage.setItem("theme", JSON.stringify(staticCurrentColor));
   currentColor = staticCurrentColor;
 } else {
+  
   currentColor = JSON.parse(colorsFound);
   applyTheme();
 }
@@ -178,15 +195,64 @@ if (!colorsFound) {
 
 //update local storage
 function updateLocalStorage() {
+  $.get("/send_data_calendar",function(data){
+    d=data[0].not_able_to_work
+    for(var i=0; i<d.length; ++i){
+      staticNotes.push({
+        id: d[i][0],
+            title: d[i][1],
+            desc: d[i][2],
+            date: d[i][0]
+      });
+    }
+
+
+	
+	d=data[0].hiring
+    for(var j=0; j<d.length; ++j){
+	  var dat = d[j][0].split('/')
+	  var day = dat[0]
+	  if (day[0] == '0'){
+		  day= day.substring(1,day.length)
+	  	}
+	  var mont = dat[1]
+	  if (mont[0] == '0'){
+		mont= mont.substring(1,mont.length)
+		}  
+
+		dat[0]=day
+		dat[1]=mont
+
+		dat=dat.join('/')
+		
+      staticNotes.push({
+        id: d[j][0],
+		title: "Work Day",
+        desc: d[j][1]+ '\n' +d[j][2],
+        date: dat
+      });
+    }
+
+
+    localStorage.setItem("notes", JSON.stringify(staticNotes));
+    localStorage.setItem("notes", JSON.stringify(staticNotes));
+
+    showCalenderInfo()
+    location.reload()
+
+    })
+
+  /*
   var d;
   $.get("/send_data_calendar",function(data){
-    d=data.details[0].not_able_to_work
-    //console.log(d)
+    d=data[0].not_able_to_work
   })
   let currentNotes = d;
+  console.log(currentNotes)
   localStorage.setItem("notes", JSON.stringify(currentNotes));
   localStorage.setItem("theme", JSON.stringify(currentColor));
   applyTheme();
+  */
 }
 
 function applyTheme() {
@@ -672,8 +738,9 @@ saveBtnInPopup.addEventListener("click", () => {
     notes.push(newNote);
     closeModal(true);
     printMonthCalendarInDOM();
-    updateLocalStorage();
     $.post("/add_note_calendar",{d : newNote.date, t : newNote.title,e : newNote.desc});
+    updateLocalStorage();
+    //location.reload();
   } else {
     document.getElementById("warning").innerHTML = "Please fill all fields";
   }
@@ -702,6 +769,8 @@ deleteBtnInPopup.addEventListener("click", () => {
   updateLocalStorage();
   closeModal(true);
   printMonthCalendarInDOM();
+  //location.reload();
+
 });
 
 //mini clock 12 and 24 timing
