@@ -615,24 +615,24 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var type = null
 
 		switch (userType) {
-			case "Company Worker":
-				db = client.db("human-resources-workers")
-				db_collection = db.collection("humanResourcsesWorkersLogin")
-				homepage_name = "CompanyWorkerHomepage"
-				type = "Company Worker"
-				break
-			case "Contractor Worker":
-				db = client.db("contractor-workers")
-				db_collection = db.collection("contractorWorkersLogin")
-				homepage_name = "contractor_worker_home_page"
-				type = "Contractor Worker"
-				break
-			case "Employee":
-				db = client.db("employers-workers")
-				db_collection = db.collection("employersWorkersLogin")
-				homepage_name = "recruiters_home_page"
-				type = "Recruiter"
-				break
+		case "Company Worker":
+			db = client.db("human-resources-workers")
+			db_collection = db.collection("humanResourcsesWorkersLogin")
+			homepage_name = "CompanyWorkerHomepage"
+			type = "Company Worker"
+			break
+		case "Contractor Worker":
+			db = client.db("contractor-workers")
+			db_collection = db.collection("contractorWorkersLogin")
+			homepage_name = "contractor_worker_home_page"
+			type = "Contractor Worker"
+			break
+		case "Employee":
+			db = client.db("employers-workers")
+			db_collection = db.collection("employersWorkersLogin")
+			homepage_name = "recruiters_home_page"
+			type = "Recruiter"
+			break
 		}
 
 		if (db_collection) {
