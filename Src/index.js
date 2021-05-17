@@ -613,7 +613,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var db_collection = null
 		var db = null
 		var type = null
-
+//
 		switch (userType) {
 			case "Company Worker":
 				db = client.db("human-resources-workers")
