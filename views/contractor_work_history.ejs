@@ -19,10 +19,11 @@
                       <table cellpadding="0" cellspacing="0" border="0">
                         <thead>
                           <tr>
+                            <th>Company</th>
+                            <th>Company ID</th>
                             <th>Date</th>
                             <th>Starting Hour</th>
                             <th>Ending Hour</th>
-                            <th>Company</th>
                           </tr>
                         </thead>
                       </table>
@@ -32,10 +33,11 @@
                         <tbody>
                             <% details[0].work_history.forEach(function(item){ %> 
                                 <tr>
+                                    <td><%= item[4]%></td>
+                                    <td><%= item[3]%></td>
                                     <td><%= item[0]%></td>
                                     <td><%= item[1]%></td>
                                     <td><%= item[2]%></td>
-                                    <td><%= item[3]%></td>
                                 </tr>
                                 <% }) %>
                         </tbody>
