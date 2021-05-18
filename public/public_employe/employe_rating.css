@@ -55,7 +55,7 @@
 	 text-shadow: 0 0 1px #333;
 }
  :root {
-	 font-size: 150%;
+	 font-size: 16px;
 	 font-family: Helvetica, arial, sans-serif;
 }
  body {
@@ -69,12 +69,7 @@
 	 border-radius: 1px;
 	 padding: 1em 1.5em 0.9em;
 }
- #log {
-	 margin: 1em auto;
-	 width: 5em;
-	 text-align: center;
-	 background: transparent;
-}
+
  h3 {
 	
    color: black;
