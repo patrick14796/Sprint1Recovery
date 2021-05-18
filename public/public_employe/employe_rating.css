@@ -50,24 +50,7 @@ body{
     position: relative;
     transition:all .3s;
   }
-  .rating-system1 label:before{
-    content: '';
-    position: absolute;
-    width:100%;
-    height:100%;
-    background: inherit;
-    top:0;
-    left:0;
-    transition:all 0.3s;
-  }
-  .rating-system1 input:checked ~ label,
-  .rating-system1 label:hover ~ label,
-  .rating-system1 label:hover{
-    background:seagreen;
-  }
-  .rating-system1 input:checked ~ label:before{
-    transform:rotate(90deg);
-  }  
+  
   .text{
     color:black;
     padding:10px 0;
@@ -75,28 +58,7 @@ body{
     width:100%;
     top:100%;  
   }
-  /*second*/
-  .rating-system2 label{
-    width:10px;
-    height:10px;
-    border-radius:100%; 
-    margin:0 10px;
-  }
-  
-  .ratings-system2 label:before{display:none;}
-  .rating-system2 label:hover ~ label,
-  .rating-system2 label:hover
-  {
-    box-shadow: 0 0 0 2px gold,
-                inset 0 0 0 5px #333;
-    
-  } 
-  
-  .rating-system2 input:checked ~ label{
-    background:gold;
-    box-shadow: 0 0 0 2px gold;
-    
-  }
+ 
   
   /*rating system 3*/
   
@@ -130,35 +92,7 @@ body{
     top: 30%;
     left: 3px;
   }
-  
-  /** rating system 4*/
-  
-  .rating-system4 label{
-      
-    width:40px;
-    height:50px;
-    background:url('https://i.imgur.com/q1tk5E7.gif'); 
-    background-size:70%;
-    background-repeat:no-repeat;
-  } 
-    
-  
-  .rating-system4 label:hover,
-  .rating-system4 label:hover ~ label
-  {
-    background:url('https://i.imgur.com/YgAna9g.gif');
-    background-size:100%;
-    background-repeat:no-repeat;
-    
-  }
-  
-  
-  .rating-system4 input:checked ~ label{
-    background:url('https://i.imgur.com/GO4qjoa.gif');
-    background-size:70%;
-    background-repeat:no-repeat;
-    
-  }
+ 
   
   
   /*selecting*/
