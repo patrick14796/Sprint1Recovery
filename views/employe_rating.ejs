@@ -3,8 +3,9 @@
 	<base href="/">
 	<header>
 		<%- include('../partials/header_recruiter'); %>
-        <link rel="stylesheet" href="public_employe/employe_rating.css">
-     
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="public_employe/employe_rating.css">
+        <script language ="javascript" type="text/javascript" src="public_employe/employe_rating.js"></script>
 	</header>
   <head>
 
@@ -14,22 +15,18 @@
         <% details[0].work_history.forEach(function(item){ %> 
         <div class="rating-system3">
           <h3><%= item[4]%></h3>
-          <input type="radio" name='rate3' id="star5_3" />
-          <label for="star5_3"></label>
-        
-          <input type="radio" name='rate3' id="star4_3" />
-          <label for="star4_3"></label>
-        
-          <input type="radio" name='rate3' id="star3_3" />
-          <label for="star3_3"></label>
-         
-          <input type="radio" name='rate3' id="star2_3" />
-          <label for="star2_3"></label>
-        
-          <input type="radio" name='rate3' id="star1_3" />
-          <label for="star1_3"></label>
-          
-          <div class="text"></div>
+          <form>
+            <fieldset>
+              <span class="star-cb-group">
+                <input type="radio" id="rating-5" name="rating" value="5" /><label for="rating-5">5</label>
+                <input type="radio" id="rating-4" name="rating" value="4" checked="checked" /><label for="rating-4">4</label>
+                <input type="radio" id="rating-3" name="rating" value="3" /><label for="rating-3">3</label>
+                <input type="radio" id="rating-2" name="rating" value="2" /><label for="rating-2">2</label>
+                <input type="radio" id="rating-1" name="rating" value="1" /><label for="rating-1">1</label>
+                <input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" /><label for="rating-0">0</label>
+              </span>
+            </fieldset>
+          </form>
         </div>
         <% }) %>
         </div>
