@@ -317,6 +317,19 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 		})
 	})
+	app.get("/ranking", authUser, authRole("Recruiter"), (req, res) => {
+		var db = client.db("employers-workers")
+		var db_collection = db.collection("employersWorkers")
+		db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				res.render("employe_rating", { details: allDetails })
+			}
+		})
+	})
+
 	//
 	app.get("/contractor_job_requests", authUser, authRole("Contractor Worker"), (req, res) => {
 		var db = client.db("contractor-workers")

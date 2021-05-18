@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<base href="/">
+	<header>
+		<%- include('../partials/header_recruiter'); %>
+        <link rel="stylesheet" href="public_employe/employe_rating.css">
+     
+	</header>
+  <head>
+
+  </head>
+  <body>
+	<div class="showcase">
+        <% details[0].work_history.forEach(function(item){ %> 
+        <div class="rating-system3">
+          <h3><%= item[4]%></h3>
+          <input type="radio" name='rate3' id="star5_3" />
+          <label for="star5_3"></label>
+        
+          <input type="radio" name='rate3' id="star4_3" />
+          <label for="star4_3"></label>
+        
+          <input type="radio" name='rate3' id="star3_3" />
+          <label for="star3_3"></label>
+         
+          <input type="radio" name='rate3' id="star2_3" />
+          <label for="star2_3"></label>
+        
+          <input type="radio" name='rate3' id="star1_3" />
+          <label for="star1_3"></label>
+          
+          <div class="text"></div>
+        </div>
+        <% }) %>
+        </div>
+
+	</body>
+</html>
+
