@@ -34,9 +34,11 @@
 </head>
 
 <body>
+	<% if(type == "Contractor Worker") { %>
     <a href="contractor_add_new_shift">
         <span><strong>Add new shift</strong></span>            
     </a>
+	<% } %> 
     <% if(details!=null) { %>
     <div class="limiter">
         <div class="container-table100">

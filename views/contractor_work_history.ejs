@@ -1,3 +1,4 @@
+<base href="/">
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,11 +24,19 @@
     <link rel="stylesheet" type="text/css" href="public_search_contractor/css/main.css">
 <!--===============================================================================================-->
     </head>
+	<% if(type=="Contractor Worker") { %>
     <header>
         <%- include('../partials/navbar_contractor_worker'); %>
     </header>
+	<% } %>
+	<% if(type=="Company Worker") { %>
+	<header>
+		<%- include('../partials/header_company_worker'); %>
+	</header>
+	<% } %>
+
   <body>
-    <h2 id="greeting"><%= full_name %> this is all of your work history</h2>
+    <h2 id="greeting"><%= full_name %> work history</h2>
 	<p></p>
 	<% if(total_pay!=null) { %>
 	<div>
@@ -39,40 +48,42 @@
 		This month you worked <%= total_hours_for_month %> hours and <%= total_minutes_for_month %> minutes
 	</div>
 	<% } %>
-	<div class="s01">
-        <form action="/filter_work_history" method="POST">
-          <div class="inner-form">
-            <div class="input-field first-wrap">
-				<select name="month" id="month">
-					<optgroup label="Month">
-					<option value="0">All Months</option>
-					  <option value="1">January</option>
-					  <option value="2">February</option>
-					  <option value="3">March</option>
-					  <option value="4">April</option>
-					  <option value="5">May</option>
-					  <option value="6">June</option>
-					  <option value="7">July</option>
-					  <option value="8">August</option>
-					  <option value="9">September</option>
-					  <option value="10">October</option>
-					  <option value="11">November</option>
-					  <option value="12">December</option>
-					</optgroup>
-				</select>
-            </div>
-            <div class="input-field second-wrap">
-              <input id="location" type="text" name="company_name" placeholder="Company name"/>
-            </div>
-            <div class="input-field second-wrap">
-                <input id="location" type="text" name="recrutier_id" placeholder="Recrutier ID"/>
-            </div>
-            <div class="input-field third-wrap">
-              <button class="btn-search" type="submit">Search</button>
-            </div>
-          </div>
-        </form>
-    </div>
+	<% if(type=="Contractor Worker") { %>
+		<div class="s01">
+			<form action="/filter_work_history" method="POST">
+			  <div class="inner-form">
+				<div class="input-field first-wrap">
+					<select name="month" id="month">
+						<optgroup label="Month">
+						<option value="0">All Months</option>
+						  <option value="1">January</option>
+						  <option value="2">February</option>
+						  <option value="3">March</option>
+						  <option value="4">April</option>
+						  <option value="5">May</option>
+						  <option value="6">June</option>
+						  <option value="7">July</option>
+						  <option value="8">August</option>
+						  <option value="9">September</option>
+						  <option value="10">October</option>
+						  <option value="11">November</option>
+						  <option value="12">December</option>
+						</optgroup>
+					</select>
+				</div>
+				<div class="input-field second-wrap">
+				  <input id="location" type="text" name="company_name" placeholder="Company name"/>
+				</div>
+				<div class="input-field second-wrap">
+					<input id="location" type="text" name="recrutier_id" placeholder="Recrutier ID"/>
+				</div>
+				<div class="input-field third-wrap">
+				  <button class="btn-search" type="submit">Search</button>
+				</div>
+			  </div>
+			</form>
+		</div>
+	<% } %>
         
                 <section>
                     <!--for demo wrap-->

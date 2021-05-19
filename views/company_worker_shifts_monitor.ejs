@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<base href="/">
 <header>
     <%- include('../partials/header_company_worker'); %>
 </header>
@@ -26,9 +27,12 @@
 </head>
 
 <body>
-	<a>All of The shifts that hasn't been confirmed yet.</a>
-	<a>If you tried to confirm a shift that's has a start hour or an ending hour in the wrong format - it will not be confirmed and it will still appear in the table.</a>
-    <a>If you reported on a shift, your report will be sent to the user email (if he has one), and it'll still appear in the table.</a>
+	<p><a>All of The shifts that hasn't been confirmed yet.</a></p>
+	<p><a>If you tried to confirm a shift that's has a start hour or an ending hour in the wrong format - it will not be confirmed and it will still appear in the table.</a></p>
+	<p><a>If you reported on a shift, your report will be sent to the user email (if he has one), and it'll still appear in the table.</a></p>
+	<% if(name!=null) { %>
+	<p><a>Those are the shifts of <%= name%>.</a></p>
+	<% } %>
 	<% if(details!=null) { %>
     <div class="limiter">
         <div class="container-table100">
