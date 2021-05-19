@@ -47,13 +47,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var db_collection = db.collection("contractorWorkers")
 		function sortByProperty(property){  
 			return function(a,b){  
-			   if(a[property] < b[property])
+			    if(a[property] < b[property])
 					return 1
-			   else if(a[property] > b[property])
+			    else if(a[property] > b[property])
 					return -1
-			   return 0
+			    return 0
 			}
-		 }
+		}
 		db_collection.find().toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
