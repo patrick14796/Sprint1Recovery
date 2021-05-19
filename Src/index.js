@@ -143,13 +143,18 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 
-		db_collection.find({ "id": req.params.id }).toArray(function (err, allDetails) {
+		db_collection.find({"id": req.params.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
 			}
 			else {
-				var contr_shifts = allDetails[0].shifts
-				res.render("contractor_shifts", { details: contr_shifts, type: "Company Worker" })
+				var all_shifts = []
+				for (var j = 0; j < allDetails[0].shifts.length; ++j) {
+					var curr_shift = allDetails[0].shifts[j]
+					curr_shift.push(req.params.id)
+					all_shifts.push(curr_shift)
+				}
+				res.render("company_worker_shifts_monitor", { details: all_shifts, name: allDetails[0].first_name + " " + allDetails[0].last_name })
 			}
 		})
 
@@ -208,7 +213,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					}
 
 				}
-				res.render("company_worker_shifts_monitor", { details: all_shifts })
+				res.render("company_worker_shifts_monitor", { details: all_shifts, name: null })
 			}
 		})
 	})
@@ -316,15 +321,31 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_worker_work_history", authUser, authRole("Contractor Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
-		db_collection.find().toArray(function (err, allDetails) {
+		db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
 			}
 			else {
-				res.render("contractor_work_history", { details: allDetails })
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
 			}
 		})
 	})
+
+	app.get("/view_contractor_worker_work_history/:id", authUser, authRole("Company Worker"), (req, res) => {
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({ "id": req.params.id }).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				res.render("contractor_work_history", { "type": "Company Worker","full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+			}
+		})
+	})
+
 	app.get("/ranking", authUser, authRole("Recruiter"), (req, res) => {
 		var db = client.db("employers-workers")
 		var db_collection = db.collection("employersWorkers")
@@ -479,6 +500,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var total_pay = 0
 		var start = ""
 		var end = ""
+		var contractor_full_name = ""
 
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
@@ -491,6 +513,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			else {
 				// Get contractor hourly pay
 				var hourly_pay = allDetails[0].hourly_pay
+				contractor_full_name = allDetails[0].first_name + " " + allDetails[0].last_name
 				// Find the recrutier that's hired him for this job
 				var con_shifts = allDetails[0].shifts
 				for (var i = 0; i < con_shifts.length; ++i) {
@@ -498,35 +521,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						rec_id = con_shifts[i][3]
 						start = con_shifts[i][1]
 						end = con_shifts[i][2]
-						// If can't calculate total time because the input isn't in the right format
-						if (start.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) == null || end.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) == null) {
-							console.log("You need to report this shift")
+						total_pay = totalPayForShift(start, end, hourly_pay)
+						if(!total_pay) {
 							//let alert = require('alert');  
 							//alert("Message: This shift has en error in it's hours, you can't confirm it.\nYou need to report it.")
 							res.redirect("/shifts_monitor")
-							return
+							break
 						}
-						var difference = Math.abs(toSeconds(start) - toSeconds(end))
-						// compute hours, minutes and seconds
-						var result = [
-							// an hour has 3600 seconds so we have to compute how often 3600 fits
-							// into the total number of seconds
-							Math.floor(difference / 3600), // HOURS
-							// similar for minutes, but we have to "remove" the hours first;
-							// this is easy with the modulus operator
-							Math.floor((difference % 3600) / 60), // MINUTES
-							// the remainder is the number of seconds
-							difference % 60 // SECONDS
-						]
-						// formatting (0 padding and concatenation)
-						result = result.map(function (v) {
-							return v < 10 ? "0" + v : v
-						}).join(":")
-
-						var total = result.split(":")
-						var total_hours = total[0]
-						var total_minutes = total[1]
-						total_pay = hourly_pay * total_hours + (total_minutes / 60) * hourly_pay
 						break
 					}
 				}
@@ -545,7 +546,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						// Push this shift to the history of the contractor
 						db_collection.updateOne({ "id": contractor_id }, { $push: { work_history: [date, start, end, rec_id, rec_company_name,""] } })
 						// Push this shift to the history of the recrutier
-						recrutiers_db_collection.updateOne({ "id": rec_id }, { $push: { work_history: [date, start, end, contractor_id, allDetails[0].first_name + " " + allDetails[0].last_name,""] } })
+						recrutiers_db_collection.updateOne({ "id": rec_id }, { $push: { work_history: [date, start, end, contractor_id, contractor_full_name] } })
 						res.redirect("/shifts_monitor")
 					}
 				})
@@ -1118,6 +1119,171 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		}
 	})
 
+	app.post("/filter_work_history", (req, res) => {
+		var month = req.body.month
+		var company_name = req.body.company_name
+		var recrutier_id = req.body.recrutier_id
+		
+		// Connect contractor workers db and collection
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+
+		if (db_collection) {
+			db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var filter_work_history = []
+					var total_pay_in_month = 0
+					var total_hours_in_month = 0
+					var total_minutes_in_month = 0
+					var hours_in_minutes = 0
+					var i = 0
+					var shift = null
+					var shift_month = null
+					var total = 0
+
+					var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+					if ((month == "" || month == "0") && company_name == "" && recrutier_id == "") {
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+					}
+					else if((month != "0" && month != "") && company_name && recrutier_id) {
+						for(i=0; i<allDetails[0].work_history.length; ++i){
+							shift = allDetails[0].work_history[i]
+							shift_month = (shift[0].split("/"))[0]
+							if(shift_month.charAt(0) == 0){
+								shift_month = shift_month.substring(1)
+							}
+							if(shift_month == month && company_name == shift[4] && recrutier_id == shift[3]){
+								filter_work_history.push(shift)
+								total_pay_in_month = total_pay_in_month + totalPayForShift(shift[1], shift[2], allDetails[0].hourly_pay)
+								total = totalTimeForShift(shift[1], shift[2])
+								total_hours_in_month += total[0]
+								total_minutes_in_month += total[1]
+							}
+						}
+						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
+						total_hours_in_month = total_hours_in_month + hours_in_minutes
+						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
+
+					}
+					else if((month != "0" && month != "") && company_name) {
+						for(i=0; i<allDetails[0].work_history.length; ++i){
+							shift = allDetails[0].work_history[i]
+							shift_month = (shift[0].split("/"))[0]
+							if(shift_month.charAt(0) == 0){
+								shift_month = shift_month.substring(1)
+							}
+							if(shift_month == month && company_name == shift[4]){
+								filter_work_history.push(shift)
+								total_pay_in_month = total_pay_in_month + totalPayForShift(shift[1], shift[2], allDetails[0].hourly_pay)
+								total = totalTimeForShift(shift[1], shift[2])
+								total_hours_in_month += total[0]
+								total_minutes_in_month += total[1]
+							}
+						}
+						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
+						total_hours_in_month = total_hours_in_month + hours_in_minutes
+						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
+					}
+					else if((month != "0" && month != "") && recrutier_id) {
+						for(i=0; i<allDetails[0].work_history.length; ++i){
+							shift = allDetails[0].work_history[i]
+							shift_month = (shift[0].split("/"))[0]
+							if(shift_month.charAt(0) == 0){
+								shift_month = shift_month.substring(1)
+							}
+							if(shift_month == month && recrutier_id == shift[3]){
+								filter_work_history.push(shift)
+								total_pay_in_month = total_pay_in_month + totalPayForShift(shift[1], shift[2], allDetails[0].hourly_pay)
+								total = totalTimeForShift(shift[1], shift[2])
+								total_hours_in_month += total[0]
+								total_minutes_in_month += total[1]
+							}
+						}
+						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
+						total_hours_in_month = total_hours_in_month + hours_in_minutes
+						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
+					}
+					else if(company_name && recrutier_id) {
+						for(i=0; i<allDetails[0].work_history.length; ++i){
+							shift = allDetails[0].work_history[i]
+							
+							if(company_name == shift[4] && recrutier_id == shift[3]){
+								filter_work_history.push(shift)
+							}
+						}
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_time_for_month": null})
+					}
+					else if((month != "0" && month != "")) {
+						for(i=0; i<allDetails[0].work_history.length; ++i){
+							shift = allDetails[0].work_history[i]
+							shift_month = (shift[0].split("/"))[0]
+							if(shift_month.charAt(0) == 0){
+								shift_month = shift_month.substring(1)
+							}
+							if(shift_month == month){
+								filter_work_history.push(shift)
+								total_pay_in_month = total_pay_in_month + totalPayForShift(shift[1], shift[2], allDetails[0].hourly_pay)
+								total = totalTimeForShift(shift[1], shift[2])
+								total_hours_in_month += total[0]
+								total_minutes_in_month += total[1]
+							}
+						}
+						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
+						total_hours_in_month = total_hours_in_month + hours_in_minutes
+						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
+					}
+					else if(company_name) {
+						for(i=0; i<allDetails[0].work_history.length; ++i){
+							shift = allDetails[0].work_history[i]
+							
+							if(company_name == shift[4]){
+								filter_work_history.push(shift)
+							}
+						}
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_time_for_month": null})
+					}
+					else if(recrutier_id) {
+						for(i=0; i<allDetails[0].work_history.length; ++i){
+							shift = allDetails[0].work_history[i]
+							
+							if(recrutier_id == shift[3]){
+								filter_work_history.push(shift)
+							}
+						}
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+					}
+					else{
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": null, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+					}
+					
+				}
+			})
+			// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
+			if (month == "" && company_name == "" && recrutier_id == "") {
+				db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+					}
+				})
+			}
+			
+			
+			
+
+		}
+	})
+
 	app.post("/add_new_shift", (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
@@ -1272,6 +1438,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.redirect("/view_a_contractor_shifts/" + contractor_id)
 	})
 
+	app.post("/view_contractor_work_history", (req, res) => {
+		var contractor_id = req.body.contractor_id_history
+		res.redirect("/view_contractor_worker_work_history/" + contractor_id)
+	})
+
 }).catch(console.error)
 
 app.listen(port, () => {
@@ -1284,6 +1455,65 @@ function toSeconds(time_str) {
 	// compute  and return total seconds
 	return parts[0] * 3600 + // an hour has 3600 seconds
 		parts[1] * 60   // a minute has 60 seconds
+}
+
+function totalPayForShift(start_time, end_time, hourly_pay){
+	// If can't calculate total time because the input isn't in the right format
+	if (start_time.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) == null || end_time.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) == null) {
+		console.log("Can't calculate the payment, start time/end time aren't in the right format")
+		return null
+	}
+	var difference = Math.abs(toSeconds(start_time) - toSeconds(end_time))
+	// compute hours, minutes and seconds
+	var result = [
+		// an hour has 3600 seconds so we have to compute how often 3600 fits
+		// into the total number of seconds
+		Math.floor(difference / 3600), // HOURS
+		// similar for minutes, but we have to "remove" the hours first;
+		// this is easy with the modulus operator
+		Math.floor((difference % 3600) / 60), // MINUTES
+		// the remainder is the number of seconds
+		difference % 60 // SECONDS
+	]
+	// formatting (0 padding and concatenation)
+	result = result.map(function (v) {
+		return v < 10 ? "0" + v : v
+	}).join(":")
+
+	var total = result.split(":")
+	var total_hours = total[0]
+	var total_minutes = total[1]
+	var total_pay = hourly_pay * total_hours + (total_minutes / 60) * hourly_pay
+	return total_pay
+}
+
+function totalTimeForShift(start_time, end_time){
+	// If can't calculate total time because the input isn't in the right format
+	if (start_time.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) == null || end_time.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/) == null) {
+		console.log("Can't calculate the payment, start time/end time aren't in the right format")
+		return null
+	}
+	var difference = Math.abs(toSeconds(start_time) - toSeconds(end_time))
+	// compute hours, minutes and seconds
+	var result = [
+		// an hour has 3600 seconds so we have to compute how often 3600 fits
+		// into the total number of seconds
+		Math.floor(difference / 3600), // HOURS
+		// similar for minutes, but we have to "remove" the hours first;
+		// this is easy with the modulus operator
+		Math.floor((difference % 3600) / 60), // MINUTES
+		// the remainder is the number of seconds
+		difference % 60 // SECONDS
+	]
+	// formatting (0 padding and concatenation)
+	result = result.map(function (v) {
+		return v < 10 ? "0" + v : v
+	}).join(":")
+
+	var total = result.split(":")
+	var total_hours = parseInt(total[0], 10)
+	var total_minutes = parseInt(total[1], 10)
+	return [total_hours, total_minutes]
 }
 
 function send_an_email(receiver_email, subject, message) {

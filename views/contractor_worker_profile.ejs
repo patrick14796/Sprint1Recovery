@@ -181,8 +181,13 @@
 							<input type="hidden" name="contractor_id" id="hiddenInput"/>
 						</div>	
 					</form>
-					
-					<% } %>
+					<form id="view_contractor_shifts" action="/view_contractor_work_history" method="POST">
+						<button class="btn btn--radius-2 btn--blue-2" type="submit">View Contractor Work History</button>
+						<div>
+							<input type="hidden" name="contractor_id_history" id="hiddenInput1"/>
+						</div>	
+					</form>
+				<% } %>
               <hr>
               
              </div><!--/tab-pane-->
@@ -197,7 +202,6 @@
 			var id="<%=  details[0].id %>";
 			var edit_btn = document.getElementById("edit_btn");
 			edit_btn.onclick = function(){
-				console.log(id)
 				window.location.href = 'contractor_worker_edit_profile/'+ id;
 			}
 		}
@@ -207,6 +211,7 @@
 			window.onload = addEditOnClick();
 		}
 		document.getElementById("hiddenInput").value = "<%=  details[0].id %>";
+		document.getElementById("hiddenInput1").value = "<%=  details[0].id %>";
 		
 	</script>
                                                       
