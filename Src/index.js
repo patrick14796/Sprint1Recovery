@@ -1052,27 +1052,32 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					var total_pay_in_month = 0
 					var total_hours_in_month = 0
 					var total_minutes_in_month = 0
+					var hours_in_minutes = 0
 					var i = 0
+					var shift = null
+					var shift_month = null
+					var total = 0
+
 					var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
 					if ((month == "" || month == "0") && company_name == "" && recrutier_id == "") {
 						res.render("contractor_work_history", { "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
 					}
 					else if((month != "0" && month != "") && company_name && recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
-							var shift = allDetails[0].work_history[i]
-							var shift_month = (shift[0].split('/'))[0]
+							shift = allDetails[0].work_history[i]
+							shift_month = (shift[0].split("/"))[0]
 							if(shift_month.charAt(0) == 0){
 								shift_month = shift_month.substring(1)
 							}
 							if(shift_month == month && company_name == shift[4] && recrutier_id == shift[3]){
 								filter_work_history.push(shift)
 								total_pay_in_month = total_pay_in_month + totalPayForShift(shift[1], shift[2], allDetails[0].hourly_pay)
-								var total = totalTimeForShift(shift[1], shift[2])
+								total = totalTimeForShift(shift[1], shift[2])
 								total_hours_in_month += total[0]
 								total_minutes_in_month += total[1]
 							}
 						}
-						var hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
+						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
 						total_hours_in_month = total_hours_in_month + hours_in_minutes
 						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
 						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
@@ -1080,47 +1085,47 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					}
 					else if((month != "0" && month != "") && company_name) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
-							var shift = allDetails[0].work_history[i]
-							var shift_month = (shift[0].split('/'))[0]
+							shift = allDetails[0].work_history[i]
+							shift_month = (shift[0].split('/'))[0]
 							if(shift_month.charAt(0) == 0){
 								shift_month = shift_month.substring(1)
 							}
 							if(shift_month == month && company_name == shift[4]){
 								filter_work_history.push(shift)
 								total_pay_in_month = total_pay_in_month + totalPayForShift(shift[1], shift[2], allDetails[0].hourly_pay)
-								var total = totalTimeForShift(shift[1], shift[2])
+								total = totalTimeForShift(shift[1], shift[2])
 								total_hours_in_month += total[0]
 								total_minutes_in_month += total[1]
 							}
 						}
-						var hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
+						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
 						total_hours_in_month = total_hours_in_month + hours_in_minutes
 						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
 						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
 					}
 					else if((month != "0" && month != "") && recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
-							var shift = allDetails[0].work_history[i]
-							var shift_month = (shift[0].split('/'))[0]
+							shift = allDetails[0].work_history[i]
+							shift_month = (shift[0].split('/'))[0]
 							if(shift_month.charAt(0) == 0){
 								shift_month = shift_month.substring(1)
 							}
 							if(shift_month == month && recrutier_id == shift[3]){
 								filter_work_history.push(shift)
 								total_pay_in_month = total_pay_in_month + totalPayForShift(shift[1], shift[2], allDetails[0].hourly_pay)
-								var total = totalTimeForShift(shift[1], shift[2])
+								total = totalTimeForShift(shift[1], shift[2])
 								total_hours_in_month += total[0]
 								total_minutes_in_month += total[1]
 							}
 						}
-						var hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
+						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
 						total_hours_in_month = total_hours_in_month + hours_in_minutes
 						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
 						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
 					}
 					else if(company_name && recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
-							var shift = allDetails[0].work_history[i]
+							shift = allDetails[0].work_history[i]
 							
 							if(company_name == shift[4] && recrutier_id == shift[3]){
 								filter_work_history.push(shift)
@@ -1130,27 +1135,27 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					}
 					else if((month != "0" && month != "")) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
-							var shift = allDetails[0].work_history[i]
-							var shift_month = (shift[0].split('/'))[0]
+							shift = allDetails[0].work_history[i]
+							shift_month = (shift[0].split('/'))[0]
 							if(shift_month.charAt(0) == 0){
 								shift_month = shift_month.substring(1)
 							}
 							if(shift_month == month){
 								filter_work_history.push(shift)
 								total_pay_in_month = total_pay_in_month + totalPayForShift(shift[1], shift[2], allDetails[0].hourly_pay)
-								var total = totalTimeForShift(shift[1], shift[2])
+								total = totalTimeForShift(shift[1], shift[2])
 								total_hours_in_month += total[0]
 								total_minutes_in_month += total[1]
 							}
 						}
-						var hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
+						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
 						total_hours_in_month = total_hours_in_month + hours_in_minutes
 						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
 						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
 					}
 					else if(company_name) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
-							var shift = allDetails[0].work_history[i]
+							shift = allDetails[0].work_history[i]
 							
 							if(company_name == shift[4]){
 								filter_work_history.push(shift)
@@ -1160,7 +1165,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					}
 					else if(recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
-							var shift = allDetails[0].work_history[i]
+							shift = allDetails[0].work_history[i]
 							
 							if(recrutier_id == shift[3]){
 								filter_work_history.push(shift)
