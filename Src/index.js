@@ -335,10 +335,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else {
-				let newArray=[];
+				let newArray=[]
 				for(let i = 0; i < allDetails[0].work_history.length;++i){
 					if( allDetails[0].work_history[i][5] == ""){
-					newArray.push(allDetails[0].work_history[i])
+						newArray.push(allDetails[0].work_history[i])
 					}
 				}
 				res.render("employe_rating", { details: newArray })
@@ -354,13 +354,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		let person=req.body.person
 		var company_name
 		db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails){
-			if(err) throw new Error(err.message, null);
+			if(err) throw new Error(err.message, null)
 			company_name=allDetails[0].company_name
 			person=person.split(",")
 			db_collection.updateOne({ "id": req.session.user.id, "work_history": { $in: [[person[0], person[1], person[2], person[3], person[4], person[5]]] } }, { $set: { "work_history": [[person[0], person[1], person[2],person[3], person[4], rate]] } })
 			db_collection1.updateOne({ "id": person[3] , "work_history": { $in: [[person[0], person[1], person[2], req.session.user.id,company_name, person[5]]] } }, { $set: { "work_history": [[person[0], person[1], person[2], req.session.user.id,company_name, rate]] } })
 			db_collection1.find({ "id": person[3] }).toArray(function (err, allDetails){
-				if(err) throw new Error(err.message, null);
+				if(err) throw new Error(err.message, null)
 				db_collection1.updateOne({ "id": person[3] , "number_of_rates": { $in: [allDetails[0].number_of_rates] } }, { $set: { "number_of_rates": [allDetails[0].number_of_rates+1]} })
 				db_collection1.updateOne({ "id": person[3] , "average_rate": { $in: [allDetails[0].average_rate] } }, { $set: { "average_rate": [allDetails[0].average_rate+rate]} })
 			})
@@ -369,10 +369,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					console.log(err)
 				}
 				else {
-					let newArray=[];
+					let newArray=[]
 					for(let i = 0; i < allDetails[0].work_history.length;++i){
 						if( allDetails[0].work_history[i][5] == ""){
-						newArray.push(allDetails[0].work_history[i])
+							newArray.push(allDetails[0].work_history[i])
 						}
 					}
 					res.render("employe_rating", { details: newArray })
