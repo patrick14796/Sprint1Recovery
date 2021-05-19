@@ -51,6 +51,18 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else {
+				console.log(allDetails)
+				function sortByProperty(property){  
+					return function(a,b){  
+					   if(a[property] < b[property])  
+						  return 1;  
+					   else if(a[property] > b[property])  
+						  return -1;  
+				   
+					   return 0;  
+					}  
+				 }
+				allDetails.sort(sortByProperty("average_rate")) 
 				res.render("recruiters_home_page", { details: allDetails })
 			}
 		})
@@ -349,6 +361,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			person=person.split(",")
 			db_collection.updateOne({ "id": req.session.user.id, "work_history": { $in: [[person[0], person[1], person[2], person[3], person[4], person[5]]] } }, { $set: { "work_history": [[person[0], person[1], person[2],person[3], person[4], rate]] } })
 			db_collection1.updateOne({ "id": person[3] , "work_history": { $in: [[person[0], person[1], person[2], req.session.user.id,company_name, person[5]]] } }, { $set: { "work_history": [[person[0], person[1], person[2], req.session.user.id,company_name, rate]] } })
+			db_collection1.find({ "id": person[3] }).toArray(function (err, allDetails){
+				if(err) throw new Error(err.message, null);
+				db_collection1.updateOne({ "id": person[3] , "number_of_rates": { $in: [allDetails[0].number_of_rates] } }, { $set: { "number_of_rates": [allDetails[0].number_of_rates+1]} })
+				db_collection1.updateOne({ "id": person[3] , "average_rate": { $in: [allDetails[0].average_rate] } }, { $set: { "average_rate": [allDetails[0].average_rate+rate]} })
+			})
 			db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails) {
 				if (err) {
 					console.log(err)
@@ -758,7 +775,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							"shifts": [],
 							"job_requests": [],
 							"canceled_jobs": [],
-							"work_history": []
+							"work_history": [],
+							"average_rate":[],
+							"number_of_rates":[]
 						}
 						// Add a new contractor worker to "contractorWorkers" collection with all of his information
 						db_collection.insertOne(data, function (err, collection) {
