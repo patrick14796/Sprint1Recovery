@@ -135,13 +135,18 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
 
-		db_collection.find({ "id": req.params.id }).toArray(function (err, allDetails) {
+		db_collection.find({"id": req.params.id}).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
 			}
 			else {
-				var contr_shifts = allDetails[0].shifts
-				res.render("contractor_shifts", { details: contr_shifts, type: "Company Worker" })
+				var all_shifts = []
+				for (var j = 0; j < allDetails[0].shifts.length; ++j) {
+					var curr_shift = allDetails[0].shifts[j]
+					curr_shift.push(req.params.id)
+					all_shifts.push(curr_shift)
+				}
+				res.render("company_worker_shifts_monitor", { details: all_shifts, name: allDetails[0].first_name + " " + allDetails[0].last_name })
 			}
 		})
 
@@ -200,7 +205,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					}
 
 				}
-				res.render("company_worker_shifts_monitor", { details: all_shifts })
+				res.render("company_worker_shifts_monitor", { details: all_shifts, name: null })
 			}
 		})
 	})
@@ -314,10 +319,25 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else {
 				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
-				res.render("contractor_work_history", { "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+				res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
 			}
 		})
 	})
+
+	app.get("/view_contractor_worker_work_history/:id", authUser, authRole("Company Worker"), (req, res) => {
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({ "id": req.params.id }).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				res.render("contractor_work_history", { "type": "Company Worker","full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+			}
+		})
+	})
+
 	app.get("/ranking", authUser, authRole("Recruiter"), (req, res) => {
 		var db = client.db("employers-workers")
 		var db_collection = db.collection("employersWorkers")
@@ -1073,7 +1093,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 					var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
 					if ((month == "" || month == "0") && company_name == "" && recrutier_id == "") {
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
 					}
 					else if((month != "0" && month != "") && company_name && recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
@@ -1093,7 +1113,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
 						total_hours_in_month = total_hours_in_month + hours_in_minutes
 						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
 
 					}
 					else if((month != "0" && month != "") && company_name) {
@@ -1114,7 +1134,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
 						total_hours_in_month = total_hours_in_month + hours_in_minutes
 						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
 					}
 					else if((month != "0" && month != "") && recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
@@ -1134,7 +1154,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
 						total_hours_in_month = total_hours_in_month + hours_in_minutes
 						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
 					}
 					else if(company_name && recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
@@ -1144,7 +1164,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 								filter_work_history.push(shift)
 							}
 						}
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_time_for_month": null})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_time_for_month": null})
 					}
 					else if((month != "0" && month != "")) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
@@ -1164,7 +1184,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						hours_in_minutes = parseInt(total_minutes_in_month / 60, 10)
 						total_hours_in_month = total_hours_in_month + hours_in_minutes
 						total_minutes_in_month = total_minutes_in_month - hours_in_minutes * 60
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": total_pay_in_month, "total_hours_for_month": total_hours_in_month, "total_minutes_for_month": total_minutes_in_month})
 					}
 					else if(company_name) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
@@ -1174,7 +1194,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 								filter_work_history.push(shift)
 							}
 						}
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_time_for_month": null})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_time_for_month": null})
 					}
 					else if(recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
@@ -1184,10 +1204,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 								filter_work_history.push(shift)
 							}
 						}
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
 					}
 					else{
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": null, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": null, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
 					}
 					
 				}
@@ -1200,7 +1220,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					}
 					else {
 						var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
-						res.render("contractor_work_history", { "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": allDetails[0].work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
 					}
 				})
 			}
@@ -1363,6 +1383,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.post("/view_contractor_shifts", (req, res) => {
 		var contractor_id = req.body.contractor_id
 		res.redirect("/view_a_contractor_shifts/" + contractor_id)
+	})
+
+	app.post("/view_contractor_work_history", (req, res) => {
+		var contractor_id = req.body.contractor_id_history
+		res.redirect("/view_contractor_worker_work_history/" + contractor_id)
 	})
 
 }).catch(console.error)
