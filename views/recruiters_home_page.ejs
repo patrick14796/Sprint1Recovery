@@ -23,6 +23,8 @@
 	<!--===============================================================================================-->
 		<link rel="stylesheet" type="text/css" href="public_search_contractor/css/util.css">
 		<link rel="stylesheet" type="text/css" href="public_search_contractor/css/main.css">
+		<script language ="javascript" type="text/javascript" src="public_search_contractor/recruiters_home_page.js"></script>
+
 	<!--===============================================================================================-->
 	</head>
 	<body>
@@ -59,6 +61,7 @@
 											<th class="cell100 column4">Hourly Pay</th>
 											<th class="cell100 column5">City</th>
 											<th class="cell100 column6">Skills</th>
+											<th class="cell100 column9">Rating</th>
 											<th class="cell100 column7">Actions</th>
 											<th class="cell100 column8"></th>
 										</tr>
@@ -68,14 +71,16 @@
 							<div class="table100-body js-pscroll">
 								<table id="contractor-workers-table">
 									<tbody>
-										<% details.forEach(function(item){ %>
+										<% for (var i =0; i < details.length; ++i ) { %>
+									
 											<tr class="row100 body">
-												<td class="cell100 column1"><%= item.id%></td>
-												<td class="cell100 column2"><%= item.first_name%></td>
-												<td class="cell100 column3"><%= item.last_name%></td>
-												<td class="cell100 column4"><%= item.hourly_pay%></td>
-												<td class="cell100 column5"><%= item.city%></td>
-												<td class="cell100 column6"><%= item.skills%></td>  
+												<td class="cell100 column1"><%= details[i].id%></td>
+												<td class="cell100 column2"><%= details[i].first_name%></td>
+												<td class="cell100 column3"><%= details[i].last_name%></td>
+												<td class="cell100 column4"><%= details[i].hourly_pay%></td>
+												<td class="cell100 column5"><%= details[i].city%></td>
+												<td class="cell100 column6"><%= details[i].skills%></td>  
+												<td class="cell100 column9"><%= details[i].average_rate[0] /details[i].number_of_rates[0] %></td>  
 												<td class="cell100 column7">
 													<button class="btn-view" type="button">View Profile</button>
 												</td>   
@@ -83,7 +88,7 @@
 													<button class="btn-Hire" type="button">Hire</button>
 												</td>                               
 											</tr>
-										<% }) %>
+										<% } %>
 									</tbody>
 								</table>
 							</div>

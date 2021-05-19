@@ -12,23 +12,26 @@
   </head>
   <body>
 	<div class="showcase">
-        <% details[0].work_history.forEach(function(item){ %> 
+       
+          <% for (var i =0; i < details.length; ++i ) { %>
         <div class="rating-system3">
-          <h3><%= item[4]%></h3>
-          <form>
+          <h3>Worker:<%= details[i][4]%> &nbsp &nbsp Date:<%= details[i][0]%> &nbsp &nbsp ID:<%= details[i][3]%>  </h3>
+          <form method="post" action="/rating_send">
             <fieldset>
               <span class="star-cb-group">
-                <input type="radio" id="rating-5" name="rating" value="5" /><label for="rating-5">5</label>
-                <input type="radio" id="rating-4" name="rating" value="4" checked="checked" /><label for="rating-4">4</label>
-                <input type="radio" id="rating-3" name="rating" value="3" /><label for="rating-3">3</label>
-                <input type="radio" id="rating-2" name="rating" value="2" /><label for="rating-2">2</label>
-                <input type="radio" id="rating-1" name="rating" value="1" /><label for="rating-1">1</label>
-                <input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" /><label for="rating-0">0</label>
+                <input name="person" value="<%= details[i]%>">
+                <input type="radio" id= "<%= i*5 + 5%>" name="rating" value="5" /><label for= "<%= i*5 + 5%>">5</label>
+                <input type="radio" id= "<%= i*5 + 4%>" name="rating" value="4" /><label for= "<%= i*5 + 4%>">4</label>
+                <input type="radio" id= "<%= i*5 + 3%>" name="rating" value="3" /><label for= "<%= i*5 + 3%>">3</label>
+                <input type="radio" id= "<%= i*5 + 2%>" name="rating" value="2" /><label for= "<%= i*5 + 2%>">2</label>
+                <input type="radio" id= "<%= i*5 + 1%>" name="rating" value="1" checked="checked"/><label for= "<%= i*5 + 1%>">1</label>
+                <input type="radio" id= "<%= i*5 + 0%>" name="rating" value="0" class="star-cb-clear" /><label for= "<%= i*5 + 0%>">0</label>
               </span>
             </fieldset>
+            <input type="submit" value="Submit">
           </form>
         </div>
-        <% }) %>
+        <% } %>
         </div>
 
 	</body>

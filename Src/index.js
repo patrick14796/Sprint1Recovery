@@ -45,12 +45,20 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
-
+		function sortByProperty(property){  
+			return function(a,b){
+				if(a[property] < b[property]){
+					return 1}
+				else if(a[property] > b[property]){
+					return -1}
+				return 0}
+		}
 		db_collection.find().toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
 			}
 			else {
+				allDetails.sort(sortByProperty("average_rate")) 
 				res.render("recruiters_home_page", { details: allDetails })
 			}
 		})
@@ -289,7 +297,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/contractor_pay_rates", authUser, authRole("Contractor Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
-		db_collection.find().toArray(function (err, allDetails) {
+		db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
 			}
@@ -346,9 +354,52 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				console.log(err)
 			}
 			else {
-				res.render("employe_rating", { details: allDetails })
+				let newArray=[]
+				for(let i = 0; i < allDetails[0].work_history.length;++i){
+					if( allDetails[0].work_history[i][5] == ""){
+						newArray.push(allDetails[0].work_history[i])
+					}
+				}
+				res.render("employe_rating", { details: newArray })
 			}
 		})
+	})
+	app.post("/rating_send", (req, res) => {
+		var db = client.db("employers-workers")
+		var db_collection = db.collection("employersWorkers")
+		var db1 = client.db("contractor-workers")
+		var db_collection1 = db1.collection("contractorWorkers")
+		let rate = req.body.rating
+		let person=req.body.person
+		var company_name
+		db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails){
+			if(err) throw new Error(err.message, null)
+			company_name=allDetails[0].company_name
+			person=person.split(",")
+			db_collection.updateOne({ "id": req.session.user.id, "work_history": { $in: [[person[0], person[1], person[2], person[3], person[4], person[5]]] } }, { $set: { "work_history": [[person[0], person[1], person[2],person[3], person[4], rate]] } })
+			db_collection1.updateOne({ "id": person[3] , "work_history": { $in: [[person[0], person[1], person[2], req.session.user.id,company_name, person[5]]] } }, { $set: { "work_history": [[person[0], person[1], person[2], req.session.user.id,company_name, rate]] } })
+			db_collection1.find({ "id": person[3] }).toArray(function (err, allDetails){
+				if(err) throw new Error(err.message, null)
+				db_collection1.updateOne({ "id": person[3] , "number_of_rates": { $in: [allDetails[0].number_of_rates] } }, { $set: { "number_of_rates": [allDetails[0].number_of_rates+1]} })
+				db_collection1.updateOne({ "id": person[3] , "average_rate": { $in: [allDetails[0].average_rate] } }, { $set: { "average_rate": [allDetails[0].average_rate+rate]} })
+			})
+			db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					let newArray=[]
+					for(let i = 0; i < allDetails[0].work_history.length;++i){
+						if( allDetails[0].work_history[i][5] == ""){
+							newArray.push(allDetails[0].work_history[i])
+						}
+					}
+					res.render("employe_rating", { details: newArray })
+				}
+			})
+			
+		} )
+	
 	})
 
 	//
@@ -493,7 +544,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						db_collection.updateOne({ "id": contractor_id }, { $push: { ratings: [rec_company_name, total_pay.toString(), date] } })
 						db_collection.updateOne({ "id": contractor_id, "shifts": { $in: [[date, start, end, rec_id]] } }, { $pull: { "shifts": { $in: [[date, start, end, rec_id]] } } })
 						// Push this shift to the history of the contractor
-						db_collection.updateOne({ "id": contractor_id }, { $push: { work_history: [date, start, end, rec_id, rec_company_name] } })
+						db_collection.updateOne({ "id": contractor_id }, { $push: { work_history: [date, start, end, rec_id, rec_company_name,""] } })
 						// Push this shift to the history of the recrutier
 						recrutiers_db_collection.updateOne({ "id": rec_id }, { $push: { work_history: [date, start, end, contractor_id, contractor_full_name] } })
 						res.redirect("/shifts_monitor")
@@ -721,7 +772,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 							"shifts": [],
 							"job_requests": [],
 							"canceled_jobs": [],
-							"work_history": []
+							"work_history": [],
+							"average_rate":[],
+							"number_of_rates":[]
 						}
 						// Add a new contractor worker to "contractorWorkers" collection with all of his information
 						db_collection.insertOne(data, function (err, collection) {
