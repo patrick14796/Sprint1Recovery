@@ -45,21 +45,20 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
-
+		function sortByProperty(property){  
+			return function(a,b){  
+			   if(a[property] < b[property])  
+				return 1;  
+			   else if(a[property] > b[property])  
+				return -1;  
+			   return 0;  
+			}  
+		 }
 		db_collection.find().toArray(function (err, allDetails) {
 			if (err) {
 				console.log(err)
 			}
 			else {
-				function sortByProperty(property){  
-					return function(a,b){  
-					   if(a[property] < b[property])  
-					    return 1;  
-					   else if(a[property] > b[property])  
-						return -1;  
-					   return 0;  
-					}  
-				 }
 				allDetails.sort(sortByProperty("average_rate")) 
 				res.render("recruiters_home_page", { details: allDetails })
 			}
