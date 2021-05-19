@@ -1086,7 +1086,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					else if((month != "0" && month != "") && company_name) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
 							shift = allDetails[0].work_history[i]
-							shift_month = (shift[0].split('/'))[0]
+							shift_month = (shift[0].split("/"))[0]
 							if(shift_month.charAt(0) == 0){
 								shift_month = shift_month.substring(1)
 							}
@@ -1106,7 +1106,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					else if((month != "0" && month != "") && recrutier_id) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
 							shift = allDetails[0].work_history[i]
-							shift_month = (shift[0].split('/'))[0]
+							shift_month = (shift[0].split("/"))[0]
 							if(shift_month.charAt(0) == 0){
 								shift_month = shift_month.substring(1)
 							}
@@ -1136,7 +1136,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					else if((month != "0" && month != "")) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
 							shift = allDetails[0].work_history[i]
-							shift_month = (shift[0].split('/'))[0]
+							shift_month = (shift[0].split("/"))[0]
 							if(shift_month.charAt(0) == 0){
 								shift_month = shift_month.substring(1)
 							}
