@@ -61,9 +61,9 @@
 											<th class="cell100 column4">Hourly Pay</th>
 											<th class="cell100 column5">City</th>
 											<th class="cell100 column6">Skills</th>
-											<th class="cell100 column9">Rating</th>
-											<th class="cell100 column7">Actions</th>
-											<th class="cell100 column8"></th>
+											<th class="cell100 column7">Rating</th>
+											<th class="cell100 column9">Actions</th>
+											<th class="cell100 column10"></th>
 										</tr>
 									</thead>
 								</table>
@@ -80,11 +80,11 @@
 												<td class="cell100 column4"><%= details[i].hourly_pay%></td>
 												<td class="cell100 column5"><%= details[i].city%></td>
 												<td class="cell100 column6"><%= details[i].skills%></td>  
-												<td class="cell100 column9"><%= details[i].average_rate[0] /details[i].number_of_rates[0] %></td>  
-												<td class="cell100 column7">
+												<td class="cell100 column7"><%= details[i].average_rate[0] /details[i].number_of_rates[0] %></td>  
+												<td class="cell100 column9">
 													<button class="btn-view" type="button">View Profile</button>
 												</td>   
-												<td class="cell100 column8">
+												<td class="cell100 column10">
 													<button class="btn-Hire" type="button">Hire</button>
 												</td>                               
 											</tr>
@@ -122,8 +122,8 @@
 				var rows = table.getElementsByTagName("tr");
 				for (i = 0; i < rows.length; i++) {
 					var currentRow = table.rows[i]
-					var currentViewBtn = currentRow.getElementsByTagName("td")[6]
-					var currentHireBtn = currentRow.getElementsByTagName("td")[7]
+					var currentViewBtn = currentRow.getElementsByTagName("td")[7]
+					var currentHireBtn = currentRow.getElementsByTagName("td")[8]
 					var createHireClickHandler = function(row) {
 						return function() {
 							var cell = row.getElementsByTagName("td")[0]
