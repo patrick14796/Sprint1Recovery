@@ -768,10 +768,16 @@ th, td {
 }
 
 .column7 {
-	width: 5%;
+	width: 15%;
 }
 
 .column8 {
+	width: 15%;
+}
+.column9 {
+	width: 5%;
+}
+.column10 {
 	width: 5%;
 }
 

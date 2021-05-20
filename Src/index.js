@@ -443,6 +443,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 				db_collection.updateOne({ "id": req.session.user.id, "job_requests": { $in: [[date, start, end, rec_id, "Waiting for approval"]] } }, { $pull: { "job_requests": { $in: [[date, start, end, rec_id, "Waiting for approval"]] } } })
 				if (db_collection.updateOne({ "id": req.session.user.id }, { $push: { hiring: [date, start, end, rec_id, "Approved"] } })) {
+					db = client.db("employers-workers")
+					db_collection = db.collection("employersWorkers")
+					db_collection.updateOne({ "id": rec_id, "job_requests": { $in: [[date, start, end, req.session.user.id, "Waiting for approval"]] } }, { $pull: { "job_requests": { $in: [[date, start, end, req.session.user.id, "Waiting for approval"]] } } })
+					db_collection.updateOne({ "id": rec_id }, { $push: { hiring: [date, start, end, req.session.user.id, "Approved"] } })
 					res.redirect("/contractor_worker_home_page")
 				}
 				else {
@@ -480,6 +484,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 				db_collection.updateOne({ "id": req.session.user.id, "job_requests": { $in: [[date, start, end, rec_id, "Waiting for approval"]] } }, { $pull: { "job_requests": { $in: [[date, start, end, rec_id, "Waiting for approval"]] } } })
 				if (db_collection.updateOne({ "id": req.session.user.id }, { $push: { canceled_jobs: [date, start, end, rec_id, "Declined"] } })) {
+					db = client.db("employers-workers")
+					db_collection = db.collection("employersWorkers")
+					db_collection.updateOne({ "id": rec_id, "job_requests": { $in: [[date, start, end, req.session.user.id, "Waiting for approval"]] } }, { $pull: { "job_requests": { $in: [[date, start, end, req.session.user.id, "Waiting for approval"]] } } })
+					db_collection.updateOne({ "id": rec_id }, { $push: { canceled_jobs: [date, start, end, req.session.user.id, "Declined"] } })
 					res.redirect("/contractor_worker_home_page")
 				}
 				else {
@@ -645,6 +653,24 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 
 	app.get("/hire_contractor/:id", (req, res) => {
 		res.render("hire_contractor", { "id": req.params.id })
+	})
+
+	app.get("/hire_history", (req, res) => {
+		var db = client.db("employers-workers")
+		var db_collection = db.collection("employersWorkers")
+
+		db_collection.find({ "id": req.session.user.id }).toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				var waiting_requests = allDetails[0].job_requests
+				var approved_requests = allDetails[0].hiring
+				var canceled_requests = allDetails[0].canceled_jobs
+				var all_job_requests = waiting_requests.concat(approved_requests, canceled_requests)
+				res.render("employee_hiring_history", { details: all_job_requests })
+			}
+		})
 	})
 
 	// POST functions
@@ -840,7 +866,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					"password": password,
 					"hiring": [],
 					"job_requests": [],
-					"work_history": []
+					"work_history": [],
+					"canceled_jobs": []
 				}
 				// Add a new employee to "employersWorkers" collection with all of his information
 				db_collection.insertOne(data, function (err, collection) {
@@ -1067,6 +1094,98 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				res.render("recruiters_home_page", { details: null })
 			}
 
+		}
+	})
+
+	app.post("/filter_hiring_history", (req, res) => {
+		var status = req.body.status
+		var contractor_id = req.body.contractor_id
+		var date = req.body.date
+		// Connect contractor workers db and collection
+		var db = client.db("employers-workers")
+		var db_collection = db.collection("employersWorkers")
+
+		if (db_collection) {
+			db_collection.find({"id": req.session.user.id}).toArray(function (err, allDetails) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var waiting_requests = allDetails[0].job_requests
+					var approved_requests = allDetails[0].hiring
+					var canceled_requests = allDetails[0].canceled_jobs
+					var all_job_requests = waiting_requests.concat(approved_requests, canceled_requests)
+					var filtered_requests = []
+					var i = 0
+					// If the employee didn't filled any of the filed then show all of the exsiting contractor workers
+					if (status == "" && contractor_id == "" && date == "") {
+						res.render("employee_hiring_history", { details: all_job_requests })	
+					}
+					// If the company worker filled all 3 criterions then search all the contractor workers that fits
+					else if (status && contractor_id && date) {
+						for(i = 0; i<all_job_requests.length; ++i){
+							if(all_job_requests[i][0] == date && all_job_requests[i][4] == status && all_job_requests[i][3] == contractor_id) {
+								filtered_requests.push(all_job_requests[i])
+							}
+						}
+						res.render("employee_hiring_history", { details: filtered_requests })
+					}
+					else if (status && contractor_id) {
+						for(i = 0; i<all_job_requests.length; ++i){
+							if(all_job_requests[i][4] == status && all_job_requests[i][3] == contractor_id) {
+								filtered_requests.push(all_job_requests[i])
+							}
+						}
+						res.render("employee_hiring_history", { details: filtered_requests })
+					}
+					else if (status && date) {
+						for(i = 0; i<all_job_requests.length; ++i){
+							if(all_job_requests[i][0] == date && all_job_requests[i][4] == status) {
+								filtered_requests.push(all_job_requests[i])
+							}
+						}
+						res.render("employee_hiring_history", { details: filtered_requests })
+					}
+					else if (contractor_id && date) {
+						for(i = 0; i<all_job_requests.length; ++i){
+							if(all_job_requests[i][0] == date && all_job_requests[i][3] == contractor_id) {
+								filtered_requests.push(all_job_requests[i])
+							}
+						}
+						res.render("employee_hiring_history", { details: filtered_requests })
+					}
+					else if (status) {
+						for(i = 0; i<all_job_requests.length; ++i){
+							if(all_job_requests[i][4] == status) {
+								filtered_requests.push(all_job_requests[i])
+							}
+						}
+						res.render("employee_hiring_history", { details: filtered_requests })
+					}
+					else if (contractor_id) {
+						for(i = 0; i<all_job_requests.length; ++i){
+							if(all_job_requests[i][3] == contractor_id) {
+								filtered_requests.push(all_job_requests[i])
+							}
+						}
+						res.render("employee_hiring_history", { details: filtered_requests })
+					}
+					else if (date) {
+						for(i = 0; i<all_job_requests.length; ++i){
+							if(all_job_requests[i][0] == date) {
+								filtered_requests.push(all_job_requests[i])
+							}
+						}
+						res.render("employee_hiring_history", { details: filtered_requests })
+					}
+					else {
+						res.render("employee_hiring_history", { details: null })
+					}
+				
+				}
+			})
+			
+			
 		}
 	})
 
