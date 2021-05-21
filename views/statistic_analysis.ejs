@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		Statistics
+	</head>
+	<header>
+        <%- include('../partials/header_company_worker'); %>
+    </header>
+	<body>
+		<div>
+			<p>Please check at least 3 criterions in order to get a statistics analysis</p>
+		</div>
+		<form id="send_report_shift" action="/make_statistics" method="POST">
+			<div class="form-check">
+				<input type="checkbox" class="form-check-input" id="shifts_confirmed" name="shifts_confirmed">
+				<label class="form-check-label" for="materialUnchecked">Shifts Confirmed</label>
+				<input type="checkbox" class="form-check-input" id="shifts_waiting" name="shifts_waiting">
+				<label class="form-check-label" for="materialUnchecked">Shifts Waiting for approval</label>
+				<input type="checkbox" class="form-check-input" id="jobs_waiting" name="jobs_waiting">
+				<label class="form-check-label" for="materialUnchecked">Job Requests Waiting for approval</label>
+				<input type="checkbox" class="form-check-input" id="jobs_decliend" name="jobs_decliend">
+				<label class="form-check-label" for="materialUnchecked">Job Requests Decliened</label>
+			</div>
+			<div>
+				<button class="btn-search" type="submit">Get Statistic Analysis</button>
+			</div>
+		</form>
+	</body>
+</html>
