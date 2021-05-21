@@ -1626,6 +1626,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var jobs_waiting = req.body.jobs_waiting
 		var jobs_decliend = req.body.jobs_decliend
 		console.log(shifts_confirmed)
+		console.log(shifts_waiting)
+		console.log(jobs_waiting)
+		console.log(jobs_decliend)
 		var num_all_jobs = 0
 		var num_all_shifts = 0
 
