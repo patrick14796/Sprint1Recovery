@@ -191,7 +191,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.get("/statistics", authUser, authRole("Company Worker"), (req, res) => {
-		res.render("statistics")
+		res.render("statistic_analysis")
 	})
 
 	app.get("/shifts_monitor", authUser, authRole("Company Worker"), (req, res) => {
@@ -266,7 +266,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else {
 				var user = allDetails[0]
-				res.render("contractor_worker_edit_profile", { "id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home": user.home, "phone": user.phone_number, "email": user.email, "gender": user.gender })
+				res.render("contractor_worker_edit_profile", { "type": "Contractor Worker", "id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home": user.home, "phone": user.phone_number, "email": user.email, "gender": user.gender })
 			}
 		})
 	})
@@ -281,7 +281,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else {
 				var user = allDetails[0]
-				res.render("contractor_worker_edit_profile", { "id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home": user.home, "phone": user.phone_number, "email": user.email, "gender": user.gender })
+				res.render("contractor_worker_edit_profile", { "type": "Company Worker","id": user.id, "first_name": user.first_name, "last_name": user.last_name, "city": user.city, "home": user.home, "phone": user.phone_number, "email": user.email, "gender": user.gender })
 			}
 		})
 	})
@@ -402,7 +402,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	
 	})
 
-	//
 	app.get("/contractor_job_requests", authUser, authRole("Contractor Worker"), (req, res) => {
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
@@ -1068,30 +1067,89 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var db_collection = db.collection("contractorWorkers")
 
 		if (db_collection) {
-			// If the company worker didn't filled any of the filed then show all of the exsiting contractor workers
 			if (skill == "" && hourly_pay == "" && city == "") {
 				db_collection.find().toArray(function (err, allDetails) {
 					if (err) {
 						console.log(err)
 					}
 					else {
-						res.render("recruiters_home_page", { details: allDetails })
+						res.render("search_contractor_worker", { details: allDetails })
 					}
 				})
 			}
-			// If the company worker filled all 3 criterions then search all the contractor workers that fits
+			// If the recruiter filled all 3 criterions then search all the contractor workers that fits
 			else if (skill && hourly_pay && city) {
 				db_collection.find({ "skills": skill, "hourly_pay": hourly_pay, "city": city }).toArray(function (err, allDetails) {
 					if (err) {
 						console.log(err)
 					}
 					else {
-						res.render("recruiters_home_page", { details: allDetails })
+						res.render("search_contractor_worker", { details: allDetails })
+					}
+				})
+			}
+			else if (skill && hourly_pay) {
+				db_collection.find({ "skills": skill, "hourly_pay": hourly_pay }).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", { details: allDetails })
+					}
+				})
+			}
+			else if (skill && city) {
+				db_collection.find({ "skills": skill, "city": city }).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", { details: allDetails })
+					}
+				})
+			}
+			else if (hourly_pay && city) {
+				db_collection.find({ "hourly_pay": hourly_pay, "city": city }).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", { details: allDetails })
+					}
+				})
+			}
+			else if (skill) {
+				db_collection.find({ "skills": skill }).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", { details: allDetails })
+					}
+				})
+			}
+			else if (hourly_pay) {
+				db_collection.find({ "hourly_pay": hourly_pay }).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", { details: allDetails })
+					}
+				})
+			}
+			else if (city) {
+				db_collection.find({ "city": city }).toArray(function (err, allDetails) {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						res.render("search_contractor_worker", { details: allDetails })
 					}
 				})
 			}
 			else {
-				res.render("recruiters_home_page", { details: null })
+				res.render("search_contractor_worker", { details: null })
 			}
 
 		}
@@ -1561,6 +1619,56 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var contractor_id = req.body.contractor_id_history
 		res.redirect("/view_contractor_worker_work_history/" + contractor_id)
 	})
+
+	app.post("/make_statistics", (req, res) => {
+		var shifts_confirmed = req.body.shifts_confirmed
+		var shifts_waiting = req.body.shifts_waiting
+		var jobs_waiting = req.body.jobs_waiting
+		var jobs_decliend = req.body.jobs_decliend
+		console.log(shifts_confirmed)
+		console.log(shifts_waiting)
+		console.log(jobs_waiting)
+		console.log(jobs_decliend)
+		var num_all_jobs = 0
+		var num_all_shifts = 0
+
+		var db = client.db("employers-workers")
+		var db_collection = db.collection("employersWorkers")
+		db_collection.find().toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				
+				for(var i=0; i<allDetails.length; ++i){
+					num_all_jobs += allDetails[i].hiring.length
+					num_all_jobs += allDetails[i].job_requests.length
+					num_all_jobs += allDetails[i].canceled_jobs.length
+				}
+			}
+		})
+
+		db = client.db("contractor-workers")
+		db_collection = db.collection("contractorWorkers")
+		db_collection.find().toArray(function (err, allDetails) {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				
+				for(var i=0; i<allDetails.length; ++i){
+					num_all_shifts += allDetails[i].shifts.length
+					num_all_shifts += allDetails[i].work_history.length
+				}
+			}
+		})
+		console.log(num_all_shifts)
+		console.log(num_all_jobs)
+		
+
+		res.redirect("/show_statistic_analysis", {})
+	})
+
 
 }).catch(console.error)
 
