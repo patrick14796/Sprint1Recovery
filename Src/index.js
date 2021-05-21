@@ -1662,10 +1662,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 			}
 		})
-
-		if(shifts_confirmed){
-
-		}
+		console.log(num_all_shifts)
+		console.log(num_all_jobs)
+		
 
 		res.redirect("/show_statistic_analysis", {})
 	})
