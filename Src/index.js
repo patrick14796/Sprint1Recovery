@@ -191,7 +191,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.get("/statistics", authUser, authRole("Company Worker"), (req, res) => {
-		res.render("statistic_analysis")
+		let arr=[];
+		res.render("statistic_analysis",{data:arr})
 	})
 
 	app.get("/shifts_monitor", authUser, authRole("Company Worker"), (req, res) => {
@@ -1665,8 +1666,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		console.log(num_all_shifts)
 		console.log(num_all_jobs)
 		
-
-		res.redirect("/show_statistic_analysis", {})
+		let arr=[num_all_jobs,num_all_shifts,0,0]
+		console.log("data is",arr)
+		res.render("statistic_analysis", {data:arr})
 	})
 
 
