@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		Statistics
+		<link rel="stylesheet" type="text/css" href="public_Company_Worker_Homepage/css/statistics.css">
 	</head>
 	<header>
         <%- include('../partials/header_company_worker'); %>
     </header>
-	<body>
+	<body style="margin:0">
 		<div>
 			<p>Please check at least 3 criterions in order to get a statistics analysis</p>
 		</div>
@@ -25,5 +25,48 @@
 				<button class="btn-search" type="submit">Get Statistic Analysis</button>
 			</div>
 		</form>
+		<div class="container">
+			<header>
+			
+			  <h1>Statistics</h1>
+			  <div class="fifa-logo"></div>
+			</header>
+			
+			<div class="content-container">
+			
+		  
+			  <div class="content">
+				
+				<div class="con1">
+				  <div class="stat">
+					Shifts Confirmed: <span class="number">999</span>
+				  </div>
+				  <div class="img"></div>
+				</div>
+				
+				<div class="con2">
+				  <div class="stat">
+					Shifts Waiting for approval: <span class="number">999</span>
+				  </div>
+				  <div class="img"></div>
+				</div>
+				
+				<div class="con3">
+				  <div class="stat">
+					Job Requests Waiting for approval: <span class="number">999</span>
+				  </div>
+				  <div class="img"></div>
+				</div>
+				<div class="con3">
+					<div class="stat">
+						Job Requests Decliened:  <span class="number">999</span>
+					</div>
+					<div class="img"></div>
+				  </div>
+			
+			  </div>
+			</div>
+			
+		  </div>
 	</body>
 </html>
