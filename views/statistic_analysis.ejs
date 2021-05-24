@@ -1,29 +1,87 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		Statistics
-	</head>
 	<header>
         <%- include('../partials/header_company_worker'); %>
     </header>
+	<head>
+		Statistics
+	</head>
 	<body>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 		<div>
 			<p>Please check at least 3 criterions in order to get a statistics analysis</p>
 		</div>
 		<form id="send_report_shift" action="/make_statistics" method="POST">
 			<div class="form-check">
 				<input type="checkbox" class="form-check-input" id="shifts_confirmed" name="shifts_confirmed">
-				<label class="form-check-label" for="materialUnchecked">Shifts Confirmed</label>
+				<label class="form-check-label" for="materialUnchecked">Shifts Confirmed In A Month</label>
+			</div>
+			<div class="form-check">
 				<input type="checkbox" class="form-check-input" id="shifts_waiting" name="shifts_waiting">
-				<label class="form-check-label" for="materialUnchecked">Shifts Waiting for approval</label>
+				<label class="form-check-label" for="materialUnchecked">Shifts Waiting for approval In A Month</label>
+			</div>
+			<div class="form-check">
 				<input type="checkbox" class="form-check-input" id="jobs_waiting" name="jobs_waiting">
-				<label class="form-check-label" for="materialUnchecked">Job Requests Waiting for approval</label>
+				<label class="form-check-label" for="materialUnchecked">Job Requests Waiting for approval In A Month</label>
+			</div>
+			<div class="form-check">
 				<input type="checkbox" class="form-check-input" id="jobs_decliend" name="jobs_decliend">
-				<label class="form-check-label" for="materialUnchecked">Job Requests Decliened</label>
+				<label class="form-check-label" for="materialUnchecked">Job Requests Decliened In A Month</label>
 			</div>
 			<div>
 				<button class="btn-search" type="submit">Get Statistic Analysis</button>
 			</div>
+			
 		</form>
+		<% if(final_datasets!=null) { %>
+			<div id="try"><%= final_datasets[0].label %></div>
+			<canvas id="lineChart"></canvas>
+
+		<% } %>
+		
+		<script>
+			if("<%= final_datasets %>" != null){
+				var obj0 = [{
+					label: "<%= final_datasets[0].label %>",
+					data: ["<%= final_datasets[0].data %>"],
+					backgroundColor: "<%= final_datasets[0].backgroundColor %>",
+					borderColor: "<%= final_datasets[0].borderColor %>",
+					borderWidth: "<%= final_datasets[0].borderWidth: %>"
+				}];
+
+				console.log(obj0);
+				/*var sets = "<%= final_datasets %>"
+				console.log(sets.length)
+				var all = []
+				for(var i=0; i<sets.length; ++i){
+					all.push({
+						label: i.toString(),
+						data: sets[i],
+						backgroundColor: [
+									'rgba(105, 0, 132, .2)',
+									],
+						borderColor: [
+									'rgba(200, 99, 132, .7)',
+									],
+						borderWidth: 2
+					})
+				}*/
+				//line
+				var ctxL = document.getElementById("lineChart").getContext('2d');
+				var myLineChart = new Chart(ctxL, {
+					type: 'line',
+					data: {
+						labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+						datasets: obj0
+					},
+					options: {
+					responsive: true
+					}
+				});
+			}
+			
+		</script>
 	</body>
+	
 </html>

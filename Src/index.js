@@ -191,7 +191,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.get("/statistics", authUser, authRole("Company Worker"), (req, res) => {
-		res.render("statistic_analysis")
+		res.render("statistic_analysis", {final_datasets: null})
 	})
 
 	app.get("/shifts_monitor", authUser, authRole("Company Worker"), (req, res) => {
@@ -1625,10 +1625,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var shifts_waiting = req.body.shifts_waiting
 		var jobs_waiting = req.body.jobs_waiting
 		var jobs_decliend = req.body.jobs_decliend
-		console.log(shifts_confirmed)
-		console.log(shifts_waiting)
-		console.log(jobs_waiting)
-		console.log(jobs_decliend)
+
+		var labels = ["Shifts confirmed in a month", "Shifts waiting for approval", "jobs waiting", "jobs declined"]
+		var all_data = [0, 0, 0, 0]
+		var arr_confirmed_shifts_in_months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		var arr_waiting_shifts_in_months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		var arr_waiting_jobs_in_months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		var arr_decliened_job_in_months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		var num_all_jobs = 0
 		var num_all_shifts = 0
 
@@ -1644,6 +1647,47 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					num_all_jobs += allDetails[i].hiring.length
 					num_all_jobs += allDetails[i].job_requests.length
 					num_all_jobs += allDetails[i].canceled_jobs.length
+					if(jobs_waiting){
+						for(var j=0; j<allDetails[i].job_requests.length; ++j){
+							var shift_date = allDetails[i].job_requests[j][0]
+							var shift_month = (shift_date.split('/'))[0]
+							arr_waiting_jobs_in_months[shift_month - 1] = arr_waiting_jobs_in_months[shift_month - 1] + 1
+						}
+					}
+					if(jobs_decliend){
+						for(var j=0; j<allDetails[i].canceled_jobs.length; ++j){
+							var shift_date = allDetails[i].canceled_jobs[j][0]
+							var shift_month = (shift_date.split('/'))[0]
+							arr_decliened_job_in_months[shift_month - 1] = arr_decliened_job_in_months[shift_month - 1] + 1
+						}
+					}
+				}
+				if(jobs_waiting){
+					const index = labels.indexOf("jobs waiting");
+					if (index > -1) {
+						all_data[index] = arr_waiting_jobs_in_months
+					}
+				}
+				else{
+					const index = labels.indexOf("jobs waiting")
+					if (index > -1) {
+						labels.splice(index, 1)
+						all_data.splice(index, 1)
+					}
+				}
+				if(jobs_decliend){
+					const index = labels.indexOf("jobs declined")
+					if (index > -1) {
+						all_data[index] = arr_confirmed_shifts_in_months
+					}
+
+				}
+				else{
+					const index = labels.indexOf("jobs declined")
+					if (index > -1) {
+						labels.splice(index, 1)
+						all_data.splice(index, 1)
+					}
 				}
 			}
 		})
@@ -1659,14 +1703,63 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				for(var i=0; i<allDetails.length; ++i){
 					num_all_shifts += allDetails[i].shifts.length
 					num_all_shifts += allDetails[i].work_history.length
+					if(shifts_confirmed){
+						for(var j=0; j<allDetails[i].work_history.length; ++j){
+							var shift_date = allDetails[i].work_history[j][0]
+							var shift_month = (shift_date.split('/'))[0]
+							arr_confirmed_shifts_in_months[shift_month - 1] = arr_confirmed_shifts_in_months[shift_month - 1] + 1
+						}
+						const index = labels.indexOf("Shifts confirmed in a month")
+						if (index > -1) {
+							all_data[index] = arr_confirmed_shifts_in_months
+						}
+
+					}
+					else{
+						const index = labels.indexOf("Shifts confirmed in a month");
+						if (index > -1) {
+							labels.splice(index, 1)
+							all_data.splice(index, 1)
+						}
+					}
+
+					if(shifts_waiting){
+						for(var j=0; j<allDetails[i].shifts.length; ++j){
+							var shift_date = allDetails[i].shifts[j][0]
+							var shift_month = (shift_date.split('/'))[0]
+							arr_waiting_shifts_in_months[shift_month - 1] = arr_waiting_shifts_in_months[shift_month - 1] + 1
+						}
+						const index = labels.indexOf("Shifts waiting for approval")
+						if (index > -1) {
+							all_data[index] = arr_waiting_shifts_in_months
+						}
+
+					}
+					else{
+						const index = labels.indexOf("Shifts waiting for approval")
+						if (index > -1) {
+							labels.splice(index, 1)
+							all_data.splice(index, 1)
+						}
+					}
 				}
+				// create datasets
+				var datasets = []
+				for(var k = 0; k<labels.length; ++k){
+					datasets.push({
+						label: labels[k],
+						data: all_data[k],
+						backgroundColor: ['rgba(105, 0, 132, .2)',],
+						borderColor: ['rgba(200, 99, 132, .7)',],
+						borderWidth: 2})
+				}
+				console.log(datasets)
+				
+				res.render("statistic_analysis", {final_datasets: datasets})
+
 			}
 		})
-		console.log(num_all_shifts)
-		console.log(num_all_jobs)
-		
 
-		res.redirect("/show_statistic_analysis", {})
 	})
 
 
