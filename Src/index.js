@@ -38,6 +38,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("contributers_page")
 	})
 
+	app.get("/forgort_my_password", (req, res)=> {
+		res.render("forgot_my_password")
+	})
+
 	app.get("/CompanyWorkerHomepage", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("CompanyWorkerHomepage")
 	})
@@ -1521,6 +1525,46 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			db_collection.updateOne({ "id": req.session.user.id }, { $pull: { not_able_to_work: [date, title, dec] } })
 			res.render("contractor_worker_home_page")
 		}
+	})
+
+	app.post("/get_my_password", (req, res) => {
+		// Get the email
+		var email = req.body.email
+		
+		var isFound = 0
+		// Check if it's exsits in our db
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var password = allDetails[0].password
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your password.\nYour password is: " + password + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Password", msg)
+			}
+		})
+		var db = client.db("employers-workers")
+		var db_collection = db.collection("employersWorkers")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var password = allDetails[0].password
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your password.\nYour password is: " + password + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Password", msg)
+			}
+		})
+		var db = client.db("human-resources-workers")
+		var db_collection = db.collection("humanResourcsesWorkersLogin")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var password = allDetails[0].password
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your password.\nYour password is: " + password + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Password", msg)
+			}
+		})
+
+		res.redirect("/Login")
 	})
 
 	app.post("/report", (req, res) => {
