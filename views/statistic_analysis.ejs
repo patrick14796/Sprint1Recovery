@@ -35,22 +35,45 @@
 			
 		</form>
 		<% if(final_datasets!=null) { %>
-			<div id="try"><%= final_datasets[0].label %></div>
+			<% for (var i =0; i < final_datasets.length; ++i ) { %>
+				<div id="label<%= i %>" style="visibility: hidden;"><%= final_datasets[i].label %></div>
+				<div id="data<%= i %>" style="visibility: hidden;"><%= final_datasets[i].data %></div>
+			<% } %>
+			
 			<canvas id="lineChart"></canvas>
 
 		<% } %>
+		<% if(msg!=null) { %>
+			<div><%= msg %></div>
+		<% } %>
+		
 		
 		<script>
-			if("<%= final_datasets %>" != null){
-				var obj0 = [{
-					label: "<%= final_datasets[0].label %>",
-					data: ["<%= final_datasets[0].data %>"],
-					backgroundColor: "<%= final_datasets[0].backgroundColor %>",
-					borderColor: "<%= final_datasets[0].borderColor %>",
-					borderWidth: "<%= final_datasets[0].borderWidth: %>"
-				}];
-
-				console.log(obj0);
+			var final_datasets = "<%= final_datasets %>"
+			console.log(final_datasets)
+			if(final_datasets != ""){
+				var all = []
+				var bg_color = ['rgba(105, 0, 132, .2)', 'rgba(0, 137, 132, .2)', 'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)',]
+				var border_colors = ['rgba(200, 99, 132, .7)', 'rgba(0, 10, 130, .7)', 'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)']
+				var j = 0
+				while(document.getElementById("label".concat('', j.toString()))){
+					console.log(document.getElementById("label".concat('', j.toString())).innerHTML)
+					all.push(
+						{
+							label: document.getElementById("label".concat('', j.toString())).innerHTML,
+							data: (document.getElementById("data".concat('', j.toString())).innerHTML).split(',').map(Number),
+							backgroundColor: [
+								bg_color[j],
+							],
+							borderColor: [
+								border_colors[j],
+							],
+							borderWidth: 2
+						}
+					)
+					++j
+				}
+				console.log(all)
 				/*var sets = "<%= final_datasets %>"
 				console.log(sets.length)
 				var all = []
@@ -73,7 +96,7 @@
 					type: 'line',
 					data: {
 						labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-						datasets: obj0
+						datasets: all
 					},
 					options: {
 					responsive: true
