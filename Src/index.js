@@ -47,7 +47,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.get("/CompanyWorkerHomepage", authUser, authRole("Company Worker"), (req, res) => {
-		res.render("CompanyWorkerHomepage")
+		res.render("CompanyWorkerHomepage",{name:req.session.user.fullname})
 	})
 
 	app.get("/recruiters_home_page", authUser, authRole("Recruiter"), (req, res) => {
@@ -67,7 +67,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			}
 			else {
 				allDetails.sort(sortByProperty("average_rate")) 
-				res.render("recruiters_home_page", { details: allDetails })
+				res.render("recruiters_home_page", { details: allDetails, name:req.session.user.fullname })
 			}
 		})
 	})
@@ -231,7 +231,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.get("/contractor_worker_home_page", authUser, authRole("Contractor Worker"), (req, res) => {
-		res.render("contractor_worker_home_page")
+		res.render("contractor_worker_home_page",{name:req.session.user.fullname})
 	})
 
 	app.get("/send_data_calendar", authUser, authRole("Contractor Worker"), (req, res) => {
@@ -454,10 +454,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					db_collection = db.collection("employersWorkers")
 					db_collection.updateOne({ "id": rec_id, "job_requests": { $in: [[date, start, end, req.session.user.id, "Waiting for approval"]] } }, { $pull: { "job_requests": { $in: [[date, start, end, req.session.user.id, "Waiting for approval"]] } } })
 					db_collection.updateOne({ "id": rec_id }, { $push: { hiring: [date, start, end, req.session.user.id, "Approved"] } })
-					res.redirect("/contractor_worker_home_page")
+					res.redirect("/contractor_worker_home_page",{name:req.session.user.fullname})
 				}
 				else {
-					res.redirect("/contractor_worker_home_page")
+					res.redirect("/contractor_worker_home_page",{name:req.session.user.fullname})
 				}
 			}
 		})
@@ -495,10 +495,10 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					db_collection = db.collection("employersWorkers")
 					db_collection.updateOne({ "id": rec_id, "job_requests": { $in: [[date, start, end, req.session.user.id, "Waiting for approval"]] } }, { $pull: { "job_requests": { $in: [[date, start, end, req.session.user.id, "Waiting for approval"]] } } })
 					db_collection.updateOne({ "id": rec_id }, { $push: { canceled_jobs: [date, start, end, req.session.user.id, "Declined"] } })
-					res.redirect("/contractor_worker_home_page")
+					res.redirect("/contractor_worker_home_page",{name:req.session.user.fullname})
 				}
 				else {
-					res.redirect("/contractor_worker_home_page")
+					res.redirect("/contractor_worker_home_page",{name:req.session.user.fullname})
 				}
 			}
 		})
@@ -732,14 +732,16 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			type = "Recruiter"
 			break
 		}
-
+		
 		if (db_collection) {
 			db_collection.find({ "user": user_name, "password": passwordd }).toArray(function (err, users) {
 				if (users.length == 1) {
 					req.session.user = {
 						"id": users[0].id,
-						"type": type
+						"type": type,
+						"fullname":users[0].full_name
 					}
+				
 					res.redirect("/" + homepage_name)
 				}
 
@@ -826,6 +828,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					data = {
 						"id": contractor_id,
 						"user": username,
+						"full_name": first_name + " " + last_name,
 						"password": password
 					}
 					db_collection_login.insertOne(data, function (err, collection) {
@@ -894,6 +897,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		var db_collection_login = db.collection("employersWorkersLogin")
 		data = {
 			"user": username,
+			"full_name": first_name + " " + last_name,
 			"password": password
 		}
 		db_collection_login.insertOne(data, function (err, collection) {
@@ -1561,11 +1565,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			var end_work = det[1]
 			var rec_id = det[2]
 			db_collection.updateOne({ "id": req.session.user.id }, { $push: { shifts: [date, start_work, end_work, rec_id] } })
-			res.render("contractor_worker_home_page")
+			res.render("contractor_worker_home_page",{name:req.session.user.fullname})
 		}
 		else {
 			db_collection.updateOne({ "id": req.session.user.id }, { $push: { not_able_to_work: [date, title, dec] } })
-			res.render("contractor_worker_home_page")
+			res.render("contractor_worker_home_page",{name:req.session.user.fullname})
 		}
 	})
 
@@ -1581,11 +1585,11 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			var end_work = det[1]
 			var rec_id = det[2]
 			db_collection.updateOne({ "id": req.session.user.id }, { $pull: { shifts: [date, start_work, end_work, rec_id] } })
-			res.render("contractor_worker_home_page")
+			res.render("contractor_worker_home_page",{name:req.session.user.fullname})
 		}
 		else {
 			db_collection.updateOne({ "id": req.session.user.id }, { $pull: { not_able_to_work: [date, title, dec] } })
-			res.render("contractor_worker_home_page")
+			res.render("contractor_worker_home_page",{name:req.session.user.fullname})
 		}
 	})
 
