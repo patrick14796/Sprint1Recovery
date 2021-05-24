@@ -38,8 +38,12 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("contributers_page")
 	})
 
-	app.get("/forgort_my_password", (req, res)=> {
+	app.get("/forgot_my_password", (req, res)=> {
 		res.render("forgot_my_password")
+	})
+
+	app.get("/forgot_my_username", (req, res)=> {
+		res.render("forgot_my_username")
 	})
 
 	app.get("/CompanyWorkerHomepage", authUser, authRole("Company Worker"), (req, res) => {
@@ -1561,6 +1565,46 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				var password = allDetails[0].password
 				var msg = "Hey " + full_name + ",\nWe got a request for retriving your password.\nYour password is: " + password + "\n\nHave a nice day!"
 				send_an_email(email, "Forgot Password", msg)
+			}
+		})
+
+		res.redirect("/Login")
+	})
+
+	app.post("/get_my_username", (req, res) => {
+		// Get the email
+		var email = req.body.email
+		
+		var isFound = 0
+		// Check if it's exsits in our db
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var username = allDetails[0].user
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your username.\nYour username is: " + username + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Username", msg)
+			}
+		})
+		var db = client.db("employers-workers")
+		var db_collection = db.collection("employersWorkers")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var username = allDetails[0].user
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your username.\nYour username is: " + username + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Username", msg)
+			}
+		})
+		var db = client.db("human-resources-workers")
+		var db_collection = db.collection("humanResourcsesWorkersLogin")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var username = allDetails[0].user
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your username.\nYour username is: " + username + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Username", msg)
 			}
 		})
 
