@@ -1652,14 +1652,14 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						if(jobs_waiting){
 							for(var j=0; j<allDetails[i].job_requests.length; ++j){
 								var shift_date = allDetails[i].job_requests[j][0]
-								var shift_month = (shift_date.split('/'))[0]
+								var shift_month = (shift_date.split("/"))[0]
 								arr_waiting_jobs_in_months[shift_month - 1] = arr_waiting_jobs_in_months[shift_month - 1] + 1
 							}
 						}
 						if(jobs_decliend){
-							for(var j=0; j<allDetails[i].canceled_jobs.length; ++j){
-								var shift_date = allDetails[i].canceled_jobs[j][0]
-								var shift_month = (shift_date.split('/'))[0]
+							for(j=0; j<allDetails[i].canceled_jobs.length; ++j){
+								shift_date = allDetails[i].canceled_jobs[j][0]
+								shift_month = (shift_date.split("/"))[0]
 								arr_decliened_job_in_months[shift_month - 1] = arr_decliened_job_in_months[shift_month - 1] + 1
 							}
 						}
@@ -1706,7 +1706,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						if(shifts_confirmed){
 							for(var j=0; j<allDetails[i].work_history.length; ++j){
 								var shift_date = allDetails[i].work_history[j][0]
-								var shift_month = (shift_date.split('/'))[0]
+								var shift_month = (shift_date.split("/"))[0]
 								arr_confirmed_shifts_in_months[shift_month - 1] = arr_confirmed_shifts_in_months[shift_month - 1] + 1
 							}
 							const index = labels.indexOf("Shifts confirmed in a month")
@@ -1724,9 +1724,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						}
 
 						if(shifts_waiting){
-							for(var j=0; j<allDetails[i].shifts.length; ++j){
-								var shift_date = allDetails[i].shifts[j][0]
-								var shift_month = (shift_date.split('/'))[0]
+							for(j=0; j<allDetails[i].shifts.length; ++j){
+								shift_date = allDetails[i].shifts[j][0]
+								shift_month = (shift_date.split("/"))[0]
 								arr_waiting_shifts_in_months[shift_month - 1] = arr_waiting_shifts_in_months[shift_month - 1] + 1
 							}
 							const index = labels.indexOf("Shifts waiting for approval")
@@ -1748,10 +1748,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 					for(var k = 0; k<labels.length; ++k){
 						datasets.push({
 							label: labels[k],
-							data: all_data[k],
-							backgroundColor: ['rgba(105, 0, 132, .2)',],
-							borderColor: ['rgba(200, 99, 132, .7)',],
-							borderWidth: 2})
+							data: all_data[k],})
 					}
 
 					res.render("statistic_analysis", {final_datasets: datasets, msg:null})
