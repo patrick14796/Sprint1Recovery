@@ -14,23 +14,23 @@
 		</div>
 		<form id="send_report_shift" action="/make_statistics" method="POST">
 			<div class="form-check">
-				<input type="checkbox" class="form-check-input" id="shifts_confirmed" name="shifts_confirmed">
+				<input type="checkbox" class="form-check-input" id="shifts_confirmed" name="shifts_confirmed" onclick="isThreeChecked()">
 				<label class="form-check-label" for="materialUnchecked">Shifts Confirmed In A Month</label>
 			</div>
 			<div class="form-check">
-				<input type="checkbox" class="form-check-input" id="shifts_waiting" name="shifts_waiting">
+				<input type="checkbox" class="form-check-input" id="shifts_waiting" name="shifts_waiting" onclick="isThreeChecked()">
 				<label class="form-check-label" for="materialUnchecked">Shifts Waiting for approval In A Month</label>
 			</div>
 			<div class="form-check">
-				<input type="checkbox" class="form-check-input" id="jobs_waiting" name="jobs_waiting">
+				<input type="checkbox" class="form-check-input" id="jobs_waiting" name="jobs_waiting" onclick="isThreeChecked()">
 				<label class="form-check-label" for="materialUnchecked">Job Requests Waiting for approval In A Month</label>
 			</div>
 			<div class="form-check">
-				<input type="checkbox" class="form-check-input" id="jobs_decliend" name="jobs_decliend">
+				<input type="checkbox" class="form-check-input" id="jobs_decliend" name="jobs_decliend" onclick="isThreeChecked()">
 				<label class="form-check-label" for="materialUnchecked">Job Requests Decliened In A Month</label>
 			</div>
 			<div>
-				<button class="btn-search" type="submit">Get Statistic Analysis</button>
+				<button class="btn-search" id="btn_statistic" disabled="true" type="submit">Get Statistic Analysis</button>
 			</div>
 			
 		</form>
@@ -49,6 +49,20 @@
 		
 		
 		<script>
+			function isThreeChecked(){
+    		    var count_v = 0
+				if(document.getElementById('shifts_confirmed').checked){++count_v}
+				if(document.getElementById('shifts_waiting').checked){++count_v}
+				if(document.getElementById('jobs_waiting').checked){++count_v}
+				if(document.getElementById('jobs_decliend').checked){++count_v}
+				if(count_v < 3){
+					document.getElementById('btn_statistic').disabled = true
+				}
+				else{
+					document.getElementById('btn_statistic').disabled = false
+				}
+    		}
+			
 			var final_datasets = "<%= final_datasets %>"
 			console.log(final_datasets)
 			if(final_datasets != ""){
