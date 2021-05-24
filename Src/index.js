@@ -38,6 +38,14 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		res.render("contributers_page")
 	})
 
+	app.get("/forgot_my_password", (req, res)=> {
+		res.render("forgot_my_password")
+	})
+
+	app.get("/forgot_my_username", (req, res)=> {
+		res.render("forgot_my_username")
+	})
+
 	app.get("/CompanyWorkerHomepage", authUser, authRole("Company Worker"), (req, res) => {
 		res.render("CompanyWorkerHomepage")
 	})
@@ -1579,6 +1587,84 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			db_collection.updateOne({ "id": req.session.user.id }, { $pull: { not_able_to_work: [date, title, dec] } })
 			res.render("contractor_worker_home_page")
 		}
+	})
+
+	app.post("/get_my_password", (req, res) => {
+		// Get the email
+		var email = req.body.email
+		
+		// Check if it's exsits in our db
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var password = allDetails[0].password
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your password.\nYour password is: " + password + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Password", msg)
+			}
+		})
+		db = client.db("employers-workers")
+		db_collection = db.collection("employersWorkers")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var password = allDetails[0].password
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your password.\nYour password is: " + password + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Password", msg)
+			}
+		})
+		db = client.db("human-resources-workers")
+		db_collection = db.collection("humanResourcsesWorkersLogin")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var password = allDetails[0].password
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your password.\nYour password is: " + password + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Password", msg)
+			}
+		})
+
+		res.redirect("/Login")
+	})
+
+	app.post("/get_my_username", (req, res) => {
+		// Get the email
+		var email = req.body.email
+		
+		// Check if it's exsits in our db
+		var db = client.db("contractor-workers")
+		var db_collection = db.collection("contractorWorkers")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var username = allDetails[0].user
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your username.\nYour username is: " + username + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Username", msg)
+			}
+		})
+		db = client.db("employers-workers")
+		db_collection = db.collection("employersWorkers")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var username = allDetails[0].user
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your username.\nYour username is: " + username + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Username", msg)
+			}
+		})
+		db = client.db("human-resources-workers")
+		db_collection = db.collection("humanResourcsesWorkersLogin")
+		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
+			if(allDetails.length > 0) {
+				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
+				var username = allDetails[0].user
+				var msg = "Hey " + full_name + ",\nWe got a request for retriving your username.\nYour username is: " + username + "\n\nHave a nice day!"
+				send_an_email(email, "Forgot Username", msg)
+			}
+		})
+
+		res.redirect("/Login")
 	})
 
 	app.post("/report", (req, res) => {
