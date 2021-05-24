@@ -1535,7 +1535,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		// Get the email
 		var email = req.body.email
 		
-		var isFound = 0
 		// Check if it's exsits in our db
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
@@ -1547,8 +1546,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				send_an_email(email, "Forgot Password", msg)
 			}
 		})
-		var db = client.db("employers-workers")
-		var db_collection = db.collection("employersWorkers")
+		db = client.db("employers-workers")
+		db_collection = db.collection("employersWorkers")
 		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
 			if(allDetails.length > 0) {
 				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
@@ -1557,8 +1556,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				send_an_email(email, "Forgot Password", msg)
 			}
 		})
-		var db = client.db("human-resources-workers")
-		var db_collection = db.collection("humanResourcsesWorkersLogin")
+		db = client.db("human-resources-workers")
+		db_collection = db.collection("humanResourcsesWorkersLogin")
 		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
 			if(allDetails.length > 0) {
 				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
@@ -1575,7 +1574,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 		// Get the email
 		var email = req.body.email
 		
-		var isFound = 0
 		// Check if it's exsits in our db
 		var db = client.db("contractor-workers")
 		var db_collection = db.collection("contractorWorkers")
@@ -1587,8 +1585,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				send_an_email(email, "Forgot Username", msg)
 			}
 		})
-		var db = client.db("employers-workers")
-		var db_collection = db.collection("employersWorkers")
+		db = client.db("employers-workers")
+		db_collection = db.collection("employersWorkers")
 		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
 			if(allDetails.length > 0) {
 				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
@@ -1597,8 +1595,8 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				send_an_email(email, "Forgot Username", msg)
 			}
 		})
-		var db = client.db("human-resources-workers")
-		var db_collection = db.collection("humanResourcsesWorkersLogin")
+		db = client.db("human-resources-workers")
+		db_collection = db.collection("humanResourcsesWorkersLogin")
 		db_collection.find({ "email": email }).toArray(function (err, allDetails) {
 			if(allDetails.length > 0) {
 				var full_name = allDetails[0].first_name + " " + allDetails[0].last_name
