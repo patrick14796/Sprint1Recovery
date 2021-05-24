@@ -1640,8 +1640,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 			var arr_waiting_shifts_in_months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			var arr_waiting_jobs_in_months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			var arr_decliened_job_in_months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-			var num_all_jobs = 0
-			var num_all_shifts = 0
 
 			var db = client.db("employers-workers")
 			var db_collection = db.collection("employersWorkers")
@@ -1651,9 +1649,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				}
 				else {
 					for(var i=0; i<allDetails.length; ++i){
-						num_all_jobs += allDetails[i].hiring.length
-						num_all_jobs += allDetails[i].job_requests.length
-						num_all_jobs += allDetails[i].canceled_jobs.length
 						if(jobs_waiting){
 							for(var j=0; j<allDetails[i].job_requests.length; ++j){
 								var shift_date = allDetails[i].job_requests[j][0]
@@ -1708,8 +1703,6 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 				else {
 
 					for(var i=0; i<allDetails.length; ++i){
-						num_all_shifts += allDetails[i].shifts.length
-						num_all_shifts += allDetails[i].work_history.length
 						if(shifts_confirmed){
 							for(var j=0; j<allDetails[i].work_history.length; ++j){
 								var shift_date = allDetails[i].work_history[j][0]
