@@ -1279,7 +1279,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						var day
 						var temp = allDetails[0].not_able_to_work
 						for (day of temp) {
-							if (day[0] == date) {
+							day = day[0]
+							day_arr = day.split("/")
+							if(day_arr[0].length == 1){
+								day_arr[0] = "0" + day_arr[0]
+							}
+							day = day_arr.join("/")
+							if (day == date) {
 								console.log("Cant' hire in this day!")
 								res.render("hire_contractor", {"id": id_of_contractor, "msg": "Cant' hire in this day! he isn't work on this date."})
 								return
@@ -1289,7 +1295,13 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						var job
 						var contractor_hiring = allDetails[0].hiring
 						for (job of contractor_hiring) {
-							if (job[0] == date) {
+							day = job[0]
+							day_arr = day.split("/")
+							if(day_arr[0].length == 1){
+								day_arr[0] = "0" + day_arr[0]
+							}
+							day = day_arr.join("/")
+							if (day == date) {
 								console.log("Cant hire twice a contractor on the same day!\n")
 								res.render("hire_contractor", {"id": id_of_contractor, "msg": "The contractor already booked in this day. Cant hire twice a contractor on the same day!\n"})
 								return
