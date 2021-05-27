@@ -659,7 +659,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 	})
 
 	app.get("/hire_contractor/:id", (req, res) => {
-		res.render("hire_contractor", { "id": req.params.id })
+		res.render("hire_contractor", { "id": req.params.id, "msg": null })
 	})
 
 	app.get("/hire_history", (req, res) => {
@@ -1280,8 +1280,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						var temp = allDetails[0].not_able_to_work
 						for (day of temp) {
 							if (day[0] == date) {
-								console.log("cant' hire in this day!")
-								res.redirect("back")
+								console.log("Cant' hire in this day!")
+								res.render("hire_contractor", {"id": id_of_contractor, "msg": "Cant' hire in this day! he isn't work on this date."})
+								return
 							}
 						}
 
@@ -1289,8 +1290,9 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						var contractor_hiring = allDetails[0].hiring
 						for (job of contractor_hiring) {
 							if (job[0] == date) {
-								console.log("cant hire twice by same recruiter!\n")
-								res.redirect("back")
+								console.log("Cant hire twice a contractor on the same day!\n")
+								res.render("hire_contractor", {"id": id_of_contractor, "msg": "The contractor already booked in this day. Cant hire twice a contractor on the same day!\n"})
+								return
 							}
 						}
 

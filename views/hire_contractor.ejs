@@ -34,10 +34,15 @@
 			<p><button class="button_hire" type="submit">Hire</button></p>
 			<input type="hidden" name="contractor_id" id="hiddenInput"/>
 
+			<p><div id="message" type="hidden"><%= msg %></div></p>
     		<script>
         		var input = document.getElementById('hiddenInput');
 				var id="<%= id %>";
 				input.value = id
+				var msg = "<%= msg %>";
+				if(msg){
+					document.getElementById('message').type ="text";
+				}
     		</script>
 		</form>
 
