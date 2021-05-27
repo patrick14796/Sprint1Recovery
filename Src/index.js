@@ -1296,7 +1296,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 						var contractor_hiring = allDetails[0].hiring
 						for (job of contractor_hiring) {
 							day = job[0]
-							var day_arr = day.split("/")
+							day_arr = day.split("/")
 							if(day_arr[0].length == 1){
 								day_arr[0] = "0" + day_arr[0]
 							}
