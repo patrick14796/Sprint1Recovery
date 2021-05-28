@@ -1420,7 +1420,7 @@ MongoClient.connect("mongodb+srv://ivan:!Joni1852!@cluster0.vb8as.mongodb.net/my
 								filter_work_history.push(shift)
 							}
 						}
-						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_time_for_month": null})
+						res.render("contractor_work_history", { "type": "Contractor Worker", "full_name": full_name, "work_history": filter_work_history, "total_pay": null, "total_hours_for_month": null, "total_minutes_for_month": null})
 					}
 					else if((month != "0" && month != "")) {
 						for(i=0; i<allDetails[0].work_history.length; ++i){
